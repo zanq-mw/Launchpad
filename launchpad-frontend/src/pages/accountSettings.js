@@ -9,25 +9,54 @@ function ProfileItems() {
     return (
         <React.Fragment>
             <CardContent>
-            <Typography variant="h5" component="div" sx ={NavStyles.cardText} >
-                Full Name
-            </Typography>
-            <Typography variant="h5" component="div" sx ={NavStyles.cardText} >
-                Email
-            </Typography>
-            <Typography variant="h5" component="div" sx ={NavStyles.cardText} >
-                Password
-            </Typography>
-            <Typography variant="h5" component="div" sx ={NavStyles.cardText} >
-                Date of Birth
-            </Typography>
-            <Typography variant="h5" component="div" sx ={NavStyles.cardText} >
-                Address
-            </Typography>
-            <Typography variant="h5" component="div" sx ={NavStyles.cardText} >
-                Phone
-            </Typography>
-            
+            <div style={NavStyles.row}>
+                <Typography variant="h5" style={NavStyles.leftText}>
+                    Full Name
+                </Typography>
+                <Typography variant="h5" style={NavStyles.rightText}>
+                    Bob Smith
+                </Typography>
+            </div>
+            <div style={NavStyles.row}>
+                <Typography variant="h5" style={NavStyles.leftText}>
+                    Email
+                </Typography>
+                <Typography variant="h5" style={NavStyles.rightText}>
+                    bob.smith@gmail.com
+                </Typography>
+            </div>
+            <div style={NavStyles.row}>
+                <Typography variant="h5" style={NavStyles.leftText}>
+                    Password
+                </Typography>
+                <Typography variant="h5" style={NavStyles.rightText}>
+                    ********
+                </Typography>
+            </div>
+            <div style={NavStyles.row}>
+                <Typography variant="h5" style={NavStyles.leftText}>
+                    Date of Birth
+                </Typography>
+                <Typography variant="h5" style={NavStyles.rightText}>
+                    April 1, 2000
+                </Typography>
+            </div>
+            <div style={NavStyles.row}>
+                <Typography variant="h5" style={NavStyles.leftText}>
+                    Address
+                </Typography>
+                <Typography variant="h5" style={NavStyles.rightText}>
+                    742 Evergreen Terrace, M9V 186, ON
+                </Typography>
+            </div>
+            <div style={NavStyles.row}>
+                <Typography variant="h5" style={NavStyles.leftText}>
+                    Phone
+                </Typography>
+                <Typography variant="h5" style={NavStyles.rightText}>
+                    (416) 905-1800
+                </Typography>
+            </div>
             </CardContent>
             
         </React.Fragment>
@@ -38,12 +67,22 @@ function PrivacyItems() {
     return (
         <React.Fragment>
             <CardContent>
-            <Typography variant="h5" component="div" sx ={NavStyles.cardText} >
-                Two-Factor Authentication
-            </Typography>
-            <Typography variant="h5" component="div" sx ={NavStyles.cardText} >
-                Data Collection
-            </Typography>
+            <div style={NavStyles.row}>
+                <Typography variant="h5" style={NavStyles.leftText}>
+                    Two-Factor Authentication
+                </Typography>
+                <Typography variant="h5" style={{...NavStyles.rightText, ...NavStyles.enableText}}>
+                    Enabled
+                </Typography>
+            </div>
+            <div style={NavStyles.row}>
+                <Typography variant="h5" style={NavStyles.leftText}>
+                    Data Collection
+                </Typography>
+                <Typography variant="h5" style={{...NavStyles.rightText, ...NavStyles.disableText}}>
+                    Disabled
+                </Typography>
+            </div>
             </CardContent>
         </React.Fragment>
     )
@@ -53,9 +92,14 @@ function AccountItems() {
     return (
         <React.Fragment>
             <CardContent>
-            <Typography variant="h5" component="div" sx ={NavStyles.cardText} >
-                Delete Account
-            </Typography>
+            <div style={NavStyles.row}>
+                <Typography variant="h5" style={NavStyles.leftText}>
+                    Delete Account
+                </Typography>
+                <Button variant="contained" size="large" style={{...NavStyles.rightText, ...NavStyles.deleteButton}}>
+                    Large
+                </Button>
+            </div>
             </CardContent>
         </React.Fragment>
     )
@@ -143,6 +187,32 @@ const NavStyles = {
     cardMargin: {
         marginLeft: "1%",
         marginRight: "1%"
+    },
+    row: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        padding: '10px'
+      },
+    leftText: {
+        display: "flex",
+        color: '#393939',
+        fontFamily: 'Roboto',
+        fontSize: 28,
+        fontWeight: 700,
+        padding: '8px'
+      },
+    rightText: {
+        display: "flex",
+    },
+    deleteButton: {
+        borderRadius: "15px",
+        background: "#DD111D"
+    },
+    enableText: {
+        color: "#218F17"
+    },
+    disableText: {
+        color: "#DD111D"
     },
     // below is a placeholder for the nav bar
     sidePanel: {
