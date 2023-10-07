@@ -1,8 +1,0 @@
-{
-  "devDependencies": {
-    "@types/node": "^20.8.0"
-  },
-  "dependencies": {
-    "@fontsource/league-spartan": "^5.0.13"
-  }
-}

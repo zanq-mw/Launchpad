@@ -1,7 +1,8 @@
+import { useState } from "react";
+import styled from "@emotion/styled";
 import * as React from "react";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
 import {
   HomeIcon,
   MessageIcon,
@@ -11,76 +12,106 @@ import {
   SettingsIcon,
 } from "./components/navIcons";
 import "@fontsource/league-spartan";
+import "@fontsource/open-sans";
+import { LaunchPadLogo } from "./components/logoIcon";
+import { IconButton } from "@mui/material";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
-export function NavItems() {
+export function NavItems({ open }) {
   return (
     <React.Fragment>
       <ListItemButton sx={NavStyles.navOption}>
-        <ListItemIcon>
+        <LPListItemIcon open={open}>
           <HomeIcon />
-        </ListItemIcon>
-        <ListItemText primary="Home" sx={NavStyles.navText} />
+        </LPListItemIcon>
+        {open && <LPListItemText>{"Home"}</LPListItemText>}
       </ListItemButton>
       <ListItemButton sx={NavStyles.navOption}>
-        <ListItemIcon>
+        <LPListItemIcon open={open}>
           <MessageIcon />
-        </ListItemIcon>
-        <ListItemText primary="Messages" sx={NavStyles.navText} />
+        </LPListItemIcon>
+        {open && <LPListItemText>{"Messages"}</LPListItemText>}
       </ListItemButton>
       <ListItemButton sx={NavStyles.navOption}>
-        <ListItemIcon>
+        <LPListItemIcon open={open}>
           <ApplicationsIcon />
-        </ListItemIcon>
-        <ListItemText primary="Applications" sx={NavStyles.navText} />
+        </LPListItemIcon>
+        {open && <LPListItemText>{"Applications"}</LPListItemText>}
       </ListItemButton>
       <ListItemButton sx={NavStyles.navOption}>
-        <ListItemIcon>
+        <LPListItemIcon open={open}>
           <JobIcon />
-        </ListItemIcon>
-        <ListItemText primary="Job Postings" sx={NavStyles.navText} />
+        </LPListItemIcon>
+        {open && <LPListItemText>{"Job Postings"}</LPListItemText>}
       </ListItemButton>
       <ListItemButton sx={NavStyles.navOption}>
-        <ListItemIcon>
+        <LPListItemIcon open={open}>
           <ProfileIcon />
-        </ListItemIcon>
-        <ListItemText primary="Account" sx={NavStyles.navText} />
+        </LPListItemIcon>
+        {open && <LPListItemText>{"Account"}</LPListItemText>}
       </ListItemButton>
       <ListItemButton sx={NavStyles.navOption}>
-        <ListItemIcon>
+        <LPListItemIcon open={open}>
           <SettingsIcon />
-        </ListItemIcon>
-        <ListItemText primary="Settings" sx={NavStyles.navText} />
+        </LPListItemIcon>
+        {open && <LPListItemText>{"Settings"}</LPListItemText>}
       </ListItemButton>
     </React.Fragment>
   );
 }
 
 export function NavBar() {
+  const [navOpen, setNavOpen] = useState(true);
+
   return (
     <div style={NavStyles.sidePanel}>
-      <p style={NavStyles.logoText}>{"LaunchPad"}</p>
-      <NavItems />
+      <div style={navOpen ? NavStyles.logo : NavStyles.logoCollapsed}>
+        <LaunchPadLogo />
+        {navOpen && <p style={NavStyles.logoText}>{"LaunchPad"}</p>}
+        <IconButton onClick={() => setNavOpen(!navOpen)}>
+          {navOpen ? (
+            <ChevronLeftIcon sx={{ color: "white" }} />
+          ) : (
+            <ChevronRightIcon sx={{ color: "white" }} />
+          )}
+        </IconButton>
+      </div>
+      <NavItems open={navOpen} />
     </div>
   );
 }
 
+const LPListItemIcon = styled(ListItemIcon)`
+  display: ${(p) => (p.open ? "block" : "flex")};
+  justify-content: ${(p) => (p.open ? "none" : "center")};
+`;
+
+const LPListItemText = styled("p")`
+  color: #ffffff;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  font-family: Open Sans;
+  font-size: 20px;
+  font-weight: bold;
+`;
+
 const NavStyles = {
   sidePanel: {
-    width: "20%",
-    height: "100%",
     minHeight: "100vh",
     backgroundColor: "#5E17EB",
     fontFamily: "League Spartan",
-    gap: "8px",
     overflow: "hidden",
     padding: "16px",
+    position: "sticky",
+    top: "0",
   },
   logoText: {
     fontSize: "32px",
     fontWeight: "bold",
     color: "white",
-    paddingTop: "16px",
     marginTop: "0px",
+    marginBottom: "0px",
   },
   navOption: {
     borderRadius: "10px",
@@ -91,7 +122,16 @@ const NavStyles = {
       backgroundColor: "#814AEF",
     },
   },
-  navText: {
-    color: "#FFFFFF",
+  logo: {
+    display: "flex",
+    gap: "8px",
+    alignItems: "center",
+    paddingBottom: "16px",
+  },
+  logoCollapsed: {
+    alignItems: "center",
+    paddingBottom: "16px",
+    display: "flex",
+    flexDirection: "column",
   },
 };

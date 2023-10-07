@@ -9,7 +9,7 @@ import { LandingPage } from "./landingPage/landingPage";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <div className="nav">
+    <div className="screen">
       <NavBar />
       <main className="content">
         <LandingPage />
