@@ -17,7 +17,7 @@ export function LandingPage() {
   return (
     <>
       <p style={PageStyles.top_banner}>Welcome Back, {first_name}!</p>
-      <Grid container spacing={2}>
+      <Grid container spacing={6}>
         <Grid item xs={8}>
           <p style={PageStyles.headings}>Applications</p>
           <TableContainer component={Paper}>
