@@ -82,9 +82,6 @@ export function LandingPage() {
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
-                      Logo
-                    </TableCell>
-                    <TableCell>
                       <p style={PageStyles.job_title}>{row.title}</p>
                       <p style={PageStyles.company}>{row.company}</p>
                       <p style={PageStyles.details}>
