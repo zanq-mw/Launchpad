@@ -7,6 +7,23 @@ const apps = [
     type: "4-month Internship",
     location: "Remote",
     status: "Applied",
+    logo: "https://www.edigitalagency.com.au/wp-content/uploads/apple-logo-png-black.png",
+  },
+  {
+    title: "Software Developer, Intern",
+    company: "Scotiabank",
+    type: "4-month Internship",
+    location: "Remote",
+    status: "Viewed",
+    logo: "https://seeklogo.com/images/S/scotiabank-logo-D2F1AF87B5-seeklogo.com.png",
+  },
+  {
+    title: "Software Developer, Intern",
+    company: "Apple",
+    type: "4-month Internship",
+    location: "Remote",
+    status: "New",
+    logo: "https://www.edigitalagency.com.au/wp-content/uploads/apple-logo-png-black.png",
   },
   {
     title: "Software Developer, Intern",
@@ -14,20 +31,7 @@ const apps = [
     type: "4-month Internship",
     location: "Remote",
     status: "Applied",
-  },
-  {
-    title: "Software Developer, Intern",
-    company: "Apple",
-    type: "4-month Internship",
-    location: "Remote",
-    status: "Applied",
-  },
-  {
-    title: "Software Developer, Intern",
-    company: "Apple",
-    type: "4-month Internship",
-    location: "Remote",
-    status: "Applied",
+    logo: "https://www.edigitalagency.com.au/wp-content/uploads/apple-logo-png-black.png",
   },
 ];
 
@@ -37,24 +41,28 @@ const saved = [
     company: "Apple",
     type: "4-month Internship",
     location: "Remote",
+    logo: "https://www.edigitalagency.com.au/wp-content/uploads/apple-logo-png-black.png",
   },
   {
     title: "Software Developer, Intern",
     company: "Apple",
     type: "4-month Internship",
     location: "Remote",
+    logo: "https://www.edigitalagency.com.au/wp-content/uploads/apple-logo-png-black.png",
   },
   {
     title: "Software Developer, Intern",
     company: "Apple",
     type: "4-month Internship",
     location: "Remote",
+    logo: "https://www.edigitalagency.com.au/wp-content/uploads/apple-logo-png-black.png",
   },
   {
     title: "Software Developer, Intern",
     company: "Apple",
     type: "4-month Internship",
     location: "Remote",
+    logo: "https://www.edigitalagency.com.au/wp-content/uploads/apple-logo-png-black.png",
   },
 ];
 
