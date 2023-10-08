@@ -10,7 +10,9 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <div className="screen">
-      <NavBar />
+      <nav className="nav">
+        <NavBar />
+      </nav>
       <main className="content">
         <LandingPage />
       </main>
