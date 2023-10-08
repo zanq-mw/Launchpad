@@ -5,5 +5,5 @@ from flask import Flask
 app = Flask(__name__)
 
 # routes has to be imported after app config and initalizaiton 
-from launchpad_server.routes import index, login
+from launchpad_server.routes import index, forms
 

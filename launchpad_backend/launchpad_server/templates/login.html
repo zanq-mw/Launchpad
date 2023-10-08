@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='/css/register_login.css') }}" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+<div class="container-main">
+    <div class="container-left">
+       
+        <div class="container-logo">
+            <img style="width: 398px; height: 436px;" src="static/logo.png" />
+            <p id="slogan">Launching Careers,<br> One Opportunity at a Time</p>
+          </div>
+    </div>
+    
+    <div class="container-right">
+        <div class="heading-container2">
+            <h2>Welcome Back </h2>
+          </div>
+        
+        <div class="form-container-login">
+            <form action="" method="POST">
+                {{ form.hidden_tag() }}
+                <p>
+                    {{form.email.label}}
+                    {{form.email(size=30,class="input2")}}
+                </p>
+                <p>
+                    {{form.password.label}}
+                    {{form.password(size=30,class="input2")}}
+                </p>
+            </br>
+                <p>{{form.submit(class='submit-btn')}}</p>    
+            </form>
+            <p> 
+                <span id="forgot-password"> <i>Forgot password?</i></span>
+            </p>
+            <div id="login-container-login">
+                <p>Already have an account?&nbsp;</p><a href="{{url_for('register') }}"><i>Register Here</i></a>
+            </div>
+        </div>
+        
+        
+    </div>
+</div>
+
+{% endblock %}
