@@ -1,7 +1,6 @@
 import React from "react";
 import { useState } from "react";
 import { Grid, IconButton } from "@mui/material";
-import ListItemButton from "@mui/material/ListItemButton";
 import { mock_data } from "./mockData";
 import "./landingPage.css";
 import { SubmittedIcon, ViewedIcon } from "../components/landingIcons";
@@ -10,13 +9,12 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 import Bookmark from "@mui/icons-material/Bookmark";
 
 function StatusIcon(status) {
-  if (status == "Applied") {
+  if (status === "Applied") {
     return <SubmittedIcon />;
-  } else if (status == "Viewed") {
+  } else if (status === "Viewed") {
     return <ViewedIcon />;
   }
 }
