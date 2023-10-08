@@ -10,6 +10,7 @@ import {
   JobIcon,
   ProfileIcon,
   SettingsIcon,
+  LogoutIcon,
 } from "./components/navIcons";
 import "@fontsource/league-spartan";
 import "@fontsource/open-sans";
@@ -56,6 +57,13 @@ export function NavItems({ open }) {
           <SettingsIcon />
         </LPListItemIcon>
         {open && <LPListItemText>{"Settings"}</LPListItemText>}
+      </ListItemButton>
+
+      <ListItemButton sx={NavStyles.navOptionLogout}>
+        <LPListItemIcon open={open}>
+          <LogoutIcon />
+        </LPListItemIcon>
+        {open && <LPListItemText>{"Log Out"}</LPListItemText>}
       </ListItemButton>
     </React.Fragment>
   );
@@ -115,6 +123,17 @@ const NavStyles = {
   },
   navOption: {
     borderRadius: "10px",
+    "&:hover": {
+      backgroundColor: "#814AEF",
+    },
+    "&:focus": {
+      backgroundColor: "#814AEF",
+    },
+  },
+  navOptionLogout: {
+    borderRadius: "10px",
+    position: "absolute",
+    bottom: "5%",
     "&:hover": {
       backgroundColor: "#814AEF",
     },

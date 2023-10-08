@@ -55,3 +55,13 @@ export function SettingsIcon() {
     ></img>
   );
 }
+
+export function LogoutIcon() {
+  return (
+    <img
+      src={require("../images/logout.png")}
+      height={"30px"}
+      alt="Logout"
+    ></img>
+  );
+}
