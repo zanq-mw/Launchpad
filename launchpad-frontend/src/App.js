@@ -1,5 +1,5 @@
-import Login from "./pages/login";
-import SignUp from "./pages/register";
+import Login from "./login-register/login";
+import SignUp from "./login-register/register";
 import './App.css';
 
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";

@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from '/Users/fatimajawed/Desktop/React/reacthtml/src/logo.png';
+import logo from './src/images/launchpadLogo.png';
 import { NavLink, Link } from 'react-router-dom';
 
 class Login extends React.Component{
