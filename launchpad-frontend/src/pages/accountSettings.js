@@ -108,8 +108,7 @@ function AccountItems() {
 export function AccountSettingsItems() {
     return (
         <div style={NavStyles.container}> 
-        {/* this div is just a placeholder for the nav bar */}
-            <div style={NavStyles.sidePanel}></div>
+
                 <div style={NavStyles.pageContainer}>
                     
                     <Typography variant="h5" component="div" sx ={NavStyles.mainTitle}>
@@ -157,7 +156,7 @@ const NavStyles = {
         height: "100%"
     },
     pageContainer: {
-        width: '80%', 
+        width: '100%', 
         background: '#F7F7F7',
         minHeight: '100vh', 
         padding: '16px'
@@ -214,14 +213,5 @@ const NavStyles = {
     disableText: {
         color: "#DD111D"
     },
-    // below is a placeholder for the nav bar
-    sidePanel: {
-      width: '20%', 
-      minHeight: '100vh', 
-      backgroundColor: '#5E17EB', 
-      fontFamily: 'League Spartan', 
-      gap: '8px', 
-      overflow: 'hidden', 
-      padding: '16px'
-    }
+  
 }
