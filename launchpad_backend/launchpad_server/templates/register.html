@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='/css/register_login.css') }}" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+<div class="container-main">
+    <div class="container-left">
+       
+        <div class="container-logo">
+            <img style="width: 398px; height: 436px;" src="static/logo.png" />
+            <p id="slogan">Launching Careers,<br> One Opportunity at a Time</p>
+          </div>
+    </div>
+    
+    <div class="container-right">
+        <div class="heading-container">
+            <h2>Create Account </h2>
+          </div>
+        
+        <div class="form-container">
+            <form action="" method="POST">
+                {{ form.hidden_tag() }}
+                <p>
+                    {{form.last_name.label}}<br>
+                    {{form.last_name(size=30)}}
+                </p>
+                <p>
+                    {{form.first_name.label}}<br>
+                    {{form.first_name(size=30)}}
+                </p>
+                
+                <div id="year-program-container">
+                    <p class="field1">
+                        {{form.year.label}}<br>
+                        {{form.year(size=30)}}
+                    
+                    </p>
+                    <p class="field2">
+                        {{form.program.label}}<br>
+                        {{form.program(class="select-box")}}
+                       
+                    </p>
+                </div>
+                
+                <p>
+                    {{form.email.label}}<br>
+                    {{form.email(size=30)}}
+                </p>
+                <p>
+                    {{form.password.label}}<br>
+                    {{form.password(size=30)}}
+                </p>
+                <p>
+                    {{form.confirm_password.label}}<br>
+                    {{form.confirm_password(size=30)}}
+                </p>
+            </br>
+                <p>{{form.submit(class='submit-btn')}}</p>    
+            </form>
+            <div id="login-container-register">
+                <p>Already have an account?&nbsp;</p><a href="{{url_for('login') }}"><i>Login in here</i></a>
+            </div>
+        </div>
+        
+        
+    </div>
+</div>
+
+{% endblock %}

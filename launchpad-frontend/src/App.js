@@ -1,5 +1,5 @@
-import './App.css';
-import { AccountSettings } from './pages/accountSettings';
+import logo from "./logo.svg";
+import "./App.css";
 
 function App() {
   return (
