@@ -102,14 +102,3 @@ export function DisabledIcon() {
   );
 }
 
-export function AccountEditIcon() {
-  return (
-    <div style={{marginLeft: "20px"}}>
-      <img
-        src={require("../images/accountEdit.png")}
-        height={"35px"}
-        alt="edit"
-      ></img>
-    </div>
-  );
-}

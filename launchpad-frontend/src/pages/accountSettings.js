@@ -6,9 +6,9 @@ import Typography from '@mui/material/Typography';
 import {
     DeleteIcon,
     EnabledIcon,
-    DisabledIcon,
-    AccountEditIcon
+    DisabledIcon
 } from "../components/navIcons";
+import { EditButton } from "../components/editButton"
 function ProfileItems() {
     return (
         <React.Fragment>
@@ -17,54 +17,66 @@ function ProfileItems() {
                 <Typography variant="h5" style={NavStyles.leftText}>
                     Full Name
                 </Typography>
-                <Typography variant="h5" style={NavStyles.rightText}>
-                    Bob Smith
-                    <AccountEditIcon/>
+                <Typography variant="h5" component="div" style={NavStyles.rightText}>
+                    <Typography variant="h5" style={{paddingTop: "10px"}}>
+                        Bob Smith
+                    </Typography>
+                    <EditButton/>
                 </Typography>
             </div>
             <div style={NavStyles.row}>
                 <Typography variant="h5" style={NavStyles.leftText}>
                     Email
                 </Typography>
-                <Typography variant="h5" style={NavStyles.rightText}>
-                    bob.smith@gmail.com
-                    <AccountEditIcon/>
+                <Typography variant="h5" component="div" style={NavStyles.rightText}>
+                    <Typography variant="h5" style={{paddingTop: "10px"}}>
+                        bob.smith@gmail.com
+                    </Typography>
+                    <EditButton/>
                 </Typography>
             </div>
             <div style={NavStyles.row}>
                 <Typography variant="h5" style={NavStyles.leftText}>
                     Password
                 </Typography>
-                <Typography variant="h5" style={NavStyles.rightText}>
-                    ********
-                    <AccountEditIcon/>
+                <Typography variant="h5" component="div" style={NavStyles.rightText}>
+                    <Typography variant="h5" style={{paddingTop: "10px"}}>
+                        ********
+                    </Typography>
+                    <EditButton/>
                 </Typography>
             </div>
             <div style={NavStyles.row}>
                 <Typography variant="h5" style={NavStyles.leftText}>
                     Date of Birth
                 </Typography>
-                <Typography variant="h5" style={NavStyles.rightText}>
-                    April 1, 2000
-                    <AccountEditIcon/>
+                <Typography variant="h5" component="div" style={NavStyles.rightText}>
+                    <Typography variant="h5" style={{paddingTop: "10px"}}>
+                        April 1, 2000
+                    </Typography>
+                    <EditButton/>
                 </Typography>
             </div>
             <div style={NavStyles.row}>
                 <Typography variant="h5" style={NavStyles.leftText}>
                     Address
                 </Typography>
-                <Typography variant="h5" style={NavStyles.rightText}>
-                    742 Evergreen Terrace, M9V 186, ON
-                    <AccountEditIcon/>
+                <Typography variant="h5" component="div"style={NavStyles.rightText}>
+                    <Typography variant="h5" style={{paddingTop: "10px"}}>
+                        742 Evergreen Terrace, M9V 186, ON
+                    </Typography>
+                    <EditButton/>
                 </Typography>
             </div>
             <div style={NavStyles.row}>
                 <Typography variant="h5" style={NavStyles.leftText}>
                     Phone
                 </Typography>
-                <Typography variant="h5" style={NavStyles.rightText}>
-                    (416) 905-1800
-                    <AccountEditIcon/>
+                <Typography variant="h5" component="div" style={NavStyles.rightText}>
+                    <Typography variant="h5" style={{paddingTop: "10px"}}>
+                        (416) 905-1800
+                    </Typography>
+                    <EditButton/>
                 </Typography>
             </div>
             </CardContent>
@@ -81,21 +93,24 @@ function PrivacyItems() {
                 <Typography variant="h5" style={NavStyles.leftText}>
                     Two-Factor Authentication
                 </Typography>
-                <Typography variant="h5" style={{...NavStyles.rightText, ...NavStyles.enableText}}>
-                    <EnabledIcon/>
-                    Enabled
-                    <AccountEditIcon/>
+                <Typography variant="h5" component="div" style={{...NavStyles.rightText, ...NavStyles.enableText}}>
+                    <Typography variant="h5" component="div" style={{paddingTop: "10px", display:"flex"}}>
+                        <EnabledIcon/>
+                        Enabled
+                    </Typography>
+                    <EditButton/>
                 </Typography>
             </div>
             <div style={NavStyles.row}>
                 <Typography variant="h5" style={NavStyles.leftText}>
                     Data Collection
                 </Typography>
-                <Typography variant="h5" style={{...NavStyles.rightText, ...NavStyles.disableText}}>
-                    <DisabledIcon/>
-                    Disabled
-                    <AccountEditIcon/>
-
+                <Typography variant="h5" component="div" style={{...NavStyles.rightText, ...NavStyles.disableText}}>
+                    <Typography variant="h5" component="div"style={{paddingTop: "10px", display:"flex"}}>
+                        <DisabledIcon/>
+                        Disabled
+                    </Typography>
+                    <EditButton/>
                 </Typography>
             </div>
             </CardContent>
