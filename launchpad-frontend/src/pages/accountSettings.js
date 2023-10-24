@@ -1,10 +1,14 @@
 import React from "react";
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-
+import {
+    DeleteIcon,
+    EnabledIcon,
+    DisabledIcon,
+    AccountEditIcon
+} from "../components/navIcons";
 function ProfileItems() {
     return (
         <React.Fragment>
@@ -15,6 +19,7 @@ function ProfileItems() {
                 </Typography>
                 <Typography variant="h5" style={NavStyles.rightText}>
                     Bob Smith
+                    <AccountEditIcon/>
                 </Typography>
             </div>
             <div style={NavStyles.row}>
@@ -23,6 +28,7 @@ function ProfileItems() {
                 </Typography>
                 <Typography variant="h5" style={NavStyles.rightText}>
                     bob.smith@gmail.com
+                    <AccountEditIcon/>
                 </Typography>
             </div>
             <div style={NavStyles.row}>
@@ -31,6 +37,7 @@ function ProfileItems() {
                 </Typography>
                 <Typography variant="h5" style={NavStyles.rightText}>
                     ********
+                    <AccountEditIcon/>
                 </Typography>
             </div>
             <div style={NavStyles.row}>
@@ -39,6 +46,7 @@ function ProfileItems() {
                 </Typography>
                 <Typography variant="h5" style={NavStyles.rightText}>
                     April 1, 2000
+                    <AccountEditIcon/>
                 </Typography>
             </div>
             <div style={NavStyles.row}>
@@ -47,6 +55,7 @@ function ProfileItems() {
                 </Typography>
                 <Typography variant="h5" style={NavStyles.rightText}>
                     742 Evergreen Terrace, M9V 186, ON
+                    <AccountEditIcon/>
                 </Typography>
             </div>
             <div style={NavStyles.row}>
@@ -55,6 +64,7 @@ function ProfileItems() {
                 </Typography>
                 <Typography variant="h5" style={NavStyles.rightText}>
                     (416) 905-1800
+                    <AccountEditIcon/>
                 </Typography>
             </div>
             </CardContent>
@@ -72,7 +82,9 @@ function PrivacyItems() {
                     Two-Factor Authentication
                 </Typography>
                 <Typography variant="h5" style={{...NavStyles.rightText, ...NavStyles.enableText}}>
+                    <EnabledIcon/>
                     Enabled
+                    <AccountEditIcon/>
                 </Typography>
             </div>
             <div style={NavStyles.row}>
@@ -80,7 +92,10 @@ function PrivacyItems() {
                     Data Collection
                 </Typography>
                 <Typography variant="h5" style={{...NavStyles.rightText, ...NavStyles.disableText}}>
+                    <DisabledIcon/>
                     Disabled
+                    <AccountEditIcon/>
+
                 </Typography>
             </div>
             </CardContent>
@@ -97,7 +112,10 @@ function AccountItems() {
                     Delete Account
                 </Typography>
                 <Button variant="contained" size="large" style={{...NavStyles.rightText, ...NavStyles.deleteButton}}>
-                    Large
+                    <DeleteIcon/>
+                    <Typography variant="h5" style={NavStyles.deleteButton}>
+                        Delete 
+                    </Typography>
                 </Button>
             </div>
             </CardContent>
@@ -205,13 +223,16 @@ const NavStyles = {
     },
     deleteButton: {
         borderRadius: "15px",
-        background: "#DD111D"
+        background: "#DD111D",
+        fontSize: 23,
     },
     enableText: {
-        color: "#218F17"
+        color: "#218F17",
+        paddingTop: "10px"
     },
     disableText: {
-        color: "#DD111D"
+        color: "#DD111D",
+        paddingTop: "10px"
     },
   
 }

@@ -65,3 +65,51 @@ export function LogoutIcon() {
     ></img>
   );
 }
+
+export function DeleteIcon() {
+  return (
+    <div style={{marginRight: "10px", marginTop: "10px"}}>
+      <img
+        src={require("../images/delete.png")}
+        height={"30px"}
+        alt="Delete"
+      ></img>
+    </div>
+  );
+}
+
+export function EnabledIcon() {
+  return (
+    <div style={{marginRight: "10px"}}>
+      <img
+        src={require("../images/enabled.png")}
+        height={"30px"}
+        alt="enabled"
+      ></img>
+    </div>
+  );
+}
+
+export function DisabledIcon() {
+  return (
+    <div style={{marginRight: "10px"}}>
+      <img
+        src={require("../images/disabled.png")}
+        height={"30px"}
+        alt="disabled"
+      ></img>
+    </div>
+  );
+}
+
+export function AccountEditIcon() {
+  return (
+    <div style={{marginLeft: "20px"}}>
+      <img
+        src={require("../images/accountEdit.png")}
+        height={"35px"}
+        alt="edit"
+      ></img>
+    </div>
+  );
+}
