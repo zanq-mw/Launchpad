@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import styled from "@emotion/styled";
 import * as React from "react";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -18,46 +18,84 @@ import { LaunchPadLogo } from "./components/logoIcon";
 import { IconButton } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import { pages } from ".";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 
-export function NavItems({ open }) {
+export function NavItems({ open, page, setPage }) {
   return (
     <React.Fragment>
-      <ListItemButton sx={NavStyles.navOption}>
-        <LPListItemIcon open={open}>
-          <HomeIcon />
-        </LPListItemIcon>
-        {open && <LPListItemText>{"Home"}</LPListItemText>}
-      </ListItemButton>
-      <ListItemButton sx={NavStyles.navOption}>
-        <LPListItemIcon open={open}>
-          <MessageIcon />
-        </LPListItemIcon>
-        {open && <LPListItemText>{"Messages"}</LPListItemText>}
-      </ListItemButton>
-      <ListItemButton sx={NavStyles.navOption}>
-        <LPListItemIcon open={open}>
-          <ApplicationsIcon />
-        </LPListItemIcon>
-        {open && <LPListItemText>{"Applications"}</LPListItemText>}
-      </ListItemButton>
-      <ListItemButton sx={NavStyles.navOption}>
-        <LPListItemIcon open={open}>
-          <JobIcon />
-        </LPListItemIcon>
-        {open && <LPListItemText>{"Job Postings"}</LPListItemText>}
-      </ListItemButton>
-      <ListItemButton sx={NavStyles.navOption}>
-        <LPListItemIcon open={open}>
-          <ProfileIcon />
-        </LPListItemIcon>
-        {open && <LPListItemText>{"Account"}</LPListItemText>}
-      </ListItemButton>
-      <ListItemButton sx={NavStyles.navOption}>
-        <LPListItemIcon open={open}>
-          <SettingsIcon />
-        </LPListItemIcon>
-        {open && <LPListItemText>{"Settings"}</LPListItemText>}
-      </ListItemButton>
+      <ThemeProvider theme={theme}>
+        <ListItemButton
+          sx={NavStyles.navOption}
+          onClick={useCallback(() => setPage(pages.landing), [setPage])}
+          selected={page === pages.landing}
+        >
+          <LPListItemIcon open={open}>
+            <HomeIcon />
+          </LPListItemIcon>
+          {open && <LPListItemText>{"Home"}</LPListItemText>}
+        </ListItemButton>
+      </ThemeProvider>
+      <ThemeProvider theme={theme}>
+        <ListItemButton
+          sx={NavStyles.navOption}
+          onClick={useCallback(() => setPage(pages.messages), [setPage])}
+          selected={page === pages.messages}
+        >
+          <LPListItemIcon open={open}>
+            <MessageIcon />
+          </LPListItemIcon>
+          {open && <LPListItemText>{"Messages"}</LPListItemText>}
+        </ListItemButton>
+      </ThemeProvider>
+      <ThemeProvider theme={theme}>
+        <ListItemButton
+          sx={NavStyles.navOption}
+          onClick={useCallback(() => setPage(pages.applications), [setPage])}
+          selected={page === pages.applications}
+        >
+          <LPListItemIcon open={open}>
+            <ApplicationsIcon />
+          </LPListItemIcon>
+          {open && <LPListItemText>{"Applications"}</LPListItemText>}
+        </ListItemButton>
+      </ThemeProvider>
+      <ThemeProvider theme={theme}>
+        <ListItemButton
+          sx={NavStyles.navOption}
+          onClick={useCallback(() => setPage(pages.jobs), [setPage])}
+          selected={page === pages.jobs}
+        >
+          <LPListItemIcon open={open}>
+            <JobIcon />
+          </LPListItemIcon>
+          {open && <LPListItemText>{"Job Postings"}</LPListItemText>}
+        </ListItemButton>
+      </ThemeProvider>
+      <ThemeProvider theme={theme}>
+        <ListItemButton
+          sx={NavStyles.navOption}
+          onClick={useCallback(() => setPage(pages.account), [setPage])}
+          selected={page === pages.account}
+        >
+          <LPListItemIcon open={open}>
+            <ProfileIcon />
+          </LPListItemIcon>
+          {open && <LPListItemText>{"Account"}</LPListItemText>}
+        </ListItemButton>
+      </ThemeProvider>
+      <ThemeProvider theme={theme}>
+        <ListItemButton
+          sx={NavStyles.navOption}
+          onClick={useCallback(() => setPage(pages.settings), [setPage])}
+          selected={page === pages.settings}
+        >
+          <LPListItemIcon open={open}>
+            <SettingsIcon />
+          </LPListItemIcon>
+          {open && <LPListItemText>{"Settings"}</LPListItemText>}
+        </ListItemButton>
+      </ThemeProvider>
 
       <ListItemButton sx={NavStyles.navOptionLogout}>
         <LPListItemIcon open={open}>
@@ -69,7 +107,7 @@ export function NavItems({ open }) {
   );
 }
 
-export function NavBar() {
+export function NavBar({ page, setPage }) {
   const [navOpen, setNavOpen] = useState(true);
 
   return (
@@ -85,7 +123,7 @@ export function NavBar() {
           )}
         </IconButton>
       </div>
-      <NavItems open={navOpen} />
+      <NavItems open={navOpen} page={page} setPage={setPage} />
     </div>
   );
 }
@@ -103,6 +141,23 @@ const LPListItemText = styled("p")`
   font-size: 20px;
   font-weight: bold;
 `;
+
+const theme = createTheme({
+  components: {
+    MuiListItemButton: {
+      styleOverrides: {
+        root: {
+          "&.Mui-selected": {
+            backgroundColor: "#814AEF",
+            ":hover": {
+              backgroundColor: "#814AEF",
+            },
+          },
+        },
+      },
+    },
+  },
+});
 
 const NavStyles = {
   sidePanel: {
@@ -129,6 +184,9 @@ const NavStyles = {
     "&:focus": {
       backgroundColor: "#814AEF",
     },
+    // "&:selected": {
+    //   backgroundColor: "#814AEF",
+    // },
   },
   navOptionLogout: {
     borderRadius: "10px",
