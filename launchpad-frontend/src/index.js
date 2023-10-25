@@ -2,21 +2,22 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import { NavBar } from "./navigation";
-// import App from "./App";
+import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { LandingPage } from "./landingPage/landingPage";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <div className="screen">
+    <App />
+    {/* <div className="screen">
       <nav className="nav">
         <NavBar />
       </nav>
       <main className="content">
         <LandingPage />
       </main>
-    </div>
+    </div> */}
   </React.StrictMode>
 );
 
