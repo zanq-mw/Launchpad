@@ -13,66 +13,66 @@ function ProfileItems() {
     return (
         <React.Fragment>
             <CardContent>
-            <div style={NavStyles.row}>
-                <Typography variant="h5" style={NavStyles.leftText}>
+            <div style={AccountSettingStyles.row}>
+                <Typography variant="h5" style={AccountSettingStyles.leftText}>
                     Full Name
                 </Typography>
-                <Typography variant="h5" component="div" style={NavStyles.rightText}>
+                <Typography variant="h5" component="div" style={AccountSettingStyles.rightText}>
                     <Typography variant="h5" style={{paddingTop: "10px"}}>
                         Bob Smith
                     </Typography>
                     <EditButton/>
                 </Typography>
             </div>
-            <div style={NavStyles.row}>
-                <Typography variant="h5" style={NavStyles.leftText}>
+            <div style={AccountSettingStyles.row}>
+                <Typography variant="h5" style={AccountSettingStyles.leftText}>
                     Email
                 </Typography>
-                <Typography variant="h5" component="div" style={NavStyles.rightText}>
+                <Typography variant="h5" component="div" style={AccountSettingStyles.rightText}>
                     <Typography variant="h5" style={{paddingTop: "10px"}}>
                         bob.smith@gmail.com
                     </Typography>
                     <EditButton/>
                 </Typography>
             </div>
-            <div style={NavStyles.row}>
-                <Typography variant="h5" style={NavStyles.leftText}>
+            <div style={AccountSettingStyles.row}>
+                <Typography variant="h5" style={AccountSettingStyles.leftText}>
                     Password
                 </Typography>
-                <Typography variant="h5" component="div" style={NavStyles.rightText}>
+                <Typography variant="h5" component="div" style={AccountSettingStyles.rightText}>
                     <Typography variant="h5" style={{paddingTop: "10px"}}>
                         ********
                     </Typography>
                     <EditButton/>
                 </Typography>
             </div>
-            <div style={NavStyles.row}>
-                <Typography variant="h5" style={NavStyles.leftText}>
+            <div style={AccountSettingStyles.row}>
+                <Typography variant="h5" style={AccountSettingStyles.leftText}>
                     Date of Birth
                 </Typography>
-                <Typography variant="h5" component="div" style={NavStyles.rightText}>
+                <Typography variant="h5" component="div" style={AccountSettingStyles.rightText}>
                     <Typography variant="h5" style={{paddingTop: "10px"}}>
                         April 1, 2000
                     </Typography>
                     <EditButton/>
                 </Typography>
             </div>
-            <div style={NavStyles.row}>
-                <Typography variant="h5" style={NavStyles.leftText}>
+            <div style={AccountSettingStyles.row}>
+                <Typography variant="h5" style={AccountSettingStyles.leftText}>
                     Address
                 </Typography>
-                <Typography variant="h5" component="div"style={NavStyles.rightText}>
+                <Typography variant="h5" component="div"style={AccountSettingStyles.rightText}>
                     <Typography variant="h5" style={{paddingTop: "10px"}}>
                         742 Evergreen Terrace, M9V 186, ON
                     </Typography>
                     <EditButton/>
                 </Typography>
             </div>
-            <div style={NavStyles.row}>
-                <Typography variant="h5" style={NavStyles.leftText}>
+            <div style={AccountSettingStyles.row}>
+                <Typography variant="h5" style={AccountSettingStyles.leftText}>
                     Phone
                 </Typography>
-                <Typography variant="h5" component="div" style={NavStyles.rightText}>
+                <Typography variant="h5" component="div" style={AccountSettingStyles.rightText}>
                     <Typography variant="h5" style={{paddingTop: "10px"}}>
                         (416) 905-1800
                     </Typography>
@@ -89,11 +89,11 @@ function PrivacyItems() {
     return (
         <React.Fragment>
             <CardContent>
-            <div style={NavStyles.row}>
-                <Typography variant="h5" style={NavStyles.leftText}>
+            <div style={AccountSettingStyles.row}>
+                <Typography variant="h5" style={AccountSettingStyles.leftText}>
                     Two-Factor Authentication
                 </Typography>
-                <Typography variant="h5" component="div" style={{...NavStyles.rightText, ...NavStyles.enableText}}>
+                <Typography variant="h5" component="div" style={{...AccountSettingStyles.rightText, ...AccountSettingStyles.enableText}}>
                     <Typography variant="h5" component="div" style={{paddingTop: "10px", display:"flex"}}>
                         <EnabledIcon/>
                         Enabled
@@ -101,11 +101,11 @@ function PrivacyItems() {
                     <EditButton/>
                 </Typography>
             </div>
-            <div style={NavStyles.row}>
-                <Typography variant="h5" style={NavStyles.leftText}>
+            <div style={AccountSettingStyles.row}>
+                <Typography variant="h5" style={AccountSettingStyles.leftText}>
                     Data Collection
                 </Typography>
-                <Typography variant="h5" component="div" style={{...NavStyles.rightText, ...NavStyles.disableText}}>
+                <Typography variant="h5" component="div" style={{...AccountSettingStyles.rightText, ...AccountSettingStyles.disableText}}>
                     <Typography variant="h5" component="div"style={{paddingTop: "10px", display:"flex"}}>
                         <DisabledIcon/>
                         Disabled
@@ -122,13 +122,13 @@ function AccountItems() {
     return (
         <React.Fragment>
             <CardContent>
-            <div style={NavStyles.row}>
-                <Typography variant="h5" style={NavStyles.leftText}>
+            <div style={AccountSettingStyles.row}>
+                <Typography variant="h5" style={AccountSettingStyles.leftText}>
                     Delete Account
                 </Typography>
-                <Button variant="contained" size="large" style={{...NavStyles.rightText, ...NavStyles.deleteButton}}>
+                <Button variant="contained" size="small" style={{...AccountSettingStyles.rightText, ...AccountSettingStyles.deleteButton}}>
                     <DeleteIcon/>
-                    <Typography variant="h5" style={NavStyles.deleteButton}>
+                    <Typography variant="h5" style={AccountSettingStyles.deleteButton}>
                         Delete 
                     </Typography>
                 </Button>
@@ -140,35 +140,35 @@ function AccountItems() {
 
 export function AccountSettingsItems() {
     return (
-        <div style={NavStyles.container}> 
+        <div style={AccountSettingStyles.container}> 
 
-                <div style={NavStyles.pageContainer}>
+                <div style={AccountSettingStyles.pageContainer}>
                     
-                    <Typography variant="h5" component="div" sx ={NavStyles.mainTitle}>
+                    <Typography variant="h5" component="div" sx ={AccountSettingStyles.mainTitle}>
                                 Account Settings
                     </Typography>
 
-                    <Typography variant="h5" component="div" sx ={NavStyles.subTitle}>
+                    <Typography variant="h5" component="div" sx ={AccountSettingStyles.subTitle}>
                                 Profile 
                     </Typography>
                     
-                    <Card sx = {NavStyles.cardMargin}>
+                    <Card sx = {AccountSettingStyles.cardMargin}>
                         <ProfileItems/>
                     </Card>
 
-                    <Typography variant="h5" component="div" sx ={NavStyles.subTitle}>
+                    <Typography variant="h5" component="div" sx ={AccountSettingStyles.subTitle}>
                                 Privacy & Security  
                     </Typography>
 
-                    <Card sx = {NavStyles.cardMargin}>
+                    <Card sx = {AccountSettingStyles.cardMargin}>
                         <PrivacyItems/>
                     </Card>
 
-                    <Typography variant="h5" component="div" sx ={NavStyles.subTitle}>
+                    <Typography variant="h5" component="div" sx ={AccountSettingStyles.subTitle}>
                                 Account 
                     </Typography>
                     
-                    <Card sx = {NavStyles.cardMargin}>
+                    <Card sx = {AccountSettingStyles.cardMargin}>
                         <AccountItems/>
                     </Card>
                 </div>
@@ -183,7 +183,7 @@ export function AccountSettings() {
     )
 }
 
-const NavStyles = {
+const AccountSettingStyles = {
     container:{
         display: "flex",
         height: "100%"
@@ -198,21 +198,21 @@ const NavStyles = {
     mainTitle: {
         color: '#000',
         fontFamily: 'League Spartan',
-        fontSize: 42,
+        fontSize: 38,
         fontWeight: 700,
         padding: '16px'
     },
     subTitle: {
         color: '#5E17EB',
         fontFamily: 'Roboto',
-        fontSize: 36,
+        fontSize: 32,
         fontWeight: 700,
         padding: '16px'
     },
     cardText: {
         color: '#393939',
         fontFamily: 'Roboto',
-        fontSize: 28,
+        fontSize: 24,
         fontWeight: 700,
         padding: '8px'
     },
@@ -229,7 +229,7 @@ const NavStyles = {
         display: "flex",
         color: '#393939',
         fontFamily: 'Roboto',
-        fontSize: 28,
+        fontSize: 24,
         fontWeight: 700,
         padding: '8px'
       },
@@ -239,7 +239,7 @@ const NavStyles = {
     deleteButton: {
         borderRadius: "15px",
         background: "#DD111D",
-        fontSize: 23,
+        fontSize: 19,
     },
     enableText: {
         color: "#218F17",
