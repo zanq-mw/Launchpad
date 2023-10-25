@@ -184,9 +184,6 @@ const NavStyles = {
     "&:focus": {
       backgroundColor: "#814AEF",
     },
-    // "&:selected": {
-    //   backgroundColor: "#814AEF",
-    // },
   },
   navOptionLogout: {
     borderRadius: "10px",
