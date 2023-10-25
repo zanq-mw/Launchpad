@@ -9,6 +9,7 @@ import {
     DisabledIcon
 } from "../components/navIcons";
 import { EditButton } from "../components/editButton"
+
 function ProfileItems() {
     return (
         <React.Fragment>
@@ -80,7 +81,6 @@ function ProfileItems() {
                 </Typography>
             </div>
             </CardContent>
-            
         </React.Fragment>
     )
 }
@@ -141,37 +141,29 @@ function AccountItems() {
 export function AccountSettingsItems() {
     return (
         <div style={AccountSettingStyles.container}> 
-
-                <div style={AccountSettingStyles.pageContainer}>
-                    
-                    <Typography variant="h5" component="div" sx ={AccountSettingStyles.mainTitle}>
-                                Account Settings
-                    </Typography>
-
-                    <Typography variant="h5" component="div" sx ={AccountSettingStyles.subTitle}>
-                                Profile 
-                    </Typography>
-                    
-                    <Card sx = {AccountSettingStyles.cardMargin}>
-                        <ProfileItems/>
-                    </Card>
-
-                    <Typography variant="h5" component="div" sx ={AccountSettingStyles.subTitle}>
-                                Privacy & Security  
-                    </Typography>
-
-                    <Card sx = {AccountSettingStyles.cardMargin}>
-                        <PrivacyItems/>
-                    </Card>
-
-                    <Typography variant="h5" component="div" sx ={AccountSettingStyles.subTitle}>
-                                Account 
-                    </Typography>
-                    
-                    <Card sx = {AccountSettingStyles.cardMargin}>
-                        <AccountItems/>
-                    </Card>
-                </div>
+            <div style={AccountSettingStyles.pageContainer}>
+                <Typography variant="h5" component="div" sx ={AccountSettingStyles.mainTitle}>
+                            Account Settings
+                </Typography>
+                <Typography variant="h5" component="div" sx ={AccountSettingStyles.subTitle}>
+                            Profile 
+                </Typography>
+                <Card sx = {AccountSettingStyles.cardMargin}>
+                    <ProfileItems/>
+                </Card>
+                <Typography variant="h5" component="div" sx ={AccountSettingStyles.subTitle}>
+                            Privacy & Security  
+                </Typography>
+                <Card sx = {AccountSettingStyles.cardMargin}>
+                    <PrivacyItems/>
+                </Card>
+                <Typography variant="h5" component="div" sx ={AccountSettingStyles.subTitle}>
+                            Account 
+                </Typography>
+                <Card sx = {AccountSettingStyles.cardMargin}>
+                    <AccountItems/>
+                </Card>
+            </div>
         </div>
     );
 }
