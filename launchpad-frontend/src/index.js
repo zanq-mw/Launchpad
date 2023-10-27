@@ -5,6 +5,7 @@ import { NavBar } from "./navigation";
 // import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { LandingPage } from "./landingPage/landingPage";
+import { NotificationsPage } from "./notificationsPage/notificationsPage";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -20,7 +21,7 @@ reportWebVitals();
 
 export const pages = {
   landing: "landing",
-  messages: "messages",
+  notifications: "notifications",
   applications: "applications",
   jobs: "jobs",
   account: "account",
@@ -37,7 +38,7 @@ function Pages() {
       </nav>
       <main className="content">
         {page === pages.landing && <LandingPage />}
-        {page === pages.messages && <div />}
+        {page === pages.notifications && <NotificationsPage />}
         {page === pages.applications && <div />}
         {page === pages.jobs && <div />}
         {page === pages.account && <div />}
