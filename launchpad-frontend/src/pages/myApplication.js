@@ -197,13 +197,13 @@ export function MyApplicationItems() {
                                      {item.action.toLowerCase() === "complete" ? (
                                     <Button variant="contained" size="small" sx={MyApplicationStyles.actionButtonComplete} >
                                     <Typography variant="p">
-                                        Complete 
+                                        {item.action} 
                                     </Typography>
                                     </Button>
                                     ) : 
                                     <Button variant="contained" size="small" sx={MyApplicationStyles.actionButtonPending} >
                                          <Typography variant="p">
-                                             Pending 
+                                             {item.action} 
                                          </Typography>
                                      </Button>
                                     }
