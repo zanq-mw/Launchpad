@@ -1,0 +1,4 @@
+.custom-icon {
+  /* fill gets overrided without important. So color of dropdown is not as gray instead of color below */
+    fill: #5E17EB !important;
+  }

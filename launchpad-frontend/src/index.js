@@ -5,6 +5,8 @@ import { NavBar } from "./navigation";
 // import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { LandingPage } from "./landingPage/landingPage";
+import { AccountSettings } from "./pages/accountSettings";
+import { MyApplication } from "./pages/myApplication";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -38,9 +40,9 @@ function Pages() {
       <main className="content">
         {page === pages.landing && <LandingPage />}
         {page === pages.messages && <div />}
-        {page === pages.applications && <div />}
+        {page === pages.applications && <MyApplication/>}
         {page === pages.jobs && <div />}
-        {page === pages.account && <div />}
+        {page === pages.account && <AccountSettings/>}
         {page === pages.settings && <div />}
       </main>
     </div>
