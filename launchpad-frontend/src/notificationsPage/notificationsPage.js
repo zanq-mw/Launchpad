@@ -25,7 +25,7 @@ const theme = createTheme({
   },
 });
 
-export function Notifications(props) {
+function Notifications(props) {
   const { filteredData, data, setData } = props;
   const [selected, setSelected] = useState(null);
   const [filtered] = useState(filteredData);
