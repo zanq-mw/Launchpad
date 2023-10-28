@@ -1,4 +1,4 @@
 .custom-icon {
-  /* fill gets overrided without important. So color of dropdown is not as gray instead of color below */
+  /* fill gets overrided without important. So color of arrow turns gray instead of fill color below */
     fill: #5E17EB !important;
   }
