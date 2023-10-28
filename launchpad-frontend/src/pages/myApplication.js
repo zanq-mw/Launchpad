@@ -79,7 +79,7 @@ function SelectDropdown({defaultValue, items}) {
           value={selectedValue}
           onChange={handleSelectChange}
           sx ={MyApplicationStyles.selectDropDown}
-          classes={{ icon: 'custom-icon' }}
+          classes={{ icon: 'dropdown-arrow' }}
 
         >
 <MenuItem value="default" disabled>
