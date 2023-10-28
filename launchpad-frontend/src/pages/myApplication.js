@@ -16,10 +16,9 @@ import IconButton from '@mui/material/IconButton';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-
-
 import "./myApplication.css";
 
+// NOTE: mock data will be delete once data connected to db
 // mock data for dropdowns 
 const mockJobTypeMenu = [
     {"name": "Intern", "value": "Intern"},
@@ -30,14 +29,46 @@ const mockDurationMenu = [
     {"name": "Toronto, ON", "value": "Toronto, ON"},
 ]
 const mockLocationMenu = [
-    {"name": "4-month", "value": "4-month"},
-    {"name": "8-month", "value": "8-month"},
+    {"name": "4 Months", "value": "4 Months"},
+    {"name": "8 Months", "value": "8 Months"},
 ]
 
-// can make mock data for rows too but this is not a high priority
-// as mock data will be deleted once db connection is done. Only do mock data if
-// we have time or if you want to be 100% with testing and less future work
-// delete these type of comment before merging 
+// mock data for app rows. 
+const mockApplicationData = [
+      {
+        title: "Software Developer, Intern",
+        company: "Wealthsimple",
+        duration: "4-month Internship",
+        location: "Remote",
+        status: "Pending",
+        logo: "https://images.ctfassets.net/v44fuld738we/3p54yem0uWnzJSPyCLdQgN/10e0569c130b369cf6b33e2f1a88acc7/_2019_Wealthsimple_Favicon_Black.png",
+        date: "2023-10-21",
+        action: "Complete",
+        imageText:"Wealthsimple Logo"
+      },
+      {
+        title: "Data Scientist, Intern",
+        company: "Scotiabank",
+        duration: "8-months Internship",
+        location: "Toronto, ON",
+        status: "Pending",
+        logo: "https://seeklogo.com/images/S/scotiabank-logo-D2F1AF87B5-seeklogo.com.png",
+        date: "2023-10-21",
+        action: "pending",
+        imageText:"Scotiabank Logo"
+      },
+      {
+        title: "title",
+        company: "company",
+        duration: "duration",
+        location: "location",
+        status: "Pending",
+        logo: "logo",
+        date: "2023-10-21",
+        action: "Complete",
+        imageText:"Logo"
+      },
+]
 
 function SearchBar(){
     return (
@@ -108,7 +139,6 @@ export function MyApplicationItems() {
             <SelectDropdown defaultValue="Duration"items={mockDurationMenu}/>
             <SelectDropdown defaultValue="Location" items={mockLocationMenu}/>
 
-
             <Typography variant="h5" component="div" sx ={MyApplicationStyles.subTitle}>
                         Applications 
             </Typography>
@@ -126,138 +156,61 @@ export function MyApplicationItems() {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {/* TODO: make mock data instead of copy and paste row data (like above with the dropdowns) Only if there's time */}
-                                {/* this is not high priority because mock data will be deleted once we do database connection delete commebnt before merge*/}
-                            <TableRow>
-                                <TableCell>
-                                    <Typography style={MyApplicationStyles.jobTitle}>
-                                        Software Developer, Intern
-                                    </Typography>
-                                    <Typography style={MyApplicationStyles.jobDescription}>
-                                        4-months Internship
-                                        <Typography variant = "span">
-                                            , Remote
-                                        </Typography>
-                                    </Typography>
-                                   
-                                </TableCell>
-                                <TableCell>
-                                    <Typography style={MyApplicationStyles.jobTitle} align="center">
-                                        <img
-                                            src={"https://images.ctfassets.net/v44fuld738we/3p54yem0uWnzJSPyCLdQgN/10e0569c130b369cf6b33e2f1a88acc7/_2019_Wealthsimple_Favicon_Black.png"}
-                                            height={"40px"}
-                                            alt={"Wealthsimple Logo"}
-                                        ></img>
-                                    </Typography>
-                                    <Typography style={MyApplicationStyles.companyName} align="center">
-                                        Wealthsimple
-                                    </Typography>
-                                </TableCell>
-                                <TableCell>
-                                    <Typography style={MyApplicationStyles.dateOfApplication}>
-                                        2023-10-21
-                                    </Typography>
-                                </TableCell>
-                                <TableCell>
-                                    <Typography style={MyApplicationStyles.status}>
-                                        Pending
-                                    </Typography>
-                                </TableCell>
-                                <TableCell>
-                                    <Typography style={MyApplicationStyles.jobTitle}>
+                            {mockApplicationData.map((item) => (
+                                 <TableRow>
+                                 <TableCell>
+                                     <Typography style={MyApplicationStyles.jobTitle}>
+                                         {item.title}
+                                     </Typography>
+                                     <Typography style={MyApplicationStyles.jobDescription}>
+                                            {item.duration}
+                                         <Typography variant = "span">
+                                             , {item.location}
+                                         </Typography>
+                                     </Typography>
+                                    
+                                 </TableCell>
+                                 <TableCell>
+                                     <Typography style={MyApplicationStyles.jobTitle} align="center">
+                                         <img
+                                             src={item.logo}
+                                             height={"40px"}
+                                             alt={item.imageText}
+                                         ></img>
+                                     </Typography>
+                                     <Typography style={MyApplicationStyles.companyName} align="center">
+                                         {item.company}
+                                     </Typography>
+                                 </TableCell>
+                                 <TableCell>
+                                     <Typography style={MyApplicationStyles.dateOfApplication}>
+                                         {item.date}
+                                     </Typography>
+                                 </TableCell>
+                                 <TableCell>
+                                     <Typography style={MyApplicationStyles.status}>
+                                         {item.status}
+                                     </Typography>
+                                 </TableCell>
+                                 <TableCell>
+                                     <Typography style={MyApplicationStyles.jobTitle}>
+                                     {item.action.toLowerCase() === "complete" ? (
                                     <Button variant="contained" size="small" sx={MyApplicationStyles.actionButtonComplete} >
-                                        <Typography variant="p">
-                                            Complete 
-                                        </Typography>
+                                    <Typography variant="p">
+                                        Complete 
+                                    </Typography>
                                     </Button>
-                                    </Typography>
-                                </TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell>
-                                    <Typography style={MyApplicationStyles.jobTitle}>
-                                        Data Scientist, Intern
-                                    </Typography>
-                                    <Typography style={MyApplicationStyles.jobDescription}>
-                                        8-months Internship
-                                        <Typography variant = "span">
-                                            , Toronto, ON
-                                        </Typography>
-                                    </Typography>
-                                </TableCell>
-                                <TableCell>
-                                    <Typography style={MyApplicationStyles.jobTitle} align="center">
-                                        <img
-                                            src={"https://seeklogo.com/images/S/scotiabank-logo-D2F1AF87B5-seeklogo.com.png"}
-                                            height={"40px"}
-                                            alt={"Scotiabank Logo"}
-                                        ></img>
-                                    </Typography>
-                                    <Typography style={MyApplicationStyles.companyName} align="center">
-                                        Scotiabank
-                                    </Typography>
-                                </TableCell>
-                                <TableCell>
-                                    <Typography style={MyApplicationStyles.dateOfApplication}>
-                                        2023-10-21
-                                    </Typography>
-                                </TableCell>
-                                <TableCell>
-                                    <Typography style={MyApplicationStyles.status}>
-                                        Pending
-                                    </Typography>
-                                </TableCell>
-                                <TableCell>
-                                    <Typography style={MyApplicationStyles.jobTitle}>
+                                    ) : 
                                     <Button variant="contained" size="small" sx={MyApplicationStyles.actionButtonPending} >
-                                        <Typography variant="p">
-                                            Complete 
-                                        </Typography>
-                                    </Button>
-                                    </Typography>
-                                </TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell>
-                                    <Typography style={MyApplicationStyles.jobTitle}>
-                                        Software Developer, Intern
-                                    </Typography>
-                                    <Typography style={MyApplicationStyles.jobDescription}>
-                                        4-months Internship
-                                        <Typography variant = "span">
-                                            , Remote
-                                        </Typography>
-                                    </Typography>
-                                   
-                                </TableCell>
-                                <TableCell>
-                                    <Typography style={MyApplicationStyles.jobTitle}>
-                                        Logo
-                                    </Typography>
-                                    <Typography style={MyApplicationStyles.companyName}>
-                                        Wealthsimple
-                                    </Typography>
-                                </TableCell>
-                                <TableCell>
-                                    <Typography style={MyApplicationStyles.dateOfApplication}>
-                                        2023-10-21
-                                    </Typography>
-                                </TableCell>
-                                <TableCell>
-                                    <Typography style={MyApplicationStyles.status}>
-                                        Pending
-                                    </Typography>
-                                </TableCell>
-                                <TableCell>
-                                    <Typography style={MyApplicationStyles.jobTitle}>
-                                    <Button variant="contained" size="small" sx={MyApplicationStyles.actionButtonComplete} >
-                                        <Typography variant="p">
-                                            Complete 
-                                        </Typography>
-                                    </Button>
-                                    </Typography>
-                                </TableCell>
-                            </TableRow>
+                                         <Typography variant="p">
+                                             Pending 
+                                         </Typography>
+                                     </Button>
+                                    }
+                                     </Typography>
+                                 </TableCell>
+                             </TableRow>
+                            ))}
                             </TableBody>
                         </Table>
                     </TableContainer>
