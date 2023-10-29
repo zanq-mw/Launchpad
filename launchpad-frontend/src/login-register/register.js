@@ -69,7 +69,7 @@ class Register extends React.Component {
               </div>
             </form>
             <div id="login-container-register">
-                <p>Already have an account?&nbsp;</p><a href="{{url_for('login') }}"><i>Login in here</i></a>
+              <p>Already have an account?&nbsp;</p><NavLink to = '/'><i>Login here</i></NavLink>
             </div>
           </div>
         </div>

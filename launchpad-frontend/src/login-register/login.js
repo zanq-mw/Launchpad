@@ -45,7 +45,7 @@ class Login extends React.Component {
                 <span id="forgot-password"> <i>Forgot password?</i></span>
             </p>
             <div id="login-container-login">
-                <p>Already have an account?&nbsp;</p><a href="{{url_for('register.js') }}"><i>Register Here</i></a>
+              <p>Already have an account?&nbsp;</p><NavLink to = '/signup'><i>Register Here</i></NavLink>
             </div>
         </div>
         
