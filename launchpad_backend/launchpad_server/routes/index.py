@@ -3,6 +3,10 @@ from flask import render_template, request, flash, redirect, url_for
 from .forms import SignupForm, LoginForm  
 from flask_login import login_user
 from flask_bcrypt import Bcrypt
+from flask_pymongo import PyMongo
+
+app.config["MONGO_URI"] = "mongodb://localhost:27017/myDatabase"
+mongo = PyMongo(app)
 
 bcrypt = Bcrypt(app)
 
