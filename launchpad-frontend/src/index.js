@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import { NavBar } from "./navigation";
-// import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { LandingPage } from "./landingPage/landingPage";
+import { AccountSettings } from "./pages/accountSettings";
+import { JobPostings } from "./jobsPage/jobsPage";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -39,8 +40,8 @@ function Pages() {
         {page === pages.landing && <LandingPage />}
         {page === pages.messages && <div />}
         {page === pages.applications && <div />}
-        {page === pages.jobs && <div />}
-        {page === pages.account && <div />}
+        {page === pages.jobs && <JobPostings />}
+        {page === pages.account && <AccountSettings />}
         {page === pages.settings && <div />}
       </main>
     </div>
