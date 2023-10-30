@@ -4,6 +4,7 @@ import "./index.css";
 import { NavBar } from "./navigation";
 import reportWebVitals from "./reportWebVitals";
 import { LandingPage } from "./landingPage/landingPage";
+import { NotificationsPage } from "./notificationsPage/notificationsPage";
 import { AccountSettings } from "./pages/accountSettings";
 import { JobPostings } from "./jobsPage/jobsPage";
 
@@ -21,7 +22,7 @@ reportWebVitals();
 
 export const pages = {
   landing: "landing",
-  messages: "messages",
+  notifications: "notifications",
   applications: "applications",
   jobs: "jobs",
   account: "account",
@@ -38,7 +39,7 @@ function Pages() {
       </nav>
       <main className="content">
         {page === pages.landing && <LandingPage />}
-        {page === pages.messages && <div />}
+        {page === pages.notifications && <NotificationsPage />}
         {page === pages.applications && <div />}
         {page === pages.jobs && <JobPostings />}
         {page === pages.account && <AccountSettings />}
