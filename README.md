@@ -14,3 +14,11 @@
 3. Install the dependency (if you haven't already) Windows: `pip install -r requirements.txt` Mac: `pip3 install -r requirements.txt`
 4. Run `python run.py` in terminal
 5. Navigate to http://127.0.0.1:5000/ on your browser to see app locally
+
+## Running MongoDB Locally
+
+1. Install MongoDB with default settings: https://www.mongodb.com/try/download/community
+2. Go to launchpad_backend directory cd launchpad_backend
+4. Run python run.py in terminal
+5. Navigate to http://127.0.0.1:5000/ on your browser to see app locally
+
