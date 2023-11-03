@@ -6,7 +6,7 @@
 2. Go to launchpad_backend directory `cd launchpad_backend`
 3. Install the required dependencies Windows: `pip install -r requirements.txt` Mac: `pip3 install -r requirements.txt`
 4. Run `python run.py` in terminal
-5. Navigate to http://127.0.0.1:5000/ on your browser to see app locally
+5. Navigate to http://localhost:5000/ on your browser to see app locally
 
 ## Running Frontend
 
@@ -15,7 +15,7 @@
 3. Run `npm install` in terminal to install all required dependencies
 4. Ensure backend server is running (see above)
 5. Run `npm start` in terminal
-6. Navigate to localhost:3000 on your browser to see app locally
+6. Navigate to http://localhost:3000/ on your browser to see app locally
 
 ## Running MongoDB UI to see and edit data (Optional)
 

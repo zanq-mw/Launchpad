@@ -7,6 +7,7 @@ import { LandingPage } from "./landingPage/landingPage";
 import { NotificationsPage } from "./notificationsPage/notificationsPage";
 import { AccountSettings } from "./pages/accountSettings";
 import { JobPostings } from "./jobsPage/jobsPage";
+import { App } from "./App";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -43,7 +44,7 @@ function Pages() {
         {page === pages.applications && <div />}
         {page === pages.jobs && <JobPostings />}
         {page === pages.account && <AccountSettings />}
-        {page === pages.settings && <div />}
+        {page === pages.settings && <App />}
       </main>
     </div>
   );
