@@ -41,7 +41,14 @@ def check_db():
 
     for doc in result:
         doc["_id"] = str(doc["_id"])
-    return (jsonify({"data": result}))    
+    return (jsonify({"data": result}))   
+
+
+@app.route("/check_db")
+def check_db():
+    # Check if the connection is successful
+    if mongo.cx:
+        return "Connected to MongoDB successfully!" 
     
 
 @app.route("/", methods = ['POST', 'GET'])
