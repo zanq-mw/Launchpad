@@ -1,4 +1,0 @@
-.dropdown-arrow {
-  /* fill gets overrided without important. So color of arrow turns gray instead of fill color below */
-    fill: #5E17EB !important;
-  }
