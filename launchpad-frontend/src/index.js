@@ -7,7 +7,6 @@ import { LandingPage } from "./landingPage/landingPage";
 import { AccountSettings } from "./pages/accountSettings";
 import { MyApplication } from "./pages/myApplication";
 import { NotificationsPage } from "./notificationsPage/notificationsPage";
-import { AccountSettings } from "./pages/accountSettings";
 import { JobPostings } from "./jobsPage/jobsPage";
 import { App } from "./App";
 
