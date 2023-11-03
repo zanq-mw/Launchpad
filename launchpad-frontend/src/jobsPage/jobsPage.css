@@ -1,0 +1,35 @@
+@import "@fontsource/league-spartan";
+
+.page-contents {
+    font-family: 'Roboto';
+}
+
+h1 {
+    color: #000;
+    font-family: 'League Spartan';
+    font-size: 38px;
+    font-weight: bold;
+    padding: 16px 0;
+}
+
+input {
+    background-color: #c1c1c17a;
+    padding: 5px 10px;
+    border-radius: 15px;
+    border-width: 3px;
+    border-color: #c1c1c17a;
+    border-style: none;
+    flex: 1 1 40rem;
+}
+
+.search {
+    display: flex;
+    align-items: center;
+    flex: 0 1 40rem;
+    margin-right: 20px;
+}
+
+.search-logo {
+    height: 15px;
+    margin-left: -30px;
+}
