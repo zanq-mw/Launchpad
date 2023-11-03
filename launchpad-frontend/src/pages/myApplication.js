@@ -19,20 +19,6 @@ import MenuItem from '@mui/material/MenuItem';
 import "./myApplication.css";
 
 // NOTE: mock data will be delete once data connected to db
-// mock data for dropdowns 
-const mockJobTypeMenu = [
-    {"name": "Intern", "value": "Intern"},
-    {"name": "Full-Time", "value": "Full-Time"},
-]
-const mockDurationMenu = [
-    {"name": "Remote", "value": "Remote"},
-    {"name": "Toronto, ON", "value": "Toronto, ON"},
-]
-const mockLocationMenu = [
-    {"name": "4 Months", "value": "4 Months"},
-    {"name": "8 Months", "value": "8 Months"},
-]
-
 // mock data for app rows. 
 const mockApplicationData = [
       {
@@ -58,170 +44,162 @@ const mockApplicationData = [
         imageText:"Scotiabank Logo"
       },
       {
-        title: "title",
-        company: "company",
-        duration: "duration",
-        location: "location",
+        title: "Software Engineer, Intern",
+        company: "Amazon",
+        duration: "New Grad",
+        location: "Vancouver, BC",
         status: "Pending",
-        logo: "logo",
+        logo: "https://seeklogo.com/images/A/amazon-icon-logo-8F577E5C31-seeklogo.com.png",
         date: "2023-10-21",
         action: "Complete",
-        imageText:"Logo"
+        imageText:"Amazon Logo"
       },
 ]
 
-function SearchBar(){
-    return (
-        <TextField
-        variant="outlined"
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-                <IconButton>
-                    <SearchIcon sx={MyApplicationStyles.searchIcon}></SearchIcon>
-
-                </IconButton>
-            </InputAdornment>
-          ),
-          sx: {
-            borderRadius: 10,
-            height: "25px",
-            width: "32vw"
-          },
-        }}
-        placeholder="Ex. Job Name"
-      />
-    )
-}
 
 
-function SelectDropdown({defaultValue, items}) {
-    const [selectedValue, setSelectedValue] = useState("default");
-  
-    const handleSelectChange = (event) => {
-      setSelectedValue(event.target.value);
-    };
-  
-    return (
-      <FormControl>
-  
-        <Select
-        defaultValue="default"
-          value={selectedValue}
-          onChange={handleSelectChange}
-          sx ={MyApplicationStyles.selectDropDown}
-          classes={{ icon: 'dropdown-arrow' }}
 
-        >
-<MenuItem value="default" disabled>
-          {defaultValue}
-        </MenuItem>
 
-          {items.map((item) => (
-            <MenuItem key={item.value} value={item.value}>
-                {item.name}
-            </MenuItem>
-           ))}
-          
-        </Select>
-      </FormControl>
-    );
-  }
-
-export function MyApplicationItems() {
+  export function MyApplicationItems() {
     return (
         <div style={MyApplicationStyles.pageContainer}>
-            <Typography variant="h5" component="div" sx ={MyApplicationStyles.mainTitle}>
-                        My Applications
-            </Typography>
-            <SearchBar/>
-            <SelectDropdown defaultValue="Job Type" items={mockJobTypeMenu}/>
-            <SelectDropdown defaultValue="Duration"items={mockDurationMenu}/>
-            <SelectDropdown defaultValue="Location" items={mockLocationMenu}/>
+            <div style={{ margin: '40px' }}></div>
+            <Card sx={{ ...MyApplicationStyles.cardMargin, paddingTop: '15px', paddingBottom: '15px' }}>
+  <CardContent>
+    <div style={{ marginBottom: '20px', marginLeft:'30px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div>
+          <Typography variant="h6" component="div" style={{ fontSize: '18px', fontWeight: 'bold' }}>
+            Application Submitted
+          </Typography>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <Typography variant="h6" component="div" style={{ fontSize: '17px', marginRight: '520px', color: '#C1C1C1', fontWeight:'bold' }}>
+            60
+          </Typography>
+        </div>
+      </div>
+    </div>
 
-            <Typography variant="h5" component="div" sx ={MyApplicationStyles.subTitle}>
-                        Applications 
+    <div style={{ borderTop: '1px solid #ccc' }}></div>
+
+    <div style={{ marginTop: '20px', marginLeft:'30px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div>
+          <Typography variant="h6" component="div" style={{ fontSize: '18px', fontWeight: 'bold' }}>
+            Selected for Interview
+          </Typography>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+        <Typography variant="h6" component="div" style={{ fontSize: '17px', marginRight: '520px', color: '#C1C1C1',fontWeight:'bold'  }}>
+            5
+          </Typography>
+        </div>
+      </div>
+    </div>
+  </CardContent>
+</Card>
+
+<div style={{ margin: '40px' }}></div>
+
+            <Typography variant="h5" component="div" sx={MyApplicationStyles.subTitle}>
+                Applications
             </Typography>
-            <Card sx = {MyApplicationStyles.cardMargin}>
+            <Card sx={MyApplicationStyles.cardMargin}>
                 <CardContent>
                     <TableContainer>
                         <Table>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell sx ={MyApplicationStyles.tableHeader}>Jobs</TableCell>
-                                    <TableCell sx ={MyApplicationStyles.tableHeader}>Company</TableCell>
-                                    <TableCell sx ={MyApplicationStyles.tableHeader}>Date of Application</TableCell>
-                                    <TableCell sx ={MyApplicationStyles.tableHeader}>Status</TableCell>
-                                    <TableCell sx ={MyApplicationStyles.tableHeader}>Action</TableCell>
+                                    <TableCell sx={MyApplicationStyles.tableHeader}>Jobs</TableCell>
+                                    <TableCell sx={MyApplicationStyles.tableHeader}>Company</TableCell>
+                                    <TableCell sx={MyApplicationStyles.tableHeader}>Date of Application</TableCell>
+                                    <TableCell sx={MyApplicationStyles.tableHeader}>Status</TableCell>
+                                    <TableCell sx={MyApplicationStyles.tableHeader}>Action</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                            {mockApplicationData.map((item) => (
-                                 <TableRow>
-                                 <TableCell>
-                                     <Typography style={MyApplicationStyles.jobTitle}>
-                                         {item.title}
-                                     </Typography>
-                                     <Typography style={MyApplicationStyles.jobDescription}>
-                                            {item.duration}
-                                         <Typography variant = "span">
-                                             , {item.location}
-                                         </Typography>
-                                     </Typography>
-                                    
-                                 </TableCell>
-                                 <TableCell>
-                                     <Typography style={MyApplicationStyles.jobTitle} align="center">
-                                         <img
-                                             src={item.logo}
-                                             height={"40px"}
-                                             alt={item.imageText}
-                                         ></img>
-                                     </Typography>
-                                     <Typography style={MyApplicationStyles.companyName} align="center">
-                                         {item.company}
-                                     </Typography>
-                                 </TableCell>
-                                 <TableCell>
-                                     <Typography style={MyApplicationStyles.dateOfApplication}>
-                                         {item.date}
-                                     </Typography>
-                                 </TableCell>
-                                 <TableCell>
-                                     <Typography style={MyApplicationStyles.status}>
-                                         {item.status}
-                                     </Typography>
-                                 </TableCell>
-                                 <TableCell>
-                                     <Typography style={MyApplicationStyles.jobTitle}>
-                                     {item.action.toLowerCase() === "complete" ? (
-                                    <Button variant="contained" size="small" sx={MyApplicationStyles.actionButtonComplete} >
-                                    <Typography variant="p">
-                                        {item.action} 
-                                    </Typography>
-                                    </Button>
-                                    ) : 
-                                    <Button variant="contained" size="small" sx={MyApplicationStyles.actionButtonPending} >
-                                         <Typography variant="p">
-                                             {item.action} 
-                                         </Typography>
-                                     </Button>
-                                    }
-                                     </Typography>
-                                 </TableCell>
-                             </TableRow>
-                            ))}
+                                {mockApplicationData.map((item) => (
+                                    <TableRow key={item.id}>
+                                        <TableCell>
+                                            <Typography style={MyApplicationStyles.jobTitle}>
+                                                {item.title}
+                                            </Typography>
+                                            <Typography style={MyApplicationStyles.jobDescription}>
+                                                {item.duration}
+                                                <Typography variant="span">
+                                                    , {item.location}
+                                                </Typography>
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography style={MyApplicationStyles.jobTitle} align="center">
+                                                <img
+                                                    src={item.logo}
+                                                    height={"40px"}
+                                                    alt={item.imageText}
+                                                ></img>
+                                            </Typography>
+                                            <Typography style={MyApplicationStyles.companyName} align="center">
+                                                {item.company}
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography style={MyApplicationStyles.dateOfApplication}>
+                                                {item.date}
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography style={MyApplicationStyles.status}>
+                                                {item.status}
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography style={MyApplicationStyles.jobTitle}>
+                                                {item.action.toLowerCase() === "complete" ? (
+                                                    <Button variant="contained" size="small" sx={MyApplicationStyles.actionButtonComplete}>
+                                                        <Typography variant="p">
+                                                            {item.action}
+                                                        </Typography>
+                                                    </Button>
+                                                ) : (
+                                                    <Button variant="contained" size="small" sx={MyApplicationStyles.actionButtonPending}>
+                                                        <Typography variant="p">
+                                                            {item.action}
+                                                        </Typography>
+                                                    </Button>
+                                                )}
+                                            </Typography>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
                             </TableBody>
                         </Table>
                     </TableContainer>
                 </CardContent>
             </Card>
+
             
-            <Card sx = {MyApplicationStyles.cardMargin}>
-            </Card>
-        </div>
+
+            
+
+
+
+
+
+
+
+
+
+   
+
+</div>
 );
 }
+        
+
+   
+
 
 
 export function MyApplication() {
@@ -324,5 +302,8 @@ const MyApplicationStyles = {
         color: '#5E17EB',
         marginLeft: "10px",
         width: "11vw",
-      }
+      },
+
+    
 }
+
