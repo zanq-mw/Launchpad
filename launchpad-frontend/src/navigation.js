@@ -39,13 +39,13 @@ export function NavItems({ open, page, setPage }) {
       <ThemeProvider theme={theme}>
         <ListItemButton
           sx={NavStyles.navOption}
-          onClick={useCallback(() => setPage(pages.messages), [setPage])}
-          selected={page === pages.messages}
+          onClick={useCallback(() => setPage(pages.notifications), [setPage])}
+          selected={page === pages.notifications}
         >
           <LPListItemIcon open={open}>
             <MessageIcon />
           </LPListItemIcon>
-          {open && <LPListItemText>{"Messages"}</LPListItemText>}
+          {open && <LPListItemText>{"Notifications"}</LPListItemText>}
         </ListItemButton>
       </ThemeProvider>
       <ThemeProvider theme={theme}>
