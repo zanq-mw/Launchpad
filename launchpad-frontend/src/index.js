@@ -41,12 +41,8 @@ function Pages() {
       </nav>
       <main className="content">
         {page === pages.landing && <LandingPage />}
-        {page === pages.messages && <div />}
-        {page === pages.applications && <MyApplication/>}
-        {page === pages.jobs && <div />}
-        {page === pages.settings && <div />}
         {page === pages.notifications && <NotificationsPage />}
-        {page === pages.applications && <div />}
+        {page === pages.applications && <MyApplication/>}
         {page === pages.jobs && <JobPostings />}
         {page === pages.account && <AccountSettings />}
         {page === pages.settings && <App />}
