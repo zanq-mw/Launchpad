@@ -11,7 +11,7 @@ export function App() {
         setData(data);
         console.log(data);
       });
-  });
+  }, []);
 
   return (
     <div className="App">
