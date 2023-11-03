@@ -44,7 +44,6 @@ function Pages() {
         {page === pages.messages && <div />}
         {page === pages.applications && <MyApplication/>}
         {page === pages.jobs && <div />}
-        {page === pages.account && <AccountSettings/>}
         {page === pages.settings && <div />}
         {page === pages.notifications && <NotificationsPage />}
         {page === pages.applications && <div />}
