@@ -8,7 +8,8 @@ export const mockApplicationData = [
       logo: "https://images.ctfassets.net/v44fuld738we/3p54yem0uWnzJSPyCLdQgN/10e0569c130b369cf6b33e2f1a88acc7/_2019_Wealthsimple_Favicon_Black.png",
       date: "2023-10-21",
       action: "Complete",
-      imageText:"Wealthsimple Logo"
+      imageText:"Wealthsimple Logo",
+      redirect:"app_link"
     },
     {
       title: "Data Scientist, Intern",
@@ -19,7 +20,8 @@ export const mockApplicationData = [
       logo: "https://seeklogo.com/images/S/scotiabank-logo-D2F1AF87B5-seeklogo.com.png",
       date: "2023-10-21",
       action: "pending",
-      imageText:"Scotiabank Logo"
+      imageText:"Scotiabank Logo",
+      redirect:"app_link"
     },
     {
       title: "Software Engineer, Intern",
@@ -30,7 +32,8 @@ export const mockApplicationData = [
       logo: "https://seeklogo.com/images/A/amazon-icon-logo-8F577E5C31-seeklogo.com.png",
       date: "2023-10-21",
       action: "Complete",
-      imageText:"Amazon Logo"
+      imageText:"Amazon Logo",
+      redirect:"app_link"
     },
     {
       title: "Software Engineer, Junior",
