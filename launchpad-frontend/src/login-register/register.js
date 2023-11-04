@@ -6,19 +6,18 @@ class Register extends React.Component {
   render() {
     return (
       <div class="container-main">
-      
-      <div class="container-left">
-        <div class="container-logo">
-            <img src={logo} alt="Logo" />
-            <p id="slogan">Launching Careers, One <br></br>Opportunity at a Time</p>
-        </div>
-      </div>
-        
-        <div class="container-right">
-          <div class="heading-container">
-            Create Account
+        <div class="container-left">
+          <div class="container-logo">
+            <img class="startup-logo" src={logo} alt="Logo" />
+            <p id="slogan">
+              Launching Careers, One <br></br>Opportunity at a Time
+            </p>
           </div>
-          
+        </div>
+
+        <div class="container-right">
+          <div class="heading-container">Create Account</div>
+
           <div class="form-container-login2">
             <form>
               <div class="input2">
@@ -31,11 +30,16 @@ class Register extends React.Component {
               </div>
 
               <div id="year-program-container">
-                
-                  <p class="field1">
-                    <label>Year</label> <br></br>
-                    <input type="number" name="Year" min="0" max="10" placeholder="3"></input>
-                  </p>
+                <p class="field1">
+                  <label>Year</label> <br></br>
+                  <input
+                    type="number"
+                    name="Year"
+                    min="0"
+                    max="10"
+                    placeholder="3"
+                  ></input>
+                </p>
                 <div class="input2">
                   <p class="field2">
                     <label>Program</label>
@@ -47,7 +51,7 @@ class Register extends React.Component {
                   </p>
                 </div>
               </div>
-              
+
               <div class="input2">
                 <label>Email</label>
                 <input
@@ -69,7 +73,10 @@ class Register extends React.Component {
               </div>
             </form>
             <div id="login-container-register">
-              <p>Already have an account?&nbsp;</p><NavLink to = '/'><i>Login here</i></NavLink>
+              <p>Already have an account?&nbsp;</p>
+              <NavLink to="/">
+                <i>Login here</i>
+              </NavLink>
             </div>
           </div>
         </div>
