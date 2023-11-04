@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import { NavBar } from "./navigation";
+import Startup from "./startup";
 import reportWebVitals from "./reportWebVitals";
 import { LandingPage } from "./landingPage/landingPage";
 import { NotificationsPage } from "./notificationsPage/notificationsPage";
@@ -13,6 +14,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <Pages />
+    {/* <Startup /> */}
   </React.StrictMode>
 );
 
