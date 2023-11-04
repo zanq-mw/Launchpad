@@ -26,6 +26,8 @@ user = {
         "year": "1st/2nd/3rd or Graduated", 
         "program": "Computer Science",
         "address": "address",  # If address is not specified for a record, do not include this key-value pair in the dictionary
+        "postalCode": "postal code",  # If postal code is not specified for a record, do not include this key-value pair in the dictionary
+        "province": "province",  # If province is not specified for a record, do not include this key-value pair in the dictionary
         "phoneNumber": "number",  # If number is not specified for a record, do not include this key-value pair in the dictionary
         "twoFactor": False,
         "dataCollection": True,
@@ -72,7 +74,8 @@ company = {
     "index": "companyId",
     "records": [{
         "companyId": 1, 
-        "companyName": "Apple"
+        "companyName": "Apple",
+        "logo": "img url"
     }]
 }
 
