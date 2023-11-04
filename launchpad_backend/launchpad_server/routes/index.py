@@ -1,15 +1,24 @@
 from launchpad_server import app
-from flask import render_template, request, flash, redirect, url_for
+from flask import render_template, request, flash, redirect, url_for,jsonify
 from .forms import SignupForm, LoginForm  
 from flask_login import login_user
 from flask_bcrypt import Bcrypt
+from flask_pymongo import PyMongo
+
+app.config['MONGO_URI'] = 'mongodb://localhost:27017/database'
+
+# Initialize the PyMongo extension
+mongo = PyMongo(app)
+
 
 bcrypt = Bcrypt(app)
 
-class User:
-    def __init__(self, email, password):
-        self.email = email
-        self.password = password
+@app.route("/check_db")
+def check_db():
+    # Check if the connection is successful
+    if mongo.cx:
+        return "Connected to MongoDB successfully!"
+    
 
 @app.route("/", methods = ['POST', 'GET'])
 def index():

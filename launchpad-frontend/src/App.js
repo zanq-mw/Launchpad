@@ -1,19 +1,21 @@
-import Login from "./login-register/login";
-import SignUp from "./login-register/register";
-import './App.css';
+import "./App.css";
+import React, { useState, useEffect } from "react";
 
-import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
+export function App() {
+  const [data, setData] = useState({});
 
-function App() {
+  useEffect(() => {
+    fetch("/test")
+      .then((res) => res.json())
+      .then((data) => {
+        setData(data);
+        console.log(data);
+      });
+  }, []);
+
   return (
-    <div>
-        <Router>
-          <Routes>
-            <Route exact path ='/' element={<Login />}/>
-            <Route path ='/signup' element={<SignUp />}/>
-            </Routes>
-      </Router>
+    <div className="App">
+      <p>{data.mssg}</p>
     </div>
   );
 }
-export default App;
