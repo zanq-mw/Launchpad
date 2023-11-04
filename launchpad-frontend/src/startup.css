@@ -79,7 +79,7 @@ body{
   
   
   
-  input{
+  .input{
      border: 0;
      color: #212121;
      font-family: Roboto;
@@ -97,11 +97,11 @@ body{
     margin-bottom: 4%;
   }
   
-  input:hover {
+  .input:hover {
     border-color: #5E17EB; 
   }
   
-  label{
+  .label{
       color: #000;
       font-family: Roboto;
       font-size: 1.4vw;

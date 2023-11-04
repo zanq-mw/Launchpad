@@ -21,16 +21,18 @@ class Login extends React.Component {
           <div class="form-container-login">
             <form action="" method="POST">
               <div class="input2">
-                <label>Email</label>
+                <label class="label">Email</label>
                 <input
+                  class="input"
                   type="text"
                   name="username"
                   placeholder="example@yourschool.com"
                 />
               </div>
               <div class="input2">
-                <label>Password</label>
+                <label class="label">Password</label>
                 <input
+                  class="input"
                   type="password"
                   name="Password"
                   placeholder="***********"

@@ -21,18 +21,29 @@ class Register extends React.Component {
           <div class="form-container-login2">
             <form>
               <div class="input2">
-                <label>First Name</label>
-                <input type="text" name="Fname" placeholder="Jane" />
+                <label class="label">First Name</label>
+                <input
+                  class="input"
+                  type="text"
+                  name="Fname"
+                  placeholder="Jane"
+                />
               </div>
               <div class="input2">
-                <label>Last Name</label>
-                <input type="text" name="Lname" placeholder="Doe" />
+                <label class="label">Last Name</label>
+                <input
+                  class="input"
+                  type="text"
+                  name="Lname"
+                  placeholder="Doe"
+                />
               </div>
 
               <div id="year-program-container">
                 <p class="field1">
-                  <label>Year</label> <br></br>
+                  <label class="label">Year</label> <br></br>
                   <input
+                    class="input"
                     type="number"
                     name="Year"
                     min="0"
@@ -42,8 +53,9 @@ class Register extends React.Component {
                 </p>
                 <div class="input2">
                   <p class="field2">
-                    <label>Program</label>
+                    <label class="label">Program</label>
                     <input
+                      class="input"
                       type="text"
                       name="Program"
                       placeholder="Computer Science"
@@ -53,16 +65,18 @@ class Register extends React.Component {
               </div>
 
               <div class="input2">
-                <label>Email</label>
+                <label class="label">Email</label>
                 <input
+                  class="input"
                   type="text"
                   name="username"
                   placeholder="example@yourschool.com"
                 />
               </div>
               <div class="input2">
-                <label>Password</label>
+                <label class="label">Password</label>
                 <input
+                  class="input"
                   type="password"
                   name="Password"
                   placeholder="***********"
