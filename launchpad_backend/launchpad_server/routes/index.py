@@ -4,6 +4,10 @@ from .forms import SignupForm, LoginForm
 from flask_login import login_user
 from flask_bcrypt import Bcrypt
 from flask_pymongo import PyMongo
+import pymongo
+import sys
+sys.path.append('.\\launchpad_server\\routes')
+from startup_data import startup_data
 
 app.config['MONGO_URI'] = 'mongodb://localhost:27017/database'
 
@@ -13,11 +17,38 @@ mongo = PyMongo(app)
 
 bcrypt = Bcrypt(app)
 
+def setup_db():
+    for data in startup_data:
+        collection = mongo.db[data["tableName"]] # similar to table in relational db
+        collection.drop()
+        insertList = []
+
+        for record in data["records"]: # similar to row in relational db
+            insertList.append(record)
+
+        collection.insert_many(insertList)
+        collection.create_index([(data["index"], pymongo.ASCENDING)], unique=True) # Enforces primary key like restrcitions
+
+setup_db() # Resets db to startup_data everytime backend is saved or ran
+
+
+@app.route("/applications/<int:user_id>")
+def get_applications(user_id):
+    # Select * from application where userId=user_id
+    collection = mongo.db.application
+    query = {"userId": user_id}
+    result = list(collection.find(query))
+
+    for doc in result:
+        doc.pop("_id")
+    return (jsonify({"data": result}))   
+
+
 @app.route("/check_db")
 def check_db():
     # Check if the connection is successful
     if mongo.cx:
-        return "Connected to MongoDB successfully!"
+        return "Connected to MongoDB successfully!" 
     
 
 @app.route("/", methods = ['POST', 'GET'])
