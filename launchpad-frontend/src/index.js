@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import { NavBar } from "./navigation";
+import Startup from "./startup";
 import reportWebVitals from "./reportWebVitals";
 import { LandingPage } from "./landingPage/landingPage";
+import { AccountSettings } from "./accountSettingPage/accountSettings";
+import { MyApplication } from "./myApplicationPage/myApplication";
 import { NotificationsPage } from "./notificationsPage/notificationsPage";
-import { AccountSettings } from "./pages/accountSettings";
 import { JobPostings } from "./jobsPage/jobsPage";
 import { App } from "./App";
 
@@ -13,6 +15,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <Pages />
+    {/* <Startup /> */}
   </React.StrictMode>
 );
 
@@ -41,7 +44,7 @@ function Pages() {
       <main className="content">
         {page === pages.landing && <LandingPage />}
         {page === pages.notifications && <NotificationsPage />}
-        {page === pages.applications && <div />}
+        {page === pages.applications && <MyApplication/>}
         {page === pages.jobs && <JobPostings />}
         {page === pages.account && <AccountSettings />}
         {page === pages.settings && <App />}
