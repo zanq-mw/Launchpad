@@ -5,8 +5,9 @@ import { NavBar } from "./navigation";
 import Startup from "./startup";
 import reportWebVitals from "./reportWebVitals";
 import { LandingPage } from "./landingPage/landingPage";
+import { AccountSettings } from "./accountSettingPage/accountSettings";
+import { MyApplication } from "./myApplicationPage/myApplication";
 import { NotificationsPage } from "./notificationsPage/notificationsPage";
-import { AccountSettings } from "./pages/accountSettings";
 import { JobPostings } from "./jobsPage/jobsPage";
 import { App } from "./App";
 
@@ -43,7 +44,7 @@ function Pages() {
       <main className="content">
         {page === pages.landing && <LandingPage />}
         {page === pages.notifications && <NotificationsPage />}
-        {page === pages.applications && <div />}
+        {page === pages.applications && <MyApplication/>}
         {page === pages.jobs && <JobPostings />}
         {page === pages.account && <AccountSettings />}
         {page === pages.settings && <App />}
