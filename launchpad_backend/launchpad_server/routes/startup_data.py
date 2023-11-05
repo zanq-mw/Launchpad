@@ -25,9 +25,11 @@ user = {
         "lastName": "C", 
         "year": "1st/2nd/3rd or Graduated", 
         "program": "Computer Science",
-        "address": "address",  # If address is not specified for a record, do not include this key-value pair in the dictionary
-        "postalCode": "postal code",  # If postal code is not specified for a record, do not include this key-value pair in the dictionary
-        "province": "province",  # If province is not specified for a record, do not include this key-value pair in the dictionary
+        "address": {        # If address is not specified for a record, do not include this key-value pair in the dictionary
+            "streetAddress": "123 example st",
+            "postalCode": "000 000",
+            "province": "ON"
+        },
         "phoneNumber": "number",  # If number is not specified for a record, do not include this key-value pair in the dictionary
         "twoFactor": False,
         "dataCollection": True,

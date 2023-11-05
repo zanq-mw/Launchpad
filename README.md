@@ -24,4 +24,3 @@ All interaction with the db is through the backend so this step is not neccessar
 1. Install MongoDB with default settings: https://www.mongodb.com/try/download/community
 2. Ensure backend server is running (see above)
 3. In MongoDB, establish a new connection with URI mongodb://localhost:27017/database
-4. Go to launchpad_backend directory cd launchpad_backend

@@ -32,15 +32,15 @@ def setup_db():
 setup_db() # Resets db to startup_data everytime backend is saved or ran
 
 
-@app.route("/applications")
-def check_db():
-    # Select * from application where userId=1
+@app.route("/applications/<int:user_id>")
+def get_applications(user_id):
+    # Select * from application where userId=user_id
     collection = mongo.db.application
-    query = {"userId": 1}
+    query = {"userId": user_id}
     result = list(collection.find(query))
 
     for doc in result:
-        doc["_id"] = str(doc["_id"])
+        doc.pop("_id")
     return (jsonify({"data": result}))   
 
 
