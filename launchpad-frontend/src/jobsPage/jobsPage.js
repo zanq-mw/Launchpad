@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import "./jobsPage.css";
 import "@fontsource/league-spartan";
 import Tabs from "@mui/material/Tabs";
@@ -22,6 +22,12 @@ import CloseIcon from "@mui/icons-material/Close";
 
 export function JobPostings() {
   const [value, setValue] = React.useState(0);
+  const [searchValue, setSearchValue] = React.useState("");
+  const [typeFilter, setTypeFilter] = React.useState(null);
+  const [durationFilter, setDurationFilter] = React.useState(null);
+  const [locationFilter, setLocationFilter] = React.useState(null);
+
+  console.log(typeFilter, durationFilter, locationFilter);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -46,10 +52,25 @@ export function JobPostings() {
           gap: "8px",
         }}
       >
-        <SearchBar />
-        <Dropdown title="Job Type" options={jobTypeOptions} />
-        <Dropdown title="Duration" options={durationOptions} />
-        <Dropdown title="Location" options={locationOptions} />
+        <SearchBar value={searchValue} handleChange={setSearchValue} />
+        <Dropdown
+          title="Job Type"
+          options={jobTypeOptions}
+          value={typeFilter}
+          handleChange={setTypeFilter}
+        />
+        <Dropdown
+          title="Duration"
+          options={durationOptions}
+          value={durationFilter}
+          handleChange={setDurationFilter}
+        />
+        <Dropdown
+          title="Location"
+          options={locationOptions}
+          value={locationFilter}
+          handleChange={setLocationFilter}
+        />
       </div>
       <Box sx={{ width: "100%" }}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -61,10 +82,21 @@ export function JobPostings() {
           </ThemeProvider>
         </Box>
         <CustomTabPanel value={value} index={0}>
-          <Postings />
+          <Postings
+            searchValue={searchValue}
+            typeFilter={typeFilter}
+            durationFilter={durationFilter}
+            locationFilter={locationFilter}
+          />
         </CustomTabPanel>
         <CustomTabPanel value={value} index={1}>
-          <Postings saved />
+          <Postings
+            saved
+            searchValue={searchValue}
+            typeFilter={typeFilter}
+            durationFilter={durationFilter}
+            locationFilter={locationFilter}
+          />
         </CustomTabPanel>
       </Box>
     </div>
@@ -133,7 +165,13 @@ function CustomTabPanel(props) {
   );
 }
 
-function Postings({ saved }) {
+function Postings({
+  saved,
+  searchValue,
+  typeFilter,
+  durationFilter,
+  locationFilter,
+}) {
   const [postingsExpanded, setPostingsExpanded] = React.useState(false);
 
   const savedPostings = postings
@@ -154,8 +192,29 @@ function Postings({ saved }) {
           <Table aria-label="simple table" style={PageStyles.table}>
             <TableBody>
               {postings
+                .filter(
+                  (row) =>
+                    row.title
+                      .toLowerCase()
+                      .includes(searchValue.toLowerCase()) ||
+                    row.company
+                      .toLowerCase()
+                      .includes(searchValue.toLowerCase())
+                )
+                .filter((row) => {
+                  return (
+                    (typeFilter ? row.type === typeFilter : true) &&
+                    (durationFilter ? row.duration === durationFilter : true) &&
+                    (locationFilter
+                      ? locationFilter === "Remote"
+                        ? row.location === locationFilter
+                        : row.location !== "Remote"
+                      : true)
+                  );
+                })
                 .slice(0, postingsExpanded ? postings.length : 5)
                 .map((row, i) => ({ ...row, index: i }))
+
                 .filter((row) => (saved ? row.saved : true))
                 .map((row, i) => (
                   <ThemeProvider theme={theme}>
@@ -315,10 +374,20 @@ function JobExpanded({ postingSelected, updateList }) {
   );
 }
 
-function SearchBar() {
+function SearchBar({ value, handleChange }) {
+  const onChange = useCallback(
+    (event) => handleChange(event.target.value),
+    [handleChange]
+  );
+
   return (
     <div className="search">
-      <input type="text" placeholder="Search" />
+      <input
+        type="text"
+        placeholder="Search"
+        value={value}
+        onChange={onChange}
+      />
       <img
         src={require("../images/search.png")}
         className="search-logo"
@@ -328,17 +397,22 @@ function SearchBar() {
   );
 }
 
-function Dropdown({ title, options }) {
+function Dropdown({ title, options, value, handleChange }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [type, setType] = React.useState(null);
+  // const [type, setType] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = (type) => {
-    setAnchorEl(null);
-    setType(type);
-  };
+  const handleClose = useCallback(
+    (newValue) => {
+      setAnchorEl(null);
+      handleChange(newValue);
+    },
+    [handleChange, setAnchorEl]
+  );
+
+  const handleClear = useCallback(() => handleChange(null), [handleChange]);
 
   return (
     <div>
@@ -350,21 +424,21 @@ function Dropdown({ title, options }) {
         onClick={handleClick}
         variant="contained"
         endIcon={
-          type === null ? (
+          value === null ? (
             <ExpandMoreIcon />
           ) : (
-            <CloseIcon onClick={() => setType(null)} />
+            <CloseIcon onClick={handleClear} />
           )
         }
         sx={PageStyles.dropdown}
       >
-        {type ? type : title}
+        {value ? value : title}
       </Button>
       <Menu
         id="basic-menu"
         anchorEl={anchorEl}
         open={open}
-        onClose={() => handleClose(type)}
+        onClose={() => handleClose(value)}
         MenuListProps={{
           "aria-labelledby": "basic-button",
         }}
