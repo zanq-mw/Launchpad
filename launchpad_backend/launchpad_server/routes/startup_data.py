@@ -112,7 +112,7 @@ Bachelor's Degree in Computer Science, or related technical discipline with prov
 Understanding of Computer Science fundamentals, data structures, algorithms, operating systems, design patterns and related topics
 
 Microsoft is an equal opportunity employer. Consistent with applicable law, all qualified applicants will receive consideration for employment without regard to age, ancestry, citizenship, color, family or medical care leave, gender identity or expression, genetic information, immigration status, marital status, medical condition, national origin, physical or mental disability, political affiliation, protected veteran or military status, race, ethnicity, religion, sex (including pregnancy), sexual orientation, or any other characteristic protected by applicable local laws, regulations and ordinances. If you need assistance and/or a reasonable accommodation due to a disability during the application process, read more about requesting accommodations.""",
-        "deadline": datetime(2024, 1, 8, 11, 59, 59),
+        "deadline": datetime(2024, 1, 8, 23, 59, 59),
         "workModel": "Hybrid",
         "companyId": 1,
         "type": "New Grad",
@@ -158,7 +158,7 @@ The base pay range for this internship is USD $5,090 - $10,120 per month. There 
 Certain roles may be eligible for benefits and other compensation. Find additional benefits and pay information here: https://careers.microsoft.com/us/en/us-intern-pay
 
 Microsoft is an equal opportunity employer. Consistent with applicable law, all qualified applicants will receive consideration for employment without regard to age, ancestry, citizenship, color, family or medical care leave, gender identity or expression, genetic information, immigration status, marital status, medical condition, national origin, physical or mental disability, political affiliation, protected veteran or military status, race, ethnicity, religion, sex (including pregnancy), sexual orientation, or any other characteristic protected by applicable local laws, regulations and ordinances. If you need assistance and/or a reasonable accommodation due to a disability during the application process, read more about requesting accommodations.""",
-    "deadline": datetime(2024, 1, 8, 11, 59, 59),
+    "deadline": datetime(2024, 1, 8, 23, 59, 59),
     "workModel": "Hybrid",
     "companyId": 1,
     "type": "Internship",
@@ -216,7 +216,7 @@ Certain roles may be eligible for benefits and other compensation. Find addition
 #SWE
 
 Microsoft is an equal opportunity employer. Consistent with applicable law, all qualified applicants will receive consideration for employment without regard to age, ancestry, citizenship, color, family or medical care leave, gender identity or expression, genetic information, immigration status, marital status, medical condition, national origin, physical or mental disability, political affiliation, protected veteran or military status, race, ethnicity, religion, sex (including pregnancy), sexual orientation, or any other characteristic protected by applicable local laws, regulations and ordinances. If you need assistance and/or a reasonable accommodation due to a disability during the application process, read more about requesting accommodations.""",
-    "deadline": datetime(2024, 1, 8, 11, 59, 59),
+    "deadline": datetime(2024, 1, 8, 23, 59, 59),
     "workModel": "Hybrid",
     "companyId": 1,
     "type": "Internship",
@@ -286,7 +286,7 @@ Applications are reviewed on a rolling basis. For an update on your status or to
 Our inclusive culture empowers Amazonians to deliver the best results for our customers. We not only celebrate the diversity of our workforce, we celebrate the diverse ways we work. If you have a disability and need an accommodation, such as sign languages interpretation or a different interview format, let us know. Contact us at 1-888-470-1688, Monday through Friday from 6 a.m. to 7 p.m. PT. Amazon is committed to providing employment accommodation in accordance with the Canada Human Rights Code and the Accessibility for Canadians with Disabilities Act. If you require accommodations, please notify us when/if you are selected for an interview.
 
 Amazon is committed to a diverse and inclusive workplace. Amazon is an equal opportunity employer and does not discriminate on the basis of race, national origin, gender, gender identity, sexual orientation, disability, age, or other legally protected status. If you would like to request an accommodation, please notify your Recruiter.""",
-    "deadline": datetime(2024, 1, 10, 11, 59, 59),
+    "deadline": datetime(2024, 1, 10, 23, 59, 59),
     "workModel": "Hybrid",
     "companyId": 2,
     "type": "Internship",
@@ -320,7 +320,7 @@ Exposure to any of the following concepts: AWS and other Web Technologies, sched
 Interest in Robotics, including coursework or clubs
 
 Amazon is committed to a diverse and inclusive workplace. Amazon is an equal opportunity employer and does not discriminate on the basis of race, national origin, gender, gender identity, sexual orientation, disability, age, or other legally protected status. If you would like to request an accommodation, please notify your Recruiter.""",
-    "deadline": datetime(2024, 1, 10, 11, 59, 59),
+    "deadline": datetime(2024, 1, 23, 23, 59, 59),
     "workModel": "Hybrid",
     "companyId": 2,
     "type": "Internship",
@@ -365,7 +365,7 @@ Ability to effectively articulate technical challenges and solutions.
 Adept at handling ambiguous or undefined problems as well as ability to think abstractly.
 
 Amazon is committed to a diverse and inclusive workplace. Amazon is an equal opportunity employer and does not discriminate on the basis of race, national origin, gender, gender identity, sexual orientation, protected veteran status, disability, age, or other legally protected status. For individuals with disabilities who would like to request an accommodation, please visit https://www.amazon.jobs/en/disability/us.""",
-    "deadline": datetime(2024, 1, 10, 11, 59, 59),
+    "deadline": datetime(2024, 1, 10, 23, 59, 59),
     "workModel": "Hybrid",
     "companyId": 2,
     "type": "New Grad",
@@ -449,7 +449,7 @@ At Wealthsimple, we are building products for a diverse world and we need a dive
 Accessibility Statement
 
 Wealthsimple provides an accessible candidate experience. If you need any accommodations or adjustments throughout the interview process and beyond, please let us know, and we will work with you to provide the necessary support and make reasonable accommodations to facilitate your participation. We are continuously working to improve our accessibility practices and welcome any feedback or suggestions on how we can better accommodate candidates with accessibility needs.""",
-    "deadline": datetime(2024, 1, 12, 11, 59, 59),
+    "deadline": datetime(2024, 1, 12, 23, 59, 59),
     "workModel": "Hybrid",
     "companyId": 3,
     "type": "Internship",
@@ -522,7 +522,7 @@ Location(s): Canada : Ontario : Toronto
 Scotiabank is a leading bank in the Americas. Guided by our purpose: "for every future", we help our customers, their families and their communities achieve success through a broad range of advice, products and services, including personal and commercial banking, wealth management and private banking, corporate and investment banking, and capital markets.
 
 At Scotiabank, we value the unique skills and experiences each individual brings to the Bank, and are committed to creating and maintaining an inclusive and accessible environment for everyone. If you require accommodation (including, but not limited to, an accessible interview site, alternate format documents, ASL Interpreter, or Assistive Technology) during the recruitment and selection process, please let our Recruitment team know. If you require technical assistance, please click here. Candidates must apply directly online to be considered for this role. We thank all applicants for their interest in a career at Scotiabank; however, only those candidates who are selected for an interview will be contacted.""",
-    "deadline": datetime(2024, 1, 14, 11, 59, 59),
+    "deadline": datetime(2024, 1, 14, 23, 59, 59),
     "workModel": "Hybrid",
     "companyId": 4,
     "type": "Internship",
@@ -586,7 +586,7 @@ Location(s): Canada : Ontario : Toronto
 Scotiabank is a leading bank in the Americas. Guided by our purpose: "for every future", we help our customers, their families and their communities achieve success through a broad range of advice, products and services, including personal and commercial banking, wealth management and private banking, corporate and investment banking, and capital markets.
 
 At Scotiabank, we value the unique skills and experiences each individual brings to the Bank, and are committed to creating and maintaining an inclusive and accessible environment for everyone. If you require accommodation (including, but not limited to, an accessible interview site, alternate format documents, ASL Interpreter, or Assistive Technology) during the recruitment and selection process, please let our Recruitment team know. If you require technical assistance, please click here. Candidates must apply directly online to be considered for this role. We thank all applicants for their interest in a career at Scotiabank; however, only those candidates who are selected for an interview will be contacted.""",
-    "deadline": datetime(2024, 1, 14, 11, 59, 59),
+    "deadline": datetime(2024, 1, 14, 23, 59, 59),
     "workModel": "Hybrid",
     "companyId": 4,
     "type": "New Grad",
@@ -656,7 +656,7 @@ Location(s): Canada : Ontario : Toronto
 Scotiabank is a leading bank in the Americas. Guided by our purpose: "for every future", we help our customers, their families and their communities achieve success through a broad range of advice, products and services, including personal and commercial banking, wealth management and private banking, corporate and investment banking, and capital markets.
 
 At Scotiabank, we value the unique skills and experiences each individual brings to the Bank, and are committed to creating and maintaining an inclusive and accessible environment for everyone. If you require accommodation (including, but not limited to, an accessible interview site, alternate format documents, ASL Interpreter, or Assistive Technology) during the recruitment and selection process, please let our Recruitment team know. If you require technical assistance, please click here. Candidates must apply directly online to be considered for this role. We thank all applicants for their interest in a career at Scotiabank; however, only those candidates who are selected for an interview will be contacted.""",
-    "deadline": datetime(2024, 1, 14, 11, 59, 59),
+    "deadline": datetime(2024, 1, 14, 23, 59, 59),
     "workModel": "Hybrid",
     "companyId": 4,
     "type": "Internship",
