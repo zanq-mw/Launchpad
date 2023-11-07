@@ -4,18 +4,20 @@ from .forms import SignupForm, LoginForm
 from flask_login import login_user
 from flask_bcrypt import Bcrypt
 from flask_pymongo import PyMongo
+from flask_cors import CORS
 import pymongo
 import sys
 sys.path.append('.\\launchpad_server\\routes')
 from startup_data import startup_data
-
 app.config['MONGO_URI'] = 'mongodb://localhost:27017/database'
 
 # Initialize the PyMongo extension
 mongo = PyMongo(app)
-
-
 bcrypt = Bcrypt(app)
+
+
+CORS(app, origins='*')
+
 
 def setup_db():
     for data in startup_data:
@@ -60,15 +62,23 @@ def index():
 def landing(form):
         return render_template('landing.html',title='Landing Page',form=form)
 
-@app.route("/register", methods = ['POST', 'GET'])
+@app.route("/api/signup", methods = ['POST'])
 def register():
-    form = SignupForm()
-    if form.validate_on_submit():
-        hash_pass =  bcrypt.generate_password_hash(request.form['password']).decode('utf-8')
-        check_pass = bcrypt.check_password_hash(hash_pass, request.form['confirm_password'])                      
-        if check_pass:
-            return landing(form)
-    return render_template('register.html',title='SignUp', form=form)
+
+    email = request.form['username']
+
+    print(email)
+    # Process the data (e.g., save to a database)
+
+    response = {'message': 'User registered successfully'}
+    return jsonify(response)
+    #form = SignupForm()
+    #if form.validate_on_submit():
+     #   hash_pass =  bcrypt.generate_password_hash(request.form['password']).decode('utf-8')
+      #  check_pass = bcrypt.check_password_hash(hash_pass, request.form['confirm_password'])                      
+       # if check_pass:
+        #    return landing(form)
+    #return render_template('register.html',title='SignUp', form=form)
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
