@@ -1,54 +1,56 @@
 import React, { useState } from "react";
-import ReactDOM from "react-dom/client";
+import ReactDOM from "react-dom";
 import "./index.css";
 import { NavBar } from "./navigation";
-import Startup from "./startup";
 import reportWebVitals from "./reportWebVitals";
 import { LandingPage } from "./landingPage/landingPage";
 import { AccountSettings } from "./accountSettingPage/accountSettings";
 import { MyApplication } from "./myApplicationPage/myApplication";
 import { NotificationsPage } from "./notificationsPage/notificationsPage";
 import { JobPostings } from "./jobsPage/jobsPage";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { App } from "./App";
+// import { Startup } from "./startup";
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
-  <React.StrictMode>
-    <Pages />
-    {/* <Startup /> */}
-  </React.StrictMode>
-);
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
 
 export const pages = {
-  landing: "landing",
-  notifications: "notifications",
-  applications: "applications",
-  jobs: "jobs",
-  account: "account",
-  settings: "settings",
+  landing: "/",
+  notifications: "/notifications",
+  applications: "/applications",
+  jobs: "/jobs",
+  account: "/account",
+  settings: "/settings",
 };
 
 function Pages() {
-  const [page, setPage] = useState(pages.landing);
+  const [page, setPage] = useState(pages);
 
   return (
-    <div className="screen">
-      <nav className="nav">
-        <NavBar page={page} setPage={setPage} />
-      </nav>
-      <main className="content">
-        {page === pages.landing && <LandingPage />}
-        {page === pages.notifications && <NotificationsPage />}
-        {page === pages.applications && <MyApplication/>}
-        {page === pages.jobs && <JobPostings />}
-        {page === pages.account && <AccountSettings />}
-        {page === pages.settings && <App />}
-      </main>
-    </div>
+    <Router>
+      <div className="screen">
+        <nav className="nav">
+          <NavBar page={page} setPage={setPage} />
+        </nav>
+        <main className="content">
+          <Routes>
+            <Route path={pages.landing} element={<LandingPage />} />
+            <Route path={pages.notifications} element={<NotificationsPage />} />
+            <Route path={pages.applications} element={<MyApplication />} />
+            <Route path={pages.jobs} element={<JobPostings />} />
+            <Route path={pages.account} element={<AccountSettings />} />
+            <Route path={pages.settings} element={<App />} />
+          </Routes>
+        </main>
+      </div>
+    </Router>
   );
 }
+
+ReactDOM.render(
+  <React.StrictMode>
+    <Pages />
+    {/* <Startup /> */}
+  </React.StrictMode>,
+  document.getElementById("root")
+);

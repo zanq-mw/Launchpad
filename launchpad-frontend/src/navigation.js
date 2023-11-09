@@ -20,81 +20,94 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { pages } from ".";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { Link } from "react-router-dom";
 
 export function NavItems({ open, page, setPage }) {
   return (
     <React.Fragment>
       <ThemeProvider theme={theme}>
-        <ListItemButton
-          sx={NavStyles.navOption}
-          onClick={useCallback(() => setPage(pages.landing), [setPage])}
-          selected={page === pages.landing}
-        >
-          <LPListItemIcon open={open}>
-            <HomeIcon />
-          </LPListItemIcon>
-          {open && <LPListItemText>{"Home"}</LPListItemText>}
-        </ListItemButton>
+        <Link to={pages.landing} style={{ textDecoration: "none" }}>
+          <ListItemButton
+            sx={NavStyles.navOption}
+            onClick={useCallback(() => setPage(pages.landing), [setPage])}
+            selected={page === pages.landing}
+          >
+            <LPListItemIcon open={open}>
+              <HomeIcon />
+            </LPListItemIcon>
+            {open && <LPListItemText>{"Home"}</LPListItemText>}
+          </ListItemButton>
+        </Link>
       </ThemeProvider>
       <ThemeProvider theme={theme}>
-        <ListItemButton
-          sx={NavStyles.navOption}
-          onClick={useCallback(() => setPage(pages.notifications), [setPage])}
-          selected={page === pages.notifications}
-        >
-          <LPListItemIcon open={open}>
-            <MessageIcon />
-          </LPListItemIcon>
-          {open && <LPListItemText>{"Notifications"}</LPListItemText>}
-        </ListItemButton>
+        <Link to={pages.notifications} style={{ textDecoration: "none" }}>
+          <ListItemButton
+            sx={NavStyles.navOption}
+            onClick={useCallback(() => setPage(pages.notifications), [setPage])}
+            selected={page === pages.notifications}
+          >
+            <LPListItemIcon open={open}>
+              <MessageIcon />
+            </LPListItemIcon>
+            {open && <LPListItemText>{"Notifications"}</LPListItemText>}
+          </ListItemButton>
+        </Link>
       </ThemeProvider>
       <ThemeProvider theme={theme}>
-        <ListItemButton
-          sx={NavStyles.navOption}
-          onClick={useCallback(() => setPage(pages.applications), [setPage])}
-          selected={page === pages.applications}
-        >
-          <LPListItemIcon open={open}>
-            <ApplicationsIcon />
-          </LPListItemIcon>
-          {open && <LPListItemText>{"Applications"}</LPListItemText>}
-        </ListItemButton>
+        <Link to={pages.applications} style={{ textDecoration: "none" }}>
+          <ListItemButton
+            sx={NavStyles.navOption}
+            onClick={useCallback(() => setPage(pages.applications), [setPage])}
+            selected={page === pages.applications}
+          >
+            <LPListItemIcon open={open}>
+              <ApplicationsIcon />
+            </LPListItemIcon>
+            {open && <LPListItemText>{"Applications"}</LPListItemText>}
+          </ListItemButton>
+        </Link>
       </ThemeProvider>
       <ThemeProvider theme={theme}>
-        <ListItemButton
-          sx={NavStyles.navOption}
-          onClick={useCallback(() => setPage(pages.jobs), [setPage])}
-          selected={page === pages.jobs}
-        >
-          <LPListItemIcon open={open}>
-            <JobIcon />
-          </LPListItemIcon>
-          {open && <LPListItemText>{"Job Postings"}</LPListItemText>}
-        </ListItemButton>
+        <Link to={pages.jobs} style={{ textDecoration: "none" }}>
+          <ListItemButton
+            sx={NavStyles.navOption}
+            onClick={useCallback(() => setPage(pages.jobs), [setPage])}
+            selected={page === pages.jobs}
+          >
+            <LPListItemIcon open={open}>
+              <JobIcon />
+            </LPListItemIcon>
+            {open && <LPListItemText>{"Job Postings"}</LPListItemText>}
+          </ListItemButton>
+        </Link>
       </ThemeProvider>
       <ThemeProvider theme={theme}>
-        <ListItemButton
-          sx={NavStyles.navOption}
-          onClick={useCallback(() => setPage(pages.account), [setPage])}
-          selected={page === pages.account}
-        >
-          <LPListItemIcon open={open}>
-            <ProfileIcon />
-          </LPListItemIcon>
-          {open && <LPListItemText>{"Account"}</LPListItemText>}
-        </ListItemButton>
+        <Link to={pages.account} style={{ textDecoration: "none" }}>
+          <ListItemButton
+            sx={NavStyles.navOption}
+            onClick={useCallback(() => setPage(pages.account), [setPage])}
+            selected={page === pages.account}
+          >
+            <LPListItemIcon open={open}>
+              <ProfileIcon />
+            </LPListItemIcon>
+            {open && <LPListItemText>{"Account"}</LPListItemText>}
+          </ListItemButton>
+        </Link>
       </ThemeProvider>
       <ThemeProvider theme={theme}>
-        <ListItemButton
-          sx={NavStyles.navOption}
-          onClick={useCallback(() => setPage(pages.settings), [setPage])}
-          selected={page === pages.settings}
-        >
-          <LPListItemIcon open={open}>
-            <SettingsIcon />
-          </LPListItemIcon>
-          {open && <LPListItemText>{"Settings"}</LPListItemText>}
-        </ListItemButton>
+        <Link to={pages.settings} style={{ textDecoration: "none" }}>
+          <ListItemButton
+            sx={NavStyles.navOption}
+            onClick={useCallback(() => setPage(pages.settings), [setPage])}
+            selected={page === pages.settings}
+          >
+            <LPListItemIcon open={open}>
+              <SettingsIcon />
+            </LPListItemIcon>
+            {open && <LPListItemText>{"Settings"}</LPListItemText>}
+          </ListItemButton>
+        </Link>
       </ThemeProvider>
 
       <ListItemButton sx={NavStyles.navOptionLogout}>
