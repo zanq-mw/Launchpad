@@ -191,6 +191,7 @@ const NavStyles = {
   },
   navOption: {
     borderRadius: "10px",
+    marginTop: "8px",
     "&:hover": {
       backgroundColor: "#814AEF",
     },
