@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import "./jobsPage.css";
 import "@fontsource/league-spartan";
 import Tabs from "@mui/material/Tabs";
@@ -8,7 +8,6 @@ import Box from "@mui/material/Box";
 import TableContainer from "@mui/material/TableContainer";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { Button, Grid } from "@mui/material";
-import { postings } from "./mockData";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
@@ -26,8 +25,53 @@ export function JobPostings() {
   const [typeFilter, setTypeFilter] = React.useState(null);
   const [durationFilter, setDurationFilter] = React.useState(null);
   const [locationFilter, setLocationFilter] = React.useState(null);
+  const [jobsData, setJobsData] = React.useState({});
+  const [companyData, setCompanyData] = React.useState({});
+  const [userData, setUserData] = React.useState({});
 
-  console.log(typeFilter, durationFilter, locationFilter);
+  useEffect(() => {
+    fetch(
+      `/jobs?type=${typeFilter}&duration=${durationFilter}&location=${locationFilter}`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        setJobsData(data);
+      });
+  }, [durationFilter, locationFilter, searchValue, typeFilter]);
+
+  useEffect(() => {
+    fetch(`/companies`)
+      .then((res) => res.json())
+      .then((data) => {
+        setCompanyData(data);
+      });
+  }, []);
+
+  useEffect(() => {
+    // add user id here when it is integrated with the code
+    fetch(`/users/1`)
+      .then((res) => res.json())
+      .then((data) => {
+        setUserData(data);
+      });
+  }, []);
+
+  const jobsCompanyData =
+    jobsData.data && companyData.data && userData.data
+      ? jobsData.data.map((job) => {
+          const companyRecord = companyData.data.find(
+            (company) => company.companyId === job.companyId
+          );
+          const saved = userData.data[0].savedPostings.find(
+            (posting) => posting.postingId === job.postingId
+          );
+          return {
+            ...job,
+            companyName: companyRecord.companyName,
+            saved: saved ? true : false,
+          };
+        })
+      : [];
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -82,20 +126,13 @@ export function JobPostings() {
           </ThemeProvider>
         </Box>
         <CustomTabPanel value={value} index={0}>
-          <Postings
-            searchValue={searchValue}
-            typeFilter={typeFilter}
-            durationFilter={durationFilter}
-            locationFilter={locationFilter}
-          />
+          <Postings searchValue={searchValue} postings={jobsCompanyData} />
         </CustomTabPanel>
         <CustomTabPanel value={value} index={1}>
           <Postings
             saved
             searchValue={searchValue}
-            typeFilter={typeFilter}
-            durationFilter={durationFilter}
-            locationFilter={locationFilter}
+            postings={jobsCompanyData}
           />
         </CustomTabPanel>
       </Box>
@@ -105,7 +142,7 @@ export function JobPostings() {
 
 const jobTypeOptions = ["Internship", "New Grad"];
 
-const durationOptions = ["4 Months", "8 Months", "12 Months", "16 Months"];
+const durationOptions = ["4-Months", "8-Months", "12-Months", "16-Months"];
 
 const locationOptions = ["Remote", "Hybrid", "In-Person"];
 
@@ -165,22 +202,36 @@ function CustomTabPanel(props) {
   );
 }
 
-function Postings({
-  saved,
-  searchValue,
-  typeFilter,
-  durationFilter,
-  locationFilter,
-}) {
+function Postings({ saved, searchValue, postings }) {
   const [postingsExpanded, setPostingsExpanded] = React.useState(false);
 
-  const savedPostings = postings
-    .map((row, i) => ({ ...row, index: i }))
-    .filter((row) => row.saved);
+  const savedPostings = postings.filter((row) => row.saved);
+
+  const filteredPostings = postings.filter(
+    (row) =>
+      row.postingTitle.toLowerCase().includes(searchValue.toLowerCase()) ||
+      row.companyName.toLowerCase().includes(searchValue.toLowerCase())
+  );
 
   const [postingSelected, setPostingSelected] = React.useState(
-    saved ? savedPostings[0].index : 0
+    saved
+      ? savedPostings.length > 0
+        ? savedPostings[0].postingId
+        : null
+      : filteredPostings.length > 0
+      ? filteredPostings[0].postingId
+      : null
   );
+
+  const selectedPosting = filteredPostings.find(
+    (row) => row.postingId === postingSelected
+  );
+
+  useEffect(() => {
+    if (selectedPosting === undefined) {
+      setPostingSelected(null);
+    }
+  }, [selectedPosting]);
 
   const [, updateState] = React.useState();
   const forceUpdate = React.useCallback(() => updateState({}), []);
@@ -191,38 +242,16 @@ function Postings({
         <TableContainer>
           <Table aria-label="simple table" style={PageStyles.table}>
             <TableBody>
-              {postings
-                .filter(
-                  (row) =>
-                    row.title
-                      .toLowerCase()
-                      .includes(searchValue.toLowerCase()) ||
-                    row.company
-                      .toLowerCase()
-                      .includes(searchValue.toLowerCase())
-                )
-                .filter((row) => {
-                  return (
-                    (typeFilter ? row.type === typeFilter : true) &&
-                    (durationFilter ? row.duration === durationFilter : true) &&
-                    (locationFilter
-                      ? locationFilter === "Remote"
-                        ? row.location === locationFilter
-                        : row.location !== "Remote"
-                      : true)
-                  );
-                })
-                .slice(0, postingsExpanded ? postings.length : 5)
-                .map((row, i) => ({ ...row, index: i }))
-
+              {filteredPostings
                 .filter((row) => (saved ? row.saved : true))
+                .slice(0, postingsExpanded ? filteredPostings.length : 5)
                 .map((row, i) => (
                   <ThemeProvider theme={theme}>
                     <TableRow
                       key={i}
                       sx={PageStyles.tableRow}
-                      onClick={() => setPostingSelected(row.index)}
-                      selected={postingSelected === row.index}
+                      onClick={() => setPostingSelected(row.postingId)}
+                      selected={postingSelected === row.postingId}
                     >
                       <TableCell component="th" scope="row" align="center">
                         <img
@@ -232,10 +261,10 @@ function Postings({
                         ></img>
                       </TableCell>
                       <TableCell style={{ paddingLeft: 0 }}>
-                        <p style={PageStyles.job_title}>{row.title}</p>
-                        <p style={PageStyles.company}>{row.company}</p>
+                        <p style={PageStyles.job_title}>{row.postingTitle}</p>
+                        <p style={PageStyles.company}>{row.companyName}</p>
                         <p style={PageStyles.details}>
-                          {row.duration} {row.type}, {row.location}
+                          {row.duration} {row.type}, {row.workModel}
                         </p>
                       </TableCell>
                       <TableCell
@@ -272,6 +301,8 @@ function Postings({
         <JobExpanded
           postingSelected={postingSelected}
           updateList={forceUpdate}
+          postings={filteredPostings}
+          saved={saved}
         />
       </Grid>
     </Grid>
@@ -279,24 +310,34 @@ function Postings({
 }
 
 function JobDescription({ posting }) {
+  // doing this because the frontend doesn't handle the newlines well
+  const postingText = posting.postingDescription.split("\n");
   return (
     <div style={{ padding: "20px" }}>
       <h2 style={PageStyles.job_description}>Job Description</h2>
-      {postings[posting].description.map((text) => (
+      {postingText.map((text) => (
         <p>{text}</p>
       ))}
     </div>
   );
 }
 
-function JobExpanded({ postingSelected, updateList }) {
-  const [save, setSave] = React.useState(postings[postingSelected].saved);
+function JobExpanded({ postingSelected, updateList, postings, saved }) {
+  const expandedPosting = postings.find(
+    (post) => post.postingId === postingSelected
+  );
+  const [save, setSave] = React.useState(
+    expandedPosting ? expandedPosting.saved : false
+  );
+
+  const isSavedPosting = expandedPosting ? expandedPosting.saved : false;
+
   const handleSave = () => {
-    postings[postingSelected].saved = !save;
+    expandedPosting.saved = !save;
     setSave(!save);
     updateList();
   };
-  return (
+  return (!saved && expandedPosting) || (saved && isSavedPosting) ? (
     <TableContainer>
       <Table style={PageStyles.table}>
         <TableBody>
@@ -305,17 +346,17 @@ function JobExpanded({ postingSelected, updateList }) {
               <div style={{ display: "flex" }}>
                 <TableCell sx={PageStyles.no_border}>
                   <img
-                    src={postings[postingSelected].logo}
+                    src={expandedPosting.logo}
                     height={"75px"}
-                    alt={postings[postingSelected].company}
+                    alt={expandedPosting.companyName}
                   ></img>
                 </TableCell>
                 <TableCell sx={PageStyles.no_border}>
                   <p style={PageStyles.job_title_large}>
-                    {postings[postingSelected].title}
+                    {expandedPosting.postingTitle}
                   </p>
                   <p style={PageStyles.company}>
-                    {postings[postingSelected].company}
+                    {expandedPosting.companyName}
                   </p>
                   <div
                     style={{
@@ -325,21 +366,21 @@ function JobExpanded({ postingSelected, updateList }) {
                       marginTop: "4px",
                     }}
                   >
-                    {postings[postingSelected].duration && (
+                    {expandedPosting.duration && (
                       <>
                         <ClockIcon />
                         <p style={PageStyles.descriptor_text}>
-                          {postings[postingSelected].duration}
+                          {expandedPosting.duration}
                         </p>
                       </>
                     )}
                     <PinIcon />
                     <p style={PageStyles.descriptor_text}>
-                      {postings[postingSelected].location}
+                      {expandedPosting.workModel}
                     </p>
                     <LaptopIcon />
                     <p style={PageStyles.descriptor_text}>
-                      {postings[postingSelected].type}
+                      {expandedPosting.type}
                     </p>
                   </div>
                 </TableCell>
@@ -360,17 +401,19 @@ function JobExpanded({ postingSelected, updateList }) {
                     sx={PageStyles.saved}
                     onClick={handleSave}
                   >
-                    {postings[postingSelected].saved ? "Unsave" : "Save"}
+                    {expandedPosting.saved ? "Unsave" : "Save"}
                   </Button>
                 </div>
               </TableCell>
             </div>
           </TableRow>
           <hr style={{ color: "#c1c1c1", width: "90%" }} />
-          <JobDescription posting={postingSelected} />
+          <JobDescription posting={expandedPosting} />
         </TableBody>
       </Table>
     </TableContainer>
+  ) : (
+    <p style={PageStyles.no_postings_text}>No Posting Selected</p>
   );
 }
 
@@ -399,7 +442,6 @@ function SearchBar({ value, handleChange }) {
 
 function Dropdown({ title, options, value, handleChange }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  // const [type, setType] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -533,6 +575,15 @@ const PageStyles = {
     marginBottom: "0px",
     marginTop: "0px",
     marginRight: "8px",
+  },
+  no_postings_text: {
+    fontSize: "14px",
+    color: "#c1c1c1",
+    marginBottom: "0px",
+    marginTop: "0px",
+    marginRight: "8px",
+    display: "flex",
+    justifyContent: "center",
   },
   details: {
     marginTop: "0px",
