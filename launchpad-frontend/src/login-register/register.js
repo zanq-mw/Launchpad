@@ -1,6 +1,9 @@
 import React from "react";
 import logo from "../images/launchpadLogo.png";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, redirect } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+import { pages } from "../index";
+import { useState, useCallback } from "react";
 
 
 
@@ -11,39 +14,53 @@ class Register extends React.Component {
       e.preventDefault();
   
       const formData = {
+        fname: e.target.Fname.value,
+        lname: e.target.Lname.value,
+        year: e.target.Year.value,
+        program: e.target.Program.value,
         username: e.target.username.value,
-        Password: e.target.Password.value
+        password: e.target.Password.value
       };
       console.log(formData);
-  
-      const response = await fetch('http://localhost:5000/signup', {
-        method: 'POST',
 
+  
+      const response = await fetch('/api/signup', {
+        method: 'POST',
         dataType: "json",
-        body: JSON.stringify(formData),
         headers: {
-          "Server": "JSON-RPC 2.0 Server",
-          "Allow": "OPTIONS, POST",
-          "Cache-Control": "no-store",
-          "Content-Type": "application/json; charset=UTF-8",
-          "Content-Language": "en-US",
+          "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "OPTIONS, POST",
+          "Access-Control-Allow-Methods": "OPTIONS, POST, GET",
           "Access-Control-Allow-Headers": "Content-Type, Authorization"
             
         },
+        body: JSON.stringify(formData),
+
         
         
       });
   
-      
+
       const responseData = await response.json();
-      console.log(responseData);
+      console.log(responseData.message);
+      if(responseData.message == "User already exists"){
+        alert("User Already Exists")
+      }
+      else if(responseData.message == 'User registered successfully'){
+        alert('User registered successfully')
+
+      }
+      else{
+        console.log("Something is Wrong")
+      }
+
+
     };
   
   
   render() {
     return (
+      
       <div className="container-main">
         <div className="container-left">
           <div className="container-logo">
@@ -66,6 +83,7 @@ class Register extends React.Component {
                   type="text"
                   name="Fname"
                   placeholder="Jane"
+                  required
                 />
               </div>
               <div className="input2">
@@ -75,6 +93,7 @@ class Register extends React.Component {
                   type="text"
                   name="Lname"
                   placeholder="Doe"
+                  required
                 />
               </div>
 
@@ -87,7 +106,7 @@ class Register extends React.Component {
                     name="Year"
                     min="0"
                     max="10"
-                    placeholder="3"
+                    placeholder="0"
                   ></input>
                 </p>
                 <div className="input2">
@@ -98,6 +117,7 @@ class Register extends React.Component {
                       type="text"
                       name="Program"
                       placeholder="Computer Science"
+                      required
                     />
                   </p>
                 </div>
@@ -110,6 +130,7 @@ class Register extends React.Component {
                   type="text"
                   name="username"
                   placeholder="example@yourschool.com"
+                  required
                 />
               </div>
               <div className="input2">
@@ -119,6 +140,7 @@ class Register extends React.Component {
                   type="password"
                   name="Password"
                   placeholder="***********"
+                  required
                 />
               </div>
               <div>
