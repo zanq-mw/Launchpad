@@ -6,7 +6,8 @@ from flask_bcrypt import Bcrypt
 from flask_pymongo import PyMongo
 import pymongo
 import sys
-sys.path.append('.\\launchpad_server\\routes')
+import re
+sys.path.append('./launchpad_server/routes')
 from startup_data import startup_data
 
 app.config['MONGO_URI'] = 'mongodb://localhost:27017/database'
@@ -43,6 +44,51 @@ def get_applications(user_id):
         doc.pop("_id")
     return (jsonify({"data": result}))   
 
+@app.route("/jobs")
+def get_jobs():
+    # Select * from posting where postingTitle LIKE user_id
+
+    # get all of the query strings
+    type_filter = request.args.get('type')
+    duration_filter = request.args.get('duration')
+    location_filter = request.args.get('location')
+    # transform everything to queryable strings
+    everything_regex = re.compile(".*")
+    type_regex = everything_regex if type_filter == "null" else type_filter 
+    duration_regex = everything_regex if duration_filter == "null" else duration_filter 
+    location_regex = everything_regex if location_filter == "null" else location_filter
+    # access database
+    collection = mongo.db.posting
+    query = {"type": type_regex, "duration": duration_regex, "workModel": location_regex}
+    result = list(collection.find(query))
+
+    for doc in result:
+        doc.pop("_id")
+    return (jsonify({"data": result}))
+
+@app.route("/companies")
+def get_companies():
+    # Select * from company
+    
+    # access database
+    collection = mongo.db.company
+    query = {}
+    result = list(collection.find(query))
+
+    for doc in result:
+        doc.pop("_id")
+    return (jsonify({"data": result}))   
+
+@app.route("/users/<int:user_id>")
+def get_users(user_id):
+    # Select * from users where userId=user_id
+    collection = mongo.db.user
+    query = {"userId": user_id}
+    result = list(collection.find(query))
+
+    for doc in result:
+        doc.pop("_id")
+    return (jsonify({"data": result}))   
 
 @app.route("/check_db")
 def check_db():
