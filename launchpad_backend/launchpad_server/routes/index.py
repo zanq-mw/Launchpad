@@ -90,6 +90,42 @@ def get_users(user_id):
         doc.pop("_id")
     return (jsonify({"data": result}))   
 
+# ACCOUNT SETTINGS INFORMATION ---------------------
+@app.route('/acc-settings/<int:user_id>')
+def get_user_info(user_id):
+    collection = mongo.db.user
+    query = {"userId": user_id}
+    user_data = collection.find_one(query)
+
+    # Extracting required information
+    full_name = f"{user_data['firstName']} {user_data['lastName']}"
+    email = user_data['email']
+    password = user_data['password']
+    program = user_data['program']
+    address = user_data['address']
+    phone_number = user_data['phoneNumber']
+    two_factor = user_data['twoFactor']
+    data_collection = user_data['dataCollection']
+
+    # Creating the response JSON
+    response_data = {
+        "profile": {
+            "full_name": full_name,
+            "email": email,
+            "password": password,
+            "program": program,
+            "address": address,
+            "phone_number": phone_number
+        },
+        "security": {
+            "two_factor":  two_factor,
+            "data_collection": data_collection,
+        }
+
+    }
+
+    return jsonify(response_data), 200
+
 @app.route("/check_db")
 def check_db():
     # Check if the connection is successful
