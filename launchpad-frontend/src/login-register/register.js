@@ -1,10 +1,9 @@
 import React from "react";
 import logo from "../images/launchpadLogo.png";
-import { NavLink, Link, redirect } from "react-router-dom";
-import { useNavigate } from 'react-router-dom';
-import { pages } from "../index";
-import { useState, useCallback } from "react";
-
+import { NavLink } from "react-router-dom";
+import  Pages from "../pages.js";
+import { BrowserRouter as Router} from "react-router-dom"
+import {root} from "../root.js"
 
 
 
@@ -24,7 +23,7 @@ class Register extends React.Component {
       console.log(formData);
 
   
-      const response = await fetch('/api/signup', {
+      const response = await fetch('/signup', {
         method: 'POST',
         dataType: "json",
         headers: {
@@ -40,19 +39,30 @@ class Register extends React.Component {
         
       });
   
+      
 
       const responseData = await response.json();
       console.log(responseData.message);
-      if(responseData.message == "User already exists"){
+      if(responseData.message === "User already exists"){
         alert("User Already Exists")
       }
-      else if(responseData.message == 'User registered successfully'){
-        alert('User registered successfully')
-
+      else if(responseData.message === 'User registered successfully'){
+        console.log("HereIAM")
+        root.render(
+          <React.StrictMode>
+           <Router>
+              { <Pages/> } 
+           </Router>
+            
+            {/* <Startup /> */}
+          </React.StrictMode>
+        );
+        
       }
       else{
         console.log("Something is Wrong")
       }
+      
 
 
     };
@@ -127,7 +137,7 @@ class Register extends React.Component {
                 <label className="label">Email</label>
                 <input
                   className="input"
-                  type="text"
+                  type="email"
                   name="username"
                   placeholder="example@yourschool.com"
                   required
