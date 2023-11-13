@@ -2,7 +2,7 @@ from launchpad_server import app
 from flask import render_template, request, flash, redirect, url_for,jsonify
 from .forms import SignupForm, LoginForm  
 from flask_login import login_user
-from flask_bcrypt import Bcrypt
+from flask_bcrypt import Bcrypt, check_password_hash
 from flask_pymongo import PyMongo
 from flask_cors import CORS
 import pymongo
@@ -63,7 +63,7 @@ def index():
 def landing(form):
         return render_template('landing.html',title='Landing Page',form=form)
 
-@app.route("/api/signup", methods = ['POST', "GET"])
+@app.route("/signup", methods = ['POST', "GET"])
 def register():
     response = "none"
     if request.method == 'POST':
@@ -87,8 +87,8 @@ def register():
         """
         
         
-        user_count = mongo.db.user.count_documents({})
-        hashed_password = bcrypt.generate_password_hash (password).decode('utf-8') 
+        user_count = mongo.db.user.count_documents({}) # count user -> for user ID
+        hashed_password = bcrypt.generate_password_hash (password).decode('utf-8') #encrypt Password
 
         data_to_insert = {
             "userId": user_count+1,
@@ -113,50 +113,17 @@ def register():
             "notifications": []  # Ids of all their notifications
         }
 
-        user_exists = mongo.db.get_collection("user").find_one({"email": username})
+        user_exists = mongo.db.get_collection("user").find_one({"email": username}) #check if user exists
        
         if user_exists:
-            print("USER THERE")
             response = {'message': 'User already exists'}
-            for key, value in user_exists.items():
-               if key == "email":
-                   if value == username:
-                        print (value)
-
         else:
             mongo.db.get_collection("user").insert_one(data_to_insert)
             response = {'message': 'User registered successfully'}
-
-        print('length: ', user_count)
-        
         return jsonify(response)
-        #user_table = mongo.db.get_collection("user").find_one({"email": "alishba.aamir@yahoo.com"})
-        #print(user_table)
+        
     return jsonify(response)
 
-
-@app.route("/api/login", methods=['GET', 'POST'])
+@app.route("/api/login", methods=['POST'])
 def login():
-    if request.method == 'POST':
-        data = request.get_json()
-        print(data)
-        username = data.get('username')
-        password = data.get('password')
-        print(
-            "username: ", username,
-            "\npasssword: ", password)
-    
-    response = {'message': 'User registered successfully'}
-    return (response)
-    """
-    form = LoginForm()
-    if form.validate_on_submit():
-        email = request.form['email']
-        password =  request.form['password']
-        return f'Hello, {email}. Your password is {password}.'  
-    else:
-        print('something wrong')
-        flash('Login failed. Please check your email and password.', 'danger')
-    return render_template('login.html', title='Login', form=form)
-    """
-
+    pass
