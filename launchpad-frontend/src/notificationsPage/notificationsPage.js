@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Grid, IconButton } from "@mui/material";
 import "./notificationsPage.css";
 import Box from "@mui/material/Box";
@@ -14,7 +14,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Typography } from "@mui/material";
-import { mock_data } from "./mockData";
+import CircularProgress from "@mui/material/CircularProgress";
 import Bookmark from "@mui/icons-material/Bookmark";
 
 const theme = createTheme({
@@ -26,9 +26,14 @@ const theme = createTheme({
 });
 
 function Notifications(props) {
-  const { filteredData, data, setData } = props;
+  const { updateFlag, filteredData, data, setData } = props;
   const [selected, setSelected] = useState(null);
-  const [filtered] = useState(filteredData);
+  const [filtered, setFiltered] = useState(filteredData);
+
+  useEffect(() => {
+    setFiltered(filteredData);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [updateFlag]);
 
   function handleSave(index) {
     let temp = [...data];
@@ -43,14 +48,20 @@ function Notifications(props) {
     const i = data.findIndex(
       (item) => item.notificationId === filtered[index].notificationId
     );
-    return data[i].read;
+    if (data[i] && "read" in data[i]) {
+      return data[i].read;
+    }
+    return true;
   }
 
   function checkSaved(index) {
     const i = data.findIndex(
       (item) => item.notificationId === filtered[index].notificationId
     );
-    return data[i].saved;
+    if (data[i] && "saved" in data[i]) {
+      return data[i].saved;
+    }
+    return data[i].false;
   }
 
   const handleRowClick = (index) => {
@@ -218,8 +229,20 @@ function Notifications(props) {
 }
 
 export function NotificationsPage() {
-  const [data, setData] = useState(mock_data);
+  const [data, setData] = useState([]);
+  const [updateFlag, setUpdateFlag] = useState(false);
   const [value, setValue] = useState("1");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(`/notifications/${1}`)
+      .then((res) => res.json())
+      .then((data1) => {
+        setData(data1.data);
+        setUpdateFlag((prevFlag) => !prevFlag);
+        setLoading(false);
+      });
+  }, []);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -228,6 +251,23 @@ export function NotificationsPage() {
   const countUnread = () => {
     return data.filter((item) => item.read === false).length;
   };
+
+  if (loading) {
+    return (
+      <ThemeProvider theme={theme}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "100vh",
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      </ThemeProvider>
+    );
+  }
 
   return (
     <>
@@ -286,6 +326,7 @@ export function NotificationsPage() {
             </Box>
             <TabPanel value="1" sx={{ paddingLeft: 0, paddingRight: 0 }}>
               <Notifications
+                updateFlag={updateFlag}
                 filteredData={data}
                 data={data}
                 setData={setData}
@@ -293,6 +334,7 @@ export function NotificationsPage() {
             </TabPanel>
             <TabPanel value="2">
               <Notifications
+                updateFlag={updateFlag}
                 filteredData={data.filter((item) => item.read === false)}
                 data={data}
                 setData={setData}
@@ -301,6 +343,7 @@ export function NotificationsPage() {
             <TabPanel value="3">
               {" "}
               <Notifications
+                updateFlag={updateFlag}
                 filteredData={data.filter((item) => item.saved === true)}
                 data={data}
                 setData={setData}

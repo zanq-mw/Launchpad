@@ -44,6 +44,27 @@ def get_applications(user_id):
         doc.pop("_id")
     return (jsonify({"data": result}))   
 
+@app.route("/notifications/<int:user_id>")
+def get_notifications(user_id):
+    user_collection = mongo.db.user
+    user_query = {"userId": user_id}
+    user_result = user_collection.find_one(user_query)
+
+    if not user_result:
+        return jsonify({"data": []})  # Return an empty list if user not found
+
+    notifications_ids = user_result.get("notifications", [])
+
+    # Select notifications where notificationId is in notifications_ids
+    notification_collection = mongo.db.notification
+    notification_query = {"notificationId": {"$in": notifications_ids}}
+    notification_result = list(notification_collection.find(notification_query))
+
+    for doc in notification_result:
+        doc.pop("_id")
+
+    return jsonify({"data": notification_result})
+
 @app.route("/jobs")
 def get_jobs():
     # Select * from posting where postingTitle LIKE user_id
