@@ -393,9 +393,9 @@ function JobExpanded({ postingSelected, updateList, postings, saved }) {
                     alignContent: "space-evenly",
                   }}
                 >
-                  <Button variant="contained" sx={PageStyles.apply}>
+                  <ApplyButton companyName={expandedPosting.companyName}>
                     Apply
-                  </Button>
+                  </ApplyButton>
                   <Button
                     variant="outlined"
                     sx={PageStyles.saved}
