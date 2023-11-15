@@ -172,7 +172,6 @@ def register():
         
     return jsonify(response)
 
-
 @app.route("/api/login", methods=['POST'])
 def login():
     if request.method == 'POST':
@@ -188,8 +187,8 @@ def login():
 
         if user_data:
             stored_password_hashed = user_data.get("password")
-            
-            if bcrypt.check_password_hash(stored_password_hashed, password):
+
+            if stored_password_hashed and check_password_hash(stored_password_hashed, password):
                 user_id = user_data.get("userId") 
                 session['user_id'] = str(user_id)
 
@@ -204,9 +203,6 @@ def login():
                     "user_info": user_info  
                 }
                 return jsonify(response)
-        else:
-            response = {"message": "User does not exist"}
-            return jsonify(response)
 
-        response = {"message": "Incorrect Password"}
+        response = {"message": "User does not exist or Incorrect Password"}
         return jsonify(response)

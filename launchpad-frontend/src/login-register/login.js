@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import "./startup.css";
 
-function Login() {
+function Login({ userId, setUserId }) {
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -29,9 +29,10 @@ function Login() {
     });
 
     const responseData = await response.json();
-    console.log(responseData);
 
     if (responseData.message === "User Logged In successfully") {
+      console.log(responseData.user_info.userId);
+      setUserId(responseData.user_info.userId);
       navigate("/landing");
     } else if (responseData.message === "Incorrect Password") {
       alert("Incorrect Password");
