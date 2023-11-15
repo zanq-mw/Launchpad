@@ -18,7 +18,7 @@ import { LaunchPadLogo } from "./components/logoIcon";
 import { IconButton } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import { pages } from ".";
+import { pages } from "./index";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 
