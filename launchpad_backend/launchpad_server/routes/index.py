@@ -65,6 +65,43 @@ def get_notifications(user_id):
 
     return jsonify({"data": notification_result})
 
+@app.route("/notifications/<int:notification_id>/mark-as-read", methods=["PUT"])
+def mark_notification_as_read(notification_id):
+    # Connect to the notifications collection
+    collection = mongo.db.notification
+
+    # Find the notification by notificationId
+    query = {"notificationId": notification_id}
+    notification = collection.find_one(query)
+
+    if notification:
+        # Update the read status to True
+        collection.update_one({"_id": notification["_id"]}, {"$set": {"read": True}})
+
+        return jsonify({"message": f"Notification {notification_id} marked as read."}), 200
+    else:
+        return jsonify({"error": "Notification not found."}), 404
+    
+@app.route("/notifications/<int:notification_id>/toggle-saved", methods=["PUT"])
+def toggle_notification_saved(notification_id):
+    # Connect to the notifications collection
+    collection = mongo.db.notification
+
+    # Find the notification by notificationId
+    query = {"notificationId": notification_id}
+    notification = collection.find_one(query)
+
+    if notification:
+        # Toggle the saved status (change True to False, and vice versa)
+        new_saved_status = not notification.get("saved", False)
+
+        # Update the saved status
+        collection.update_one({"_id": notification["_id"]}, {"$set": {"saved": new_saved_status}})
+
+        return jsonify({"message": f"Notification {notification_id} saved status toggled."}), 200
+    else:
+        return jsonify({"error": "Notification not found."}), 404
+
 @app.route("/jobs")
 def get_jobs():
     # Select * from posting where postingTitle LIKE user_id

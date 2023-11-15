@@ -67,13 +67,34 @@ function Notifications(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateFlag]);
 
-  function handleSave(index) {
+  async function handleSave(index) {
     let temp = [...data];
     const i = temp.findIndex(
       (item) => item.notificationId === filtered[index].notificationId
     );
     temp[i].saved = !temp[i].saved;
     setData(temp);
+    // Call the mark_notification_as_read endpoint
+    try {
+      const response = await fetch(
+        `/notifications/${filtered[index].notificationId}/toggle-saved`,
+        {
+          method: "PUT",
+        }
+      );
+
+      if (response.ok) {
+        console.log(
+          `Notification ${filtered[index].notificationId} save toggled.`
+        );
+      } else {
+        console.error(
+          `Failed to toggle save status of notification. Status: ${response.status}`
+        );
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   }
 
   function checkRead(index) {
@@ -96,7 +117,7 @@ function Notifications(props) {
     return data[i].false;
   }
 
-  const handleRowClick = (index) => {
+  const handleRowClick = async (index) => {
     setSelected(index);
     if (filtered[index].read === false) {
       let temp = [...data];
@@ -105,6 +126,27 @@ function Notifications(props) {
       );
       temp[i].read = true;
       setData(temp);
+      // Call the mark_notification_as_read endpoint
+      try {
+        const response = await fetch(
+          `/notifications/${filtered[index].notificationId}/mark-as-read`,
+          {
+            method: "PUT",
+          }
+        );
+
+        if (response.ok) {
+          console.log(
+            `Notification ${filtered[index].notificationId} marked as read.`
+          );
+        } else {
+          console.error(
+            `Failed to mark notification as read. Status: ${response.status}`
+          );
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
     }
   };
 
@@ -345,7 +387,7 @@ export function NotificationsPage() {
                 setData={setData}
               />
             </TabPanel>
-            <TabPanel value="2">
+            <TabPanel value="2" sx={{ paddingLeft: 0, paddingRight: 0 }}>
               <Notifications
                 updateFlag={updateFlag}
                 filteredData={data.filter((item) => item.read === false)}
@@ -353,7 +395,7 @@ export function NotificationsPage() {
                 setData={setData}
               />
             </TabPanel>
-            <TabPanel value="3">
+            <TabPanel value="3" sx={{ paddingLeft: 0, paddingRight: 0 }}>
               {" "}
               <Notifications
                 updateFlag={updateFlag}
