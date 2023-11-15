@@ -1,5 +1,4 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Grid, IconButton } from "@mui/material";
 import { mock_data } from "./mockData";
 import "./landingPage.css";
@@ -19,11 +18,22 @@ function StatusIcon(status) {
   }
 }
 
-export function LandingPage() {
+export function LandingPage({ userId }) {
   const [data, setData] = useState(mock_data);
   const [appsExpanded, setAppsExpanded] = useState(false);
   const [savedExpanded, setSavedExpanded] = useState(false);
-  const { first_name, applications, saved_jobs, recommended } = data;
+  const { applications, saved_jobs, recommended } = data;
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    if (userId) {
+      fetch(`/users/${userId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setUserData(data);
+        });
+    }
+  }, [userId]);
 
   function handleSave(i) {
     let temp = { ...data };
@@ -31,9 +41,15 @@ export function LandingPage() {
     setData(temp);
   }
 
+  if (!userId) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <>
-      <p style={PageStyles.top_banner}>Welcome Back, {first_name}!</p>
+      <p style={PageStyles.top_banner}>
+        Welcome Back, {userData?.data?.[0]?.firstName || "User"}!
+      </p>
       <Grid container spacing={6}>
         <Grid item xs={8}>
           <p style={PageStyles.headings}>Applications</p>
