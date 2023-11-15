@@ -2,6 +2,7 @@ import React from "react";
 import logo from "../images/launchpadLogo.png";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import "./startup.css";
 
 function Register() {
   const navigate = useNavigate();

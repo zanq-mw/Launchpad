@@ -5,10 +5,12 @@ from flask_login import login_user
 from flask_bcrypt import Bcrypt, check_password_hash
 from flask_pymongo import PyMongo
 from flask_cors import CORS
+from flask_cors import CORS
+from flask import session  
 import pymongo
 import sys
 import re
-sys.path.append('./launchpad_server/routes')
+sys.path.append('.\\launchpad_server\\routes')
 from startup_data import startup_data
 app.config['MONGO_URI'] = 'mongodb://localhost:27017/database'
 from datetime import datetime
@@ -35,18 +37,6 @@ def setup_db():
 
 setup_db() # Resets db to startup_data everytime backend is saved or ran
 
-
-@app.route("/applications/<int:user_id>")
-def get_applications(user_id):
-    # Select * from application where userId=user_id
-    collection = mongo.db.application
-    query = {"userId": user_id}
-    result = list(collection.find(query))
-
-    for doc in result:
-        doc.pop("_id")
-    return (jsonify({"data": result}))   
-
 @app.route("/jobs")
 def get_jobs():
     # Select * from posting where postingTitle LIKE user_id
@@ -72,7 +62,7 @@ def get_jobs():
 @app.route("/companies")
 def get_companies():
     # Select * from company
-    
+
     # access database
     collection = mongo.db.company
     query = {}
@@ -91,7 +81,19 @@ def get_users(user_id):
 
     for doc in result:
         doc.pop("_id")
+    return (jsonify({"data": result}))  
+
+@app.route("/applications/<int:user_id>")
+def get_applications(user_id):
+    # Select * from application where userId=user_id
+    collection = mongo.db.application
+    query = {"userId": user_id}
+    result = list(collection.find(query))
+
+    for doc in result:
+        doc.pop("_id")
     return (jsonify({"data": result}))   
+
 
 @app.route("/check_db")
 def check_db():
@@ -169,7 +171,37 @@ def register():
         return jsonify(response)
         
     return jsonify(response)
-
 @app.route("/api/login", methods=['POST'])
 def login():
-    pass
+    if request.method == 'POST':
+        data = request.get_json()
+        print(data)
+        username = data.get('username')
+        password = data.get('password')
+        print(
+            "Username: ", username,
+            "\nPassword: ", password)
+
+        user_data = mongo.db.get_collection("user").find_one({"email": username})
+
+        if user_data:
+            stored_password_hashed = user_data.get("password")
+
+            if stored_password_hashed and check_password_hash(stored_password_hashed, password):
+                user_id = user_data.get("userId") 
+                session['user_id'] = str(user_id)
+
+                user_info = {
+                    "userId": user_data.get("userId"),
+                    "email": user_data.get("email"),
+                    "firstName": user_data.get("firstName"),
+                }
+
+                response = {
+                    "message": "User Logged In successfully",
+                    "user_info": user_info  
+                }
+                return jsonify(response)
+
+        response = {"message": "User does not exist or Incorrect Password"}
+        return jsonify(response)

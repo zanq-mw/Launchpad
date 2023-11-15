@@ -1,11 +1,47 @@
 import React from "react";
 import logo from "../images/launchpadLogo.png";
 import { NavLink } from "react-router-dom";
-import "./startup.css";
 import { useNavigate } from "react-router-dom";
+import "./startup.css";
 
-function Login() {
+function Login({ userId, setUserId }) {
   const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = {
+      username: e.target.username.value,
+      password: e.target.Password.value,
+    };
+    console.log(formData);
+
+    const response = await fetch("/api/login", {
+      method: "POST",
+      dataType: "json",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "OPTIONS, POST, GET",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    const responseData = await response.json();
+
+    if (responseData.message === "User Logged In successfully") {
+      console.log(responseData.user_info.userId);
+      setUserId(responseData.user_info.userId);
+      navigate("/landing");
+    } else if (
+      responseData.message === "User does not exist or Incorrect Password"
+    ) {
+      alert("User does not exist or Incorrect Password");
+    } else {
+      console.log("Email already in use");
+    }
+  };
 
   return (
     <div className="container-main">
@@ -17,14 +53,13 @@ function Login() {
           </p>
         </div>
       </div>
-
       <div className="container-right">
         <div className="heading-container2">Welcome Back</div>
 
         <div className="form-container-login">
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="input2">
-              <label className="label">Email</label>
+              <label class="label">Email</label>
               <input
                 className="input"
                 type="text"
@@ -44,12 +79,7 @@ function Login() {
               />
             </div>
             <div className="btn-cont">
-              <button
-                className="submit-btn"
-                onClick={() => navigate("/landing")}
-              >
-                Log In
-              </button>
+              <button className="submit-btn">Log In</button>
             </div>
           </form>
           <p>
@@ -69,5 +99,4 @@ function Login() {
     </div>
   );
 }
-
 export default Login;

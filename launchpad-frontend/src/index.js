@@ -21,7 +21,7 @@ export const pages = {
   settings: "/settings",
 };
 
-function Pages() {
+function Pages({ userId }) {
   const [page, setPage] = useState(pages.landing);
 
   return (
@@ -31,7 +31,10 @@ function Pages() {
       </nav>
       <main className="content">
         <Routes>
-          <Route path={pages.landing} element={<LandingPage />} />
+          <Route
+            path={pages.landing}
+            element={<LandingPage userId={userId} />}
+          />
           <Route path={pages.notifications} element={<NotificationsPage />} />
           <Route path={pages.applications} element={<MyApplication />} />
           <Route path={pages.jobs} element={<JobPostings />} />
@@ -44,12 +47,17 @@ function Pages() {
 }
 
 function AppRouter() {
+  const [userId, setUserId] = useState(null);
+
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route
+          path="/"
+          element={<Login user={userId} setUserId={setUserId} />}
+        />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="*" element={<Pages />} />
+        <Route path="*" element={<Pages userId={userId} />} />
       </Routes>
     </Router>
   );
