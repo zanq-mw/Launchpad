@@ -283,14 +283,14 @@ function Notifications(props) {
   );
 }
 
-export function NotificationsPage() {
+export function NotificationsPage({ userId }) {
   const [data, setData] = useState([]);
   const [updateFlag, setUpdateFlag] = useState(false);
   const [value, setValue] = useState("1");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`/notifications/${1}`)
+    fetch(`/notifications/${userId}`)
       .then((res) => res.json())
       .then((data1) => {
         setData(data1.data);

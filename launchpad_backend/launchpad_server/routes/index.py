@@ -151,19 +151,7 @@ def get_users(user_id):
 
     for doc in result:
         doc.pop("_id")
-    return (jsonify({"data": result}))  
-
-@app.route("/applications/<int:user_id>")
-def get_applications(user_id):
-    # Select * from application where userId=user_id
-    collection = mongo.db.application
-    query = {"userId": user_id}
-    result = list(collection.find(query))
-
-    for doc in result:
-        doc.pop("_id")
     return (jsonify({"data": result}))   
-
 
 @app.route("/check_db")
 def check_db():

@@ -35,7 +35,10 @@ function Pages({ userId }) {
             path={pages.landing}
             element={<LandingPage userId={userId} />}
           />
-          <Route path={pages.notifications} element={<NotificationsPage />} />
+          <Route
+            path={pages.notifications}
+            element={<NotificationsPage userId={userId} />}
+          />
           <Route path={pages.applications} element={<MyApplication />} />
           <Route path={pages.jobs} element={<JobPostings />} />
           <Route path={pages.account} element={<AccountSettings />} />
