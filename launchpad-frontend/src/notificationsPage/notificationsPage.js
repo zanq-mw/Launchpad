@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Grid, IconButton } from "@mui/material";
 import "./notificationsPage.css";
 import Box from "@mui/material/Box";
