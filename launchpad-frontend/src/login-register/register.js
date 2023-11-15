@@ -38,7 +38,7 @@ function Register() {
       alert("User Already Exists");
     } else if (responseData.message === "User registered successfully") {
       console.log("User registered successfully");
-      navigate("/landing");
+      navigate("/login");
     } else {
       console.log("Something is Wrong");
     }
