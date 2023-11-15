@@ -686,7 +686,7 @@ Best regards,
 
 Sasuke Uchiha""", 
         "dateTime": datetime(2023, 11, 14, 7, 30, 54), 
-        "read": True, 
+        "read": False, 
         "saved": False, 
         "applicationId": 2
     },
