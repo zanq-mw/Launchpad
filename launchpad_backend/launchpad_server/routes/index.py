@@ -2,21 +2,24 @@ from launchpad_server import app
 from flask import render_template, request, flash, redirect, url_for,jsonify
 from .forms import SignupForm, LoginForm  
 from flask_login import login_user
-from flask_bcrypt import Bcrypt
+from flask_bcrypt import Bcrypt, check_password_hash
 from flask_pymongo import PyMongo
+from flask_cors import CORS
 import pymongo
 import sys
 import re
 sys.path.append('./launchpad_server/routes')
 from startup_data import startup_data
-
 app.config['MONGO_URI'] = 'mongodb://localhost:27017/database'
+from datetime import datetime
 
 # Initialize the PyMongo extension
 mongo = PyMongo(app)
-
-
 bcrypt = Bcrypt(app)
+
+
+CORS(app, origins='*')
+
 
 def setup_db():
     for data in startup_data:
@@ -106,25 +109,67 @@ def index():
 def landing(form):
         return render_template('landing.html',title='Landing Page',form=form)
 
-@app.route("/register", methods = ['POST', 'GET'])
+@app.route("/signup", methods = ['POST', "GET"])
 def register():
-    form = SignupForm()
-    if form.validate_on_submit():
-        hash_pass =  bcrypt.generate_password_hash(request.form['password']).decode('utf-8')
-        check_pass = bcrypt.check_password_hash(hash_pass, request.form['confirm_password'])                      
-        if check_pass:
-            return landing(form)
-    return render_template('register.html',title='SignUp', form=form)
+    response = "none"
+    if request.method == 'POST':
+        data = request.get_json()
+        #print(data)
+        fname =  data.get('fname')
+        lname =data.get('lname')
+        year = data.get('year')
+        program = data.get('program')
+        username = data.get('username')
+        password = data.get('password')
+        """
+        print(
+            "First Name: ", fname,
+            "\nLast Name: ", lname,
+            "\nYear: ", year,
+            "\nProgram ", program,
+            "\nusername: ", username,
+            "\npasssword: ", password)
 
-@app.route("/login", methods=['GET', 'POST'])
+        """
+        
+        
+        user_count = mongo.db.user.count_documents({}) # count user -> for user ID
+        hashed_password = bcrypt.generate_password_hash (password).decode('utf-8') #encrypt Password
+
+        data_to_insert = {
+            "userId": user_count+1,
+            "email": username, 
+            "password": hashed_password, 
+            "firstName": fname, 
+            "lastName": lname, 
+            "year": year, 
+            "program": program,
+            "address": {        # If address is not specified for a record, do not include this key-value pair in the dictionary
+                "streetAddress": "",
+                "postalCode": "",
+                "province": ""
+            },
+            "phoneNumber": "",  # If number is not specified for a record, do not include this key-value pair in the dictionary
+            "twoFactor": False,
+            "dataCollection": True,
+            "savedPostings": [{
+                "dateTime": "", 
+                "postingId": ""
+            }],
+            "notifications": []  # Ids of all their notifications
+        }
+
+        user_exists = mongo.db.get_collection("user").find_one({"email": username}) #check if user exists
+       
+        if user_exists:
+            response = {'message': 'User already exists'}
+        else:
+            mongo.db.get_collection("user").insert_one(data_to_insert)
+            response = {'message': 'User registered successfully'}
+        return jsonify(response)
+        
+    return jsonify(response)
+
+@app.route("/api/login", methods=['POST'])
 def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        email = request.form['email']
-        password =  request.form['password']
-        return f'Hello, {email}. Your password is {password}.'  
-    else:
-        print('something wrong')
-        flash('Login failed. Please check your email and password.', 'danger')
-    return render_template('login.html', title='Login', form=form)
-
+    pass
