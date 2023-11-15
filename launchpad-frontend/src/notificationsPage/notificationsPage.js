@@ -297,7 +297,7 @@ export function NotificationsPage({ userId }) {
         setUpdateFlag((prevFlag) => !prevFlag);
         setLoading(false);
       });
-  }, []);
+  }, [userId]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
