@@ -25,6 +25,38 @@ const theme = createTheme({
   },
 });
 
+const formatDate = (inputString) => {
+  const inputDate = new Date(inputString);
+
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  const day = inputDate.getUTCDate();
+  const month = months[inputDate.getUTCMonth()];
+  const year = inputDate.getUTCFullYear();
+  const hours = inputDate.getUTCHours();
+  const minutes = inputDate.getUTCMinutes();
+  const ampm = hours >= 12 ? "PM" : "AM";
+
+  const formattedDate = `${month} ${day}, ${year} ${
+    hours % 12 === 0 ? 12 : hours % 12
+  }:${minutes.toString().padStart(2, "0")} ${ampm}`;
+
+  return formattedDate;
+};
+
 function Notifications(props) {
   const { updateFlag, filteredData, data, setData } = props;
   const [selected, setSelected] = useState(null);
@@ -122,15 +154,7 @@ function Notifications(props) {
                       >
                         <p style={PageStyles.leftSubject}>{row.subject}</p>
                         <p style={PageStyles.date}>
-                          {`${row.dateTime.toLocaleString("en-us", {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                          })} ${row.dateTime.toLocaleString("en-us", {
-                            hour: "numeric",
-                            minute: "numeric",
-                            hour12: true,
-                          })}`}
+                          {formatDate(row.dateTime)}
                         </p>
                       </TableCell>
                       <TableCell
@@ -172,20 +196,7 @@ function Notifications(props) {
                         style={{ paddingRight: 4, paddingTop: 1 }}
                       ></img>
                     </Grid>
-                    <Grid item>
-                      {` ${filtered[selected].dateTime.toLocaleString("en-us", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })} ${filtered[selected].dateTime.toLocaleString(
-                        "en-us",
-                        {
-                          hour: "numeric",
-                          minute: "numeric",
-                          hour12: true,
-                        }
-                      )}`}
-                    </Grid>
+                    <Grid item>{formatDate(filtered[selected].dateTime)}</Grid>
                   </Grid>
                 </Grid>
                 <Grid item xs={1}>
@@ -217,9 +228,11 @@ function Notifications(props) {
                 </Grid>
               </Grid>
               <hr />
-              <p style={{ paddingTop: 18, paddingBottom: 18 }}>
-                {filtered[selected].body}
-              </p>
+              <div style={{ paddingTop: 18, paddingBottom: 18 }}>
+                {filtered[selected].body.split("\n").map((text) => (
+                  <p style={{ marginTop: 0 }}>{text}</p>
+                ))}
+              </div>
             </Box>
           </Grid>
         )}
