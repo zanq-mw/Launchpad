@@ -171,7 +171,6 @@ def register():
         return jsonify(response)
         
     return jsonify(response)
-
 @app.route("/api/login", methods=['POST'])
 def login():
     if request.method == 'POST':

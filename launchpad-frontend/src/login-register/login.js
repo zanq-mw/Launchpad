@@ -34,10 +34,10 @@ function Login({ userId, setUserId }) {
       console.log(responseData.user_info.userId);
       setUserId(responseData.user_info.userId);
       navigate("/landing");
-    } else if (responseData.message === "Incorrect Password") {
-      alert("Incorrect Password");
-    } else if (responseData.message === "User does not exist") {
-      alert("User does not exist");
+    } else if (
+      responseData.message === "User does not exist or Incorrect Password"
+    ) {
+      alert("User does not exist or Incorrect Password");
     } else {
       console.log("Email already in use");
     }
@@ -53,14 +53,13 @@ function Login({ userId, setUserId }) {
           </p>
         </div>
       </div>
-
       <div className="container-right">
         <div className="heading-container2">Welcome Back</div>
 
         <div className="form-container-login">
           <form onSubmit={handleSubmit}>
             <div className="input2">
-              <label className="label">Email</label>
+              <label class="label">Email</label>
               <input
                 className="input"
                 type="text"
@@ -85,6 +84,7 @@ function Login({ userId, setUserId }) {
           </form>
           <p>
             <span id="forgot-password">
+              {" "}
               <i>Forgot password?</i>
             </span>
           </p>
@@ -99,5 +99,4 @@ function Login({ userId, setUserId }) {
     </div>
   );
 }
-
 export default Login;
