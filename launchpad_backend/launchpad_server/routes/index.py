@@ -9,6 +9,7 @@ from flask_cors import CORS
 from flask import session  
 import pymongo
 import sys
+import re
 sys.path.append('.\\launchpad_server\\routes')
 from startup_data import startup_data
 app.config['MONGO_URI'] = 'mongodb://localhost:27017/database'
