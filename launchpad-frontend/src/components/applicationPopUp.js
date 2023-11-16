@@ -20,14 +20,22 @@ export function ApplyButton({ companyName }) {
     if (fileInput.files.length > 0) {
       const file = fileInput.files[0];
       // Set the corresponding file state based on the fileType
-      fileType === "resume"
-        ? setResumeFile(file) && setResumeUploadDate(formattedDate)
-        : setCoverLetterFile(file) && setCoverLetterUploadDate(formattedDate);
+      if (fileType === "resume") {
+        setResumeFile(file);
+        setResumeUploadDate(formattedDate);
+      } else {
+        setCoverLetterFile(file);
+        setCoverLetterUploadDate(formattedDate);
+      }
     } else {
       // If no files are selected, reset the corresponding file state
-      fileType === "resume"
-        ? setResumeFile(null) && setResumeUploadDate(null)
-        : setCoverLetterFile(null) && setCoverLetterUploadDate(null);
+      if (fileType === "resume") {
+        setResumeFile(null);
+        setResumeUploadDate(null);
+      } else {
+        setCoverLetterFile(null);
+        setCoverLetterUploadDate(null);
+      }
     }
   };
 
@@ -59,11 +67,14 @@ export function ApplyButton({ companyName }) {
 
   const handleClose = () => {
     setOpen(false);
+    resetForm();
   };
 
   const resetForm = () => {
     setResumeFile(null);
     setCoverLetterFile(null);
+    setResumeUploadDate(null);
+    setCoverLetterUploadDate(null);
     setSubmissionStatus("pending");
   };
 
