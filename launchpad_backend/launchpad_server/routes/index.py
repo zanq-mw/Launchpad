@@ -37,6 +37,65 @@ def setup_db():
 
 setup_db() # Resets db to startup_data everytime backend is saved or ran
 
+
+@app.route("/notifications/<int:user_id>")
+def get_notifications(user_id):
+    user_collection = mongo.db.user
+    user_query = {"userId": user_id}
+    user_result = user_collection.find_one(user_query)
+
+    if not user_result:
+        return jsonify({"data": []})  # Return an empty list if user not found
+
+    notifications_ids = user_result.get("notifications", [])
+
+    # Select notifications where notificationId is in notifications_ids
+    notification_collection = mongo.db.notification
+    notification_query = {"notificationId": {"$in": notifications_ids}}
+    notification_result = list(notification_collection.find(notification_query))
+
+    for doc in notification_result:
+        doc.pop("_id")
+
+    return jsonify({"data": notification_result})
+
+@app.route("/notifications/<int:notification_id>/mark-as-read", methods=["PUT"])
+def mark_notification_as_read(notification_id):
+    # Connect to the notifications collection
+    collection = mongo.db.notification
+
+    # Find the notification by notificationId
+    query = {"notificationId": notification_id}
+    notification = collection.find_one(query)
+
+    if notification:
+        # Update the read status to True
+        collection.update_one({"_id": notification["_id"]}, {"$set": {"read": True}})
+
+        return jsonify({"message": f"Notification {notification_id} marked as read."}), 200
+    else:
+        return jsonify({"error": "Notification not found."}), 404
+    
+@app.route("/notifications/<int:notification_id>/toggle-saved", methods=["PUT"])
+def toggle_notification_saved(notification_id):
+    # Connect to the notifications collection
+    collection = mongo.db.notification
+
+    # Find the notification by notificationId
+    query = {"notificationId": notification_id}
+    notification = collection.find_one(query)
+
+    if notification:
+        # Toggle the saved status (change True to False, and vice versa)
+        new_saved_status = not notification.get("saved", False)
+
+        # Update the saved status
+        collection.update_one({"_id": notification["_id"]}, {"$set": {"saved": new_saved_status}})
+
+        return jsonify({"message": f"Notification {notification_id} saved status toggled."}), 200
+    else:
+        return jsonify({"error": "Notification not found."}), 404
+
 @app.route("/jobs")
 def get_jobs():
     # Select * from posting where postingTitle LIKE user_id
@@ -81,7 +140,7 @@ def get_users(user_id):
 
     for doc in result:
         doc.pop("_id")
-    return (jsonify({"data": result}))  
+    return (jsonify({"data": result}))   
 
 @app.route("/applications/<int:user_id>")
 def get_applications(user_id):

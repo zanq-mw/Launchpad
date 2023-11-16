@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Grid, IconButton } from "@mui/material";
 import "./notificationsPage.css";
 import Box from "@mui/material/Box";
@@ -14,7 +14,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Typography } from "@mui/material";
-import { mock_data } from "./mockData";
+import CircularProgress from "@mui/material/CircularProgress";
 import Bookmark from "@mui/icons-material/Bookmark";
 
 const theme = createTheme({
@@ -25,35 +25,99 @@ const theme = createTheme({
   },
 });
 
-function Notifications(props) {
-  const { filteredData, data, setData } = props;
-  const [selected, setSelected] = useState(null);
-  const [filtered] = useState(filteredData);
+const formatDate = (inputString) => {
+  const inputDate = new Date(inputString);
 
-  function handleSave(index) {
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  const day = inputDate.getUTCDate();
+  const month = months[inputDate.getUTCMonth()];
+  const year = inputDate.getUTCFullYear();
+  const hours = inputDate.getUTCHours();
+  const minutes = inputDate.getUTCMinutes();
+  const ampm = hours >= 12 ? "PM" : "AM";
+
+  const formattedDate = `${month} ${day}, ${year} ${
+    hours % 12 === 0 ? 12 : hours % 12
+  }:${minutes.toString().padStart(2, "0")} ${ampm}`;
+
+  return formattedDate;
+};
+
+function Notifications(props) {
+  const { updateFlag, filteredData, data, setData } = props;
+  const [selected, setSelected] = useState(null);
+  const [filtered, setFiltered] = useState(filteredData);
+
+  useEffect(() => {
+    setFiltered(filteredData);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [updateFlag]);
+
+  async function handleSave(index) {
     let temp = [...data];
     const i = temp.findIndex(
       (item) => item.notificationId === filtered[index].notificationId
     );
     temp[i].saved = !temp[i].saved;
     setData(temp);
+    // Call the mark_notification_as_read endpoint
+    try {
+      const response = await fetch(
+        `/notifications/${filtered[index].notificationId}/toggle-saved`,
+        {
+          method: "PUT",
+        }
+      );
+
+      if (response.ok) {
+        console.log(
+          `Notification ${filtered[index].notificationId} save toggled.`
+        );
+      } else {
+        console.error(
+          `Failed to toggle save status of notification. Status: ${response.status}`
+        );
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   }
 
   function checkRead(index) {
     const i = data.findIndex(
       (item) => item.notificationId === filtered[index].notificationId
     );
-    return data[i].read;
+    if (data[i] && "read" in data[i]) {
+      return data[i].read;
+    }
+    return true;
   }
 
   function checkSaved(index) {
     const i = data.findIndex(
       (item) => item.notificationId === filtered[index].notificationId
     );
-    return data[i].saved;
+    if (data[i] && "saved" in data[i]) {
+      return data[i].saved;
+    }
+    return data[i].false;
   }
 
-  const handleRowClick = (index) => {
+  const handleRowClick = async (index) => {
     setSelected(index);
     if (filtered[index].read === false) {
       let temp = [...data];
@@ -62,6 +126,27 @@ function Notifications(props) {
       );
       temp[i].read = true;
       setData(temp);
+      // Call the mark_notification_as_read endpoint
+      try {
+        const response = await fetch(
+          `/notifications/${filtered[index].notificationId}/mark-as-read`,
+          {
+            method: "PUT",
+          }
+        );
+
+        if (response.ok) {
+          console.log(
+            `Notification ${filtered[index].notificationId} marked as read.`
+          );
+        } else {
+          console.error(
+            `Failed to mark notification as read. Status: ${response.status}`
+          );
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
     }
   };
 
@@ -111,15 +196,7 @@ function Notifications(props) {
                       >
                         <p style={PageStyles.leftSubject}>{row.subject}</p>
                         <p style={PageStyles.date}>
-                          {`${row.dateTime.toLocaleString("en-us", {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                          })} ${row.dateTime.toLocaleString("en-us", {
-                            hour: "numeric",
-                            minute: "numeric",
-                            hour12: true,
-                          })}`}
+                          {formatDate(row.dateTime)}
                         </p>
                       </TableCell>
                       <TableCell
@@ -161,20 +238,7 @@ function Notifications(props) {
                         style={{ paddingRight: 4, paddingTop: 1 }}
                       ></img>
                     </Grid>
-                    <Grid item>
-                      {` ${filtered[selected].dateTime.toLocaleString("en-us", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })} ${filtered[selected].dateTime.toLocaleString(
-                        "en-us",
-                        {
-                          hour: "numeric",
-                          minute: "numeric",
-                          hour12: true,
-                        }
-                      )}`}
-                    </Grid>
+                    <Grid item>{formatDate(filtered[selected].dateTime)}</Grid>
                   </Grid>
                 </Grid>
                 <Grid item xs={1}>
@@ -206,9 +270,11 @@ function Notifications(props) {
                 </Grid>
               </Grid>
               <hr />
-              <p style={{ paddingTop: 18, paddingBottom: 18 }}>
-                {filtered[selected].body}
-              </p>
+              <div style={{ paddingTop: 18, paddingBottom: 18 }}>
+                {filtered[selected].body.split("\n").map((text) => (
+                  <p style={{ marginTop: 0 }}>{text}</p>
+                ))}
+              </div>
             </Box>
           </Grid>
         )}
@@ -217,9 +283,21 @@ function Notifications(props) {
   );
 }
 
-export function NotificationsPage() {
-  const [data, setData] = useState(mock_data);
+export function NotificationsPage({ userId }) {
+  const [data, setData] = useState([]);
+  const [updateFlag, setUpdateFlag] = useState(false);
   const [value, setValue] = useState("1");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(`/notifications/${userId}`)
+      .then((res) => res.json())
+      .then((data1) => {
+        setData(data1.data);
+        setUpdateFlag((prevFlag) => !prevFlag);
+        setLoading(false);
+      });
+  }, [userId]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -228,6 +306,23 @@ export function NotificationsPage() {
   const countUnread = () => {
     return data.filter((item) => item.read === false).length;
   };
+
+  if (loading) {
+    return (
+      <ThemeProvider theme={theme}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "100vh",
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      </ThemeProvider>
+    );
+  }
 
   return (
     <>
@@ -286,21 +381,24 @@ export function NotificationsPage() {
             </Box>
             <TabPanel value="1" sx={{ paddingLeft: 0, paddingRight: 0 }}>
               <Notifications
+                updateFlag={updateFlag}
                 filteredData={data}
                 data={data}
                 setData={setData}
               />
             </TabPanel>
-            <TabPanel value="2">
+            <TabPanel value="2" sx={{ paddingLeft: 0, paddingRight: 0 }}>
               <Notifications
+                updateFlag={updateFlag}
                 filteredData={data.filter((item) => item.read === false)}
                 data={data}
                 setData={setData}
               />
             </TabPanel>
-            <TabPanel value="3">
+            <TabPanel value="3" sx={{ paddingLeft: 0, paddingRight: 0 }}>
               {" "}
               <Notifications
+                updateFlag={updateFlag}
                 filteredData={data.filter((item) => item.saved === true)}
                 data={data}
                 setData={setData}

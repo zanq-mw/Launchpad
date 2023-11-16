@@ -1,4 +1,8 @@
 from datetime import datetime
+from launchpad_server import app
+from flask_bcrypt import Bcrypt
+
+bcrypt = Bcrypt(app)
 
 application = {
     "tableName": "application",
@@ -38,7 +42,7 @@ user = {
     "records": [{
         "userId": 1,
         "email": "ash.ketchum@gmail.com", 
-        "password": "Pikachu@123", 
+        "password": bcrypt.generate_password_hash ("Pikachu@123").decode('utf-8'), 
         "firstName": "Ash", 
         "lastName": "Ketchum", 
         "year": "4th", 
@@ -62,7 +66,7 @@ user = {
     {
         "userId": 2,
         "email": "naruto.uzumaki@gmail.com", 
-        "password": "BelieveIt@123", 
+        "password": bcrypt.generate_password_hash ("BelieveIt@123").decode('utf-8'), 
         "firstName": "Naruto", 
         "lastName": "Uzumaki", 
         "year": "1st", 
@@ -686,7 +690,7 @@ Best regards,
 
 Sasuke Uchiha""", 
         "dateTime": datetime(2023, 11, 14, 7, 30, 54), 
-        "read": True, 
+        "read": False, 
         "saved": False, 
         "applicationId": 2
     },
@@ -715,7 +719,7 @@ Recrutier, ScotiaBank
 111-111-1111""", 
         "dateTime": datetime(2023,11, 7, 7, 30, 54), 
         "read": True, 
-        "saved": False, 
+        "saved": True, 
         "applicationId": 1
     },
     {
@@ -734,7 +738,7 @@ Best regards,
 
 Sasuke Uchiha """, 
         "dateTime": datetime(2023, 11, 4, 7, 30, 54), 
-        "read": True, 
+        "read": False, 
         "saved": False, 
         "applicationId": 3
     }]
