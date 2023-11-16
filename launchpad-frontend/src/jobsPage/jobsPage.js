@@ -18,6 +18,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { ClockIcon, PinIcon, LaptopIcon } from "../components/jobsIcons";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CloseIcon from "@mui/icons-material/Close";
+import { ApplyButton } from "../components/applicationPopUp";
 
 export function JobPostings() {
   const [value, setValue] = React.useState(0);
@@ -393,9 +394,9 @@ function JobExpanded({ postingSelected, updateList, postings, saved }) {
                     alignContent: "space-evenly",
                   }}
                 >
-                  <Button variant="contained" sx={PageStyles.apply}>
+                  <ApplyButton companyName={expandedPosting.companyName}>
                     Apply
-                  </Button>
+                  </ApplyButton>
                   <Button
                     variant="outlined"
                     sx={PageStyles.saved}
