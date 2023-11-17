@@ -96,16 +96,16 @@ export function ApplyButton({ companyName }) {
       >
         {submissionStatus === "pending" ? (
           <>
-            <div style={{ marginTop: "60px" }} />
+            <div style={{ marginTop: "40px" }} />
             <Typography sx={ApplyButtonStyles.header}>
               Apply to {companyName}
             </Typography>
-            <div style={{ marginBottom: "10px" }} />
+            <div style={{ marginBottom: "20px" }} />
             <Typography>
               <Typography sx={ApplyButtonStyles.heading2}>
                 Please upload your resume and cover letter
               </Typography>
-              <div style={{ marginBottom: "45px" }} />
+              <div style={{ marginBottom: "10px" }} />
               <div style={{ clear: "both" }} />
               <div style={ApplyButtonStyles.greyBox}>
                 <div style={ApplyButtonStyles.greyBoxText}>Resume</div>
@@ -173,7 +173,7 @@ export function ApplyButton({ companyName }) {
                   </div>
                 </div>
               </div>
-              <div style={{ margin: "20px" }} />
+              <div style={{ margin: "10px" }} />
               <DialogActions>
                 <Button
                   variant="contained"
@@ -249,6 +249,7 @@ const ApplyButtonStyles = {
     width: "100%",
   },
   greyBoxText: {
+    fontFamily: "League Spartan",
     paddingLeft: "100px",
     paddingTop: "5px",
     paddingBottom: "5px",
@@ -279,7 +280,6 @@ const ApplyButtonStyles = {
     marginBottom: "10px",
     cursor: "pointer", // Add cursor style to indicate it's clickable
   },
-
   buttonContainerStyles: {
     borderRadius: "20px",
     padding: "10px",
@@ -290,7 +290,6 @@ const ApplyButtonStyles = {
     position: "relative",
     overflow: "hidden", // Hide overflowing content
   },
-
   labelStyles: {
     color: "white",
     fontWeight: "bold",
@@ -298,7 +297,6 @@ const ApplyButtonStyles = {
     position: "relative",
     top: "16px",
   },
-
   fileNameStyles: {
     marginLeft: "23px",
     fontWeight: "bold",
@@ -308,7 +306,6 @@ const ApplyButtonStyles = {
     whiteSpace: "nowrap", // Prevent wrapping
     textOverflow: "ellipsis", // Show ellipsis (...) for long filenames
   },
-
   descriptionStyles: {
     fontSize: "12px",
     marginTop: "5px",
@@ -317,7 +314,6 @@ const ApplyButtonStyles = {
     position: "relative",
     top: "5px",
   },
-
   uploadbuttonStyles: {
     fontFamily: "League Spartan",
     fontWeight: "bold",
