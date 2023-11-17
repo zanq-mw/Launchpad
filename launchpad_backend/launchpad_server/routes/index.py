@@ -1,5 +1,5 @@
 from launchpad_server import app
-from flask import render_template, request, flash, redirect, url_for,jsonify
+from flask import render_template, request, flash, redirect, url_for,jsonify, send_file
 from .forms import SignupForm, LoginForm  
 from flask_login import login_user
 from flask_bcrypt import Bcrypt, check_password_hash
@@ -10,10 +10,12 @@ from flask import session
 import pymongo
 import sys
 import re
+import gridfs
 sys.path.append('.\\launchpad_server\\routes')
 from startup_data import startup_data
 app.config['MONGO_URI'] = 'mongodb://localhost:27017/database'
 from datetime import datetime
+from bson import ObjectId
 
 # Initialize the PyMongo extension
 mongo = PyMongo(app)
@@ -299,3 +301,40 @@ def login():
 
         response = {"message": "User does not exist or Incorrect Password"}
         return jsonify(response)
+
+@app.route('/get-resume/<resume_id>')
+def get_resume(resume_id):
+    try:
+        resume_id = ObjectId(resume_id)
+        fs = gridfs.GridFS(mongo.db, collection='pdfs')
+        resume_file = fs.get(resume_id)
+
+        # Set the appropriate content type for PDF files
+        response = send_file(resume_file, mimetype='application/pdf')
+
+        # Optionally, you can specify a filename for the downloaded file
+        response.headers['Content-Disposition'] = 'attachment; filename=resume.pdf'
+        
+        return response
+    except Exception as e:
+        return str(e), 404  # Or handle the error as needed
+
+@app.route ("/upload-pdf", methods=["POST"])
+def upload_pdf():
+    if 'resume' in request.files and 'coverLetter' in request.files:
+
+        # client = MongoClient('mongodb://localhost:27017/database')
+        # db = client['database']
+        fs = gridfs.GridFS(mongo.db, collection='application')
+        resume = request.files['resume']
+        cover_letter = request.files['coverLetter']
+
+        # Save files to MongoDB using GridFS
+        fs = gridfs.GridFS(mongo.db, collection='pdfs')
+
+        resume_id = fs.put(resume, filename=resume.filename, custom_metadata={"type": "resume"})
+        cover_letter_id = fs.put(cover_letter, filename=cover_letter.filename, custom_metadata={"type": "cover_letter"}) 
+
+        return jsonify({"message": "PDF files uploaded successfully"}), 200
+    else:
+        return jsonify({"error": "Missing files"}), 400

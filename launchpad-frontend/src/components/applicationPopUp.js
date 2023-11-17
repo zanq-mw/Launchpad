@@ -16,6 +16,8 @@ export function ApplyButton ({ companyName }){
   const [submissionStatus, setSubmissionStatus] = useState('pending'); // 'pending', 'success'
   const [resumeUploadDate, setResumeUploadDate] = useState(null);
   const [coverLetterUploadDate, setCoverLetterUploadDate] = useState(null);
+  const [displayResume, setDisplayResume] = useState(false);
+  const [displayCoverLetter, setDisplayCoverLetter] = useState(false);
 
   
 
@@ -42,20 +44,57 @@ export function ApplyButton ({ companyName }){
     }
   };
 
-  const handleSubmission = () => {
+  const handleSubmission = async () => {
     // Check if both resume and cover letter files are uploaded
     if (resumeFile && coverLetterFile) {
-    // For example, you can send them to the server using an API call
+      const formData = new FormData();
+      formData.append('resume', resumeFile);
+      formData.append('coverLetter', coverLetterFile);
 
-    // Update the submission status to indicate success
-      setSubmissionStatus('success');
-      console.log('Submission successful');
+      try 
+      {
+        const response = await fetch('/upload-pdf', {
+          method: 'POST',
+          body: formData,
+        });
+
+        // Update the submission status to indicate success
+        if (response.ok)
+        {
+          setSubmissionStatus('success');
+          console.log('Submission successful');
+          console.log('Resume URL:', response.resume_url);
+          console.log('Cover Letter URL:', response.cover_letter_url);
+        }
+        else
+        {
+          console.error('Submission failed:', response.status);
+        }
+      } 
+
+      catch (error) 
+      {
+        console.error('Error during submission:', error);
+      }
 
     } else {
       // Display an error or prompt the user to upload both files
       console.error('Please upload both resume and cover letter files.');
     }
   };
+
+  const handleDisplayResume = async () => {
+    try {
+      const response = await fetch('/get-resume'); // Replace with your endpoint
+      const resumeBlob = await response.blob();
+      const url = URL.createObjectURL(resumeBlob);
+      window.open(url, '_blank');
+    } catch (error) {
+      console.error('Error fetching resume:', error);
+    }
+  };
+
+
   const handleOpen = () => {
     resetForm();
     setOpen(true);
@@ -150,7 +189,10 @@ export function ApplyButton ({ companyName }){
                   Your application has succesfully been submitted!
             </Typography>
             <div style={{ marginBottom: '45px' }} />
-            <div style={{ clear: 'both' }} />           
+            <div style={{ clear: 'both' }} />
+            <div>
+              <Button onClick={handleDisplayResume}>View Resume</Button>
+            </div>           
           </>
         )}
           </Dialog>
