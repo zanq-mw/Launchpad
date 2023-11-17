@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
 import * as React from "react";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -9,12 +10,15 @@ import {
   ApplicationsIcon,
   JobIcon,
   ProfileIcon,
-  SettingsIcon,
   LogoutIcon,
 } from "./components/navIcons";
 import "@fontsource/league-spartan";
 import "@fontsource/open-sans";
 import { LaunchPadLogo } from "./components/logoIcon";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogTitle from "@mui/material/DialogTitle";
 import { IconButton } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
@@ -22,7 +26,7 @@ import { pages } from "./index";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 
-export function NavItems({ open, page, setPage }) {
+export function NavItems({ open, page, setPage, setShowLogout }) {
   return (
     <React.Fragment>
       <ThemeProvider theme={theme}>
@@ -95,22 +99,10 @@ export function NavItems({ open, page, setPage }) {
           </ListItemButton>
         </Link>
       </ThemeProvider>
-      <ThemeProvider theme={theme}>
-        <Link to={pages.settings} style={{ textDecoration: "none" }}>
-          <ListItemButton
-            sx={NavStyles.navOption}
-            onClick={useCallback(() => setPage(pages.settings), [setPage])}
-            selected={page === pages.settings}
-          >
-            <LPListItemIcon open={open}>
-              <SettingsIcon />
-            </LPListItemIcon>
-            {open && <LPListItemText>{"Settings"}</LPListItemText>}
-          </ListItemButton>
-        </Link>
-      </ThemeProvider>
-
-      <ListItemButton sx={NavStyles.navOptionLogout}>
+      <ListItemButton
+        sx={NavStyles.navOptionLogout}
+        onClick={useCallback(() => setShowLogout(true), [setShowLogout])}
+      >
         <LPListItemIcon open={open}>
           <LogoutIcon />
         </LPListItemIcon>
@@ -120,7 +112,7 @@ export function NavItems({ open, page, setPage }) {
   );
 }
 
-export function NavBar({ page, setPage }) {
+export function NavBar({ page, setPage, setShowLogout }) {
   const [navOpen, setNavOpen] = useState(true);
 
   return (
@@ -136,8 +128,49 @@ export function NavBar({ page, setPage }) {
           )}
         </IconButton>
       </div>
-      <NavItems open={navOpen} page={page} setPage={setPage} />
+      <NavItems
+        open={navOpen}
+        page={page}
+        setPage={setPage}
+        setShowLogout={setShowLogout}
+      />
     </div>
+  );
+}
+
+export function LogoutPopup({ setUserId, setShowLogout, showLogout }) {
+  const navigate = useNavigate();
+
+  const handleClose = useCallback(() => setShowLogout(false), [setShowLogout]);
+
+  const handleLogout = useCallback(() => {
+    setUserId(null);
+    setShowLogout(false);
+    navigate("/");
+  }, [navigate, setShowLogout, setUserId]);
+
+  return (
+    <Dialog
+      open={showLogout}
+      onClose={handleClose}
+      aria-labelledby="logout-confirmation"
+    >
+      <DialogTitle id="logout-confirmation">
+        {"Are you sure you want to log out?"}
+      </DialogTitle>
+      <DialogActions>
+        <Button
+          sx={NavStyles.cancelButton}
+          onClick={handleClose}
+          variant="outlined"
+        >
+          Cancel
+        </Button>
+        <Button sx={NavStyles.logoutButton} onClick={handleLogout} autoFocus>
+          Logout
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 }
 
@@ -166,6 +199,13 @@ const theme = createTheme({
               backgroundColor: "#814AEF",
             },
           },
+        },
+      },
+    },
+    MuiDialogActions: {
+      styleOverrides: {
+        root: {
+          alignItems: "center",
         },
       },
     },
@@ -221,5 +261,24 @@ const NavStyles = {
     paddingBottom: "16px",
     display: "flex",
     flexDirection: "column",
+  },
+  cancelButton: {
+    color: "#5e17eb",
+    borderRadius: "15px",
+    borderColor: "#5e17eb",
+    "&:hover": {
+      backgroundColor: "#D3D3D3",
+      borderColor: "#5e17eb",
+    },
+  },
+  logoutButton: {
+    backgroundColor: "#5e17eb",
+    boxShadow: "none",
+    borderRadius: "15px",
+    color: "#FFFFFF",
+    "&:hover": {
+      backgroundColor: "#D3D3D3",
+      boxShadow: "none",
+    },
   },
 };

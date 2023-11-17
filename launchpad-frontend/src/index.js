@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { NavBar } from "./navigation.js";
+import { NavBar, LogoutPopup } from "./navigation.js";
 import { LandingPage } from "./landingPage/landingPage.js";
 import { AccountSettings } from "./accountSettingPage/accountSettings.js";
 import { MyApplication } from "./myApplicationPage/myApplication.js";
@@ -21,13 +21,14 @@ export const pages = {
   settings: "/settings",
 };
 
-function Pages({ userId }) {
+function Pages({ userId, setUserId }) {
   const [page, setPage] = useState(pages.landing);
+  const [showLogout, setShowLogout] = useState(false);
 
   return (
     <div className="screen">
       <nav className="nav">
-        <NavBar page={page} setPage={setPage} />
+        <NavBar page={page} setPage={setPage} setShowLogout={setShowLogout} />
       </nav>
       <main className="content">
         <Routes>
@@ -44,6 +45,11 @@ function Pages({ userId }) {
           <Route path={pages.account} element={<AccountSettings />} />
           <Route path={pages.settings} element={<App />} />
         </Routes>
+        <LogoutPopup
+          setUserId={setUserId}
+          setShowLogout={setShowLogout}
+          showLogout={showLogout}
+        />
       </main>
     </div>
   );
@@ -60,7 +66,10 @@ function AppRouter() {
           element={<Login user={userId} setUserId={setUserId} />}
         />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="*" element={<Pages userId={userId} />} />
+        <Route
+          path="*"
+          element={<Pages userId={userId} setUserId={setUserId} />}
+        />
       </Routes>
     </Router>
   );
