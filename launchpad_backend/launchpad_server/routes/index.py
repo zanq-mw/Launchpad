@@ -322,10 +322,6 @@ def get_resume(resume_id):
 @app.route ("/upload-pdf", methods=["POST"])
 def upload_pdf():
     if 'resume' in request.files and 'coverLetter' in request.files:
-
-        # client = MongoClient('mongodb://localhost:27017/database')
-        # db = client['database']
-        fs = gridfs.GridFS(mongo.db, collection='application')
         resume = request.files['resume']
         cover_letter = request.files['coverLetter']
 

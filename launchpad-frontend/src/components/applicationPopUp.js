@@ -83,9 +83,10 @@ export function ApplyButton ({ companyName }){
     }
   };
 
+  // WIP function to display the submitted pdf
   const handleDisplayResume = async () => {
     try {
-      const response = await fetch('/get-resume'); // Replace with your endpoint
+      const response = await fetch('/get-resume');
       const resumeBlob = await response.blob();
       const url = URL.createObjectURL(resumeBlob);
       window.open(url, '_blank');
