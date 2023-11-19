@@ -35,7 +35,7 @@ export function EditButton(props) {
     });
 
     // update data on backend/db side
-    const response = await fetch("/edit_profile/1", {
+    const response = await fetch(`/edit_profile/${props.userId}`, {
       method: "PUT",
       dataType: "json",
       headers: {
