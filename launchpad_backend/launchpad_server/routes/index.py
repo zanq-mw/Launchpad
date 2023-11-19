@@ -10,7 +10,7 @@ from flask import session
 import pymongo
 import sys
 import re
-sys.path.append('.\\launchpad_server\\routes')
+sys.path.append('./launchpad_server/routes')
 from startup_data import startup_data
 app.config['MONGO_URI'] = 'mongodb://localhost:27017/database'
 from datetime import datetime
@@ -147,11 +147,26 @@ def get_applications(user_id):
     # Select * from application where userId=user_id
     collection = mongo.db.application
     query = {"userId": user_id}
-    result = list(collection.find(query))
+    applications = list(collection.find(query))
 
-    for doc in result:
-        doc.pop("_id")
-    return (jsonify({"data": result}))   
+    # Remove the "_id" field from each document in the result
+    for app in applications:
+        app.pop("_id")
+
+        # Additional query to retrieve information from anotherTable
+        application_id = app["applicationId"]
+        postings = mongo.db.posting
+        other_table_query = {"postingId": application_id}
+       
+        #additional_info = list(postings.find(other_table_query))
+        additional_info = postings.find_one(other_table_query, {"postingTitle": 1, "location": 1, "workmodel": 1, "duration": 1, "type":1, "postingDescription":1, "workModel":1, "workterm":1,"deadline":1 })
+        additional_info.pop("_id")
+        print(additional_info)
+        # Add the additional information to the application data
+        app["additionalInfo"] = additional_info
+
+    
+    return jsonify({"data": applications}) 
 
 # ACCOUNT SETTINGS INFORMATION ---------------------
 @app.route('/acc-settings/<int:user_id>')
