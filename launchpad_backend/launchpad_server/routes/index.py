@@ -322,15 +322,34 @@ def get_resume(resume_id):
 @app.route ("/upload-pdf", methods=["POST"])
 def upload_pdf():
     if 'resume' in request.files and 'coverLetter' in request.files:
-        resume = request.files['resume']
-        cover_letter = request.files['coverLetter']
+        user_id = session.get('user_id')
+        if user_id:
+            resume = request.files['resume']
+            cover_letter = request.files['coverLetter']
 
-        # Save files to MongoDB using GridFS
-        fs = gridfs.GridFS(mongo.db, collection='pdfs')
+            # Save files to MongoDB using GridFS
 
-        resume_id = fs.put(resume, filename=resume.filename, custom_metadata={"type": "resume"})
-        cover_letter_id = fs.put(cover_letter, filename=cover_letter.filename, custom_metadata={"type": "cover_letter"}) 
+            fs = gridfs.GridFS(mongo.db, collection='application')
+            resume_id = fs.put(resume, filename=resume.filename, custom_metadata={"type": "resume"})
+            cover_letter_id = fs.put(cover_letter, filename=cover_letter.filename, custom_metadata={"type": "cover_letter"}) 
 
-        return jsonify({"message": "PDF files uploaded successfully"}), 200
+            # get number of existing applications, add 1 to generate applicationID
+            existing_applications = mongo.db.application.count_documents({})
+            new_application_id = existing_applications + 1
+
+            application_data = {
+                "applicationId": new_application_id,  
+                "resumeId": resume_id,
+                "coverLetterId": cover_letter_id,
+                "Status": "Applied",
+                #"postingId": get_posting_id(),  
+                "userId": user_id
+            }
+
+            mongo.db.application.insert_one(application_data)
+            return jsonify({"message": "PDF files uploaded successfully"}), 200
+        
+        else:
+            return jsonify({"error": "User not authenticated"}), 401   
     else:
         return jsonify({"error": "Missing files"}), 400
