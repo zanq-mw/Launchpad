@@ -1,3 +1,36 @@
+export function transformJSON(jsonData) {
+  console.log(jsonData)
+  if (!jsonData || !jsonData.data || !Array.isArray(jsonData.data)) {
+    // Handle the case where jsonData or jsonData.data is undefined
+    return [];
+  }
+  return jsonData.data.map(application => {
+    return {
+      title: application.additionalInfo.postingTitle ,
+      company: "N/A", // You might need to provide a default value or fetch this from another source
+      duration: application.additionalInfo.duration ,
+      type: application.additionalInfo.type ,
+      location: application.additionalInfo.location ,
+      status: application.Status ,
+      logo: application.logo ,
+      description:  application.additionalInfo.postingDescription ,
+      workModel: application.additionalInfo.workModel,
+      workterm: application.additionalInfo.workterm ,
+      workModel: application.additionalInfo.workModel ,
+      deadline: application.additionalInfo.deadline ,
+      date: "N/A", // You might need to provide a default value or fetch this from another source
+      action: "N/A", // You might need to provide a default value or fetch this from another source
+      imageText: "N/A", // You might need to provide a default value or fetch this from another source
+      redirect: "N/A", // You might need to provide a default value or fetch this from another source
+    };
+  });
+}
+
+
+
+
+
+/*
 export const mockApplicationData = [
     {
       title: "Software Developer, Intern",
@@ -48,3 +81,4 @@ export const mockApplicationData = [
       redirect:"app_link"
     },
 ]
+*/
