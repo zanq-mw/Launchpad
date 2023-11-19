@@ -12,6 +12,7 @@ import { transformSettingsData } from "./transformSettingsData";
 function ProfileItems(props) {
   const data = props.data;
   const transformedData = props.transformedData;
+  const updateData = props.updateData;
 
   if (!data || !data.profile) {
     return null;
@@ -32,7 +33,7 @@ function ProfileItems(props) {
             <Typography variant="h5" style={{ paddingTop: "10px" }}>
               {data.profile.full_name || ""}
             </Typography>
-            <EditButton data={transformedData.fullname} />
+            <EditButton data={transformedData.fullname} updateData={updateData} />
           </Typography>
         </div>
         <div style={AccountSettingStyles.row}>
@@ -47,7 +48,7 @@ function ProfileItems(props) {
             <Typography variant="h5" style={{ paddingTop: "10px" }}>
               {data.profile.email}
             </Typography>
-            <EditButton data={transformedData.email} />
+            <EditButton data={transformedData.email} updateData={updateData}/>
           </Typography>
         </div>
         <div style={AccountSettingStyles.row}>
@@ -62,7 +63,7 @@ function ProfileItems(props) {
             <Typography variant="h5" style={{ paddingTop: "10px" }}>
               {data.profile.password}
             </Typography>
-            <EditButton data={transformedData.password} />
+            <EditButton data={transformedData.password} updateData={updateData}/>
           </Typography>
         </div>
         <div style={AccountSettingStyles.row}>
@@ -77,7 +78,7 @@ function ProfileItems(props) {
             <Typography variant="h5" style={{ paddingTop: "10px" }}>
               {data.profile.program}
             </Typography>
-            <EditButton data={transformedData.program} />
+            <EditButton data={transformedData.program} updateData={updateData}/>
           </Typography>
         </div>
         <div style={AccountSettingStyles.row}>
@@ -94,7 +95,7 @@ function ProfileItems(props) {
                 data.profile.address &&
                 `${data.profile.address.streetAddress}, ${data.profile.address.postalCode}, ${data.profile.address.province}`}
             </Typography>
-            <EditButton data={transformedData.address} />
+            <EditButton data={transformedData.address} updateData={updateData}/>
           </Typography>
         </div>
         <div style={AccountSettingStyles.row}>
@@ -109,7 +110,7 @@ function ProfileItems(props) {
             <Typography variant="h5" style={{ paddingTop: "10px" }}>
               {data.profile.phone_number}
             </Typography>
-            <EditButton data={transformedData.phone} />
+            <EditButton data={transformedData.phone} updateData={updateData}/>
           </Typography>
         </div>
       </CardContent>
@@ -192,15 +193,19 @@ export function AccountSettingsItems() {
   const [data, setData] = useState({});
 
   useEffect(() => {
+    updateData();
+  }, []);
+
+  const updateData = () => {
     // Change 1 to userId when log-in is implemented
     fetch("acc-settings/1")
       .then((res) => res.json())
       .then((data) => {
         setData(data);
+        console.log("went in");
         console.log(data);
       });
-  }, []);
-
+  };
   const transformedData = transformSettingsData(data);
 
   return (
@@ -221,7 +226,7 @@ export function AccountSettingsItems() {
           Profile
         </Typography>
         <Card sx={AccountSettingStyles.cardMargin}>
-          <ProfileItems data={data} transformedData={transformedData} />
+          <ProfileItems data={data} transformedData={transformedData} updateData={updateData}/>
         </Card>
         <Typography
           variant="h5"

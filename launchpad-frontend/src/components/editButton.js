@@ -20,6 +20,14 @@ export function EditButton(props) {
     setisClicked(false);
   };
 
+  const clickedSave = () => {
+    setisClicked(false);
+    if (props.updateData) {
+      console.log("save");
+      props.updateData();
+    }
+  };
+
   return (
     <div>
       <Button onClick={clickedOpen}>
@@ -90,7 +98,7 @@ export function EditButton(props) {
               variant="contained"
               size="small"
               sx={EditButtonStyles.saveButton}
-              onClick={clickedClose}
+              onClick={clickedSave}
             >
               Save
             </Button>
