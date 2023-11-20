@@ -62,7 +62,7 @@ function ProfileItems(props) {
             style={AccountSettingStyles.rightText}
           >
             <Typography variant="h5" style={{ paddingTop: "10px" }}>
-              {data.profile.password}
+              ***********
             </Typography>
             <EditButton data={transformedData.password} updateData={updateData} userId={userId}/>
           </Typography>

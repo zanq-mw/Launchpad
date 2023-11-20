@@ -42,7 +42,7 @@ export function transformSettingsData(data) {
         {
           label: "Password",
           id: "password",
-          placeholder: data.profile.password || "",
+          placeholder: "***********" || "",
         },
       ],
     },
