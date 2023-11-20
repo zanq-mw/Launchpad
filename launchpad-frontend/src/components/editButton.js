@@ -48,10 +48,10 @@ export function EditButton(props) {
     });
 
     if(response.ok){
-      console.log("Data updated successfully");
+      console.log("User profile data updated successfully");
     }
     else{
-      console.log("Error: could not update data");
+      console.log("Error: could not update user profile data");
     }
 
     // update data/states on frontend 

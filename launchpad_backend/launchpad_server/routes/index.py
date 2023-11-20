@@ -244,8 +244,38 @@ def edit_profile(user_id):
 
     # check it file was updated
     if result.modified_count > 0:
-        print("Update successful")
-        return jsonify({"success": "Update Succesful."}), 200
+        print("Update user profile successful")
+        return jsonify({"success": "Update user profile succesful."}), 200
+    else:
+        print("Error update failed")
+        return jsonify({"error": "Could not update."}), 400
+    
+@app.route("/edit_security/<int:user_id>", methods=["PUT"])
+def edit_security(user_id):
+    # Connect to the user collection
+    collection = mongo.db.user
+
+    # Find the user by userId
+    filter_query = {"userId": user_id}
+    
+    if request.method == 'PUT':
+        # get form data
+        formData = request.get_json()
+        security_type = formData["security_type"]
+
+        # update security info
+        if(security_type=="twoFactor"):
+            twoFactor =  formData.get('twoFactor')
+            update_query = { '$set': {'twoFactor': twoFactor }}
+            result = collection.update_one(filter_query, update_query)
+        elif(security_type=="dataCollection"):
+            dataCollection =  formData.get('dataCollection')
+            update_query = { '$set': {'dataCollection': dataCollection }}
+            result = collection.update_one(filter_query, update_query)
+    # check it file was updated
+    if result.modified_count > 0:
+        print("Update security info successful")
+        return jsonify({"success": "Update security info succesful."}), 200
     else:
         print("Error update failed")
         return jsonify({"error": "Could not update."}), 400

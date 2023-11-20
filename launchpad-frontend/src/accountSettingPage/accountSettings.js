@@ -121,9 +121,46 @@ function ProfileItems(props) {
 
 function PrivacyItems(props) {
   const data = props.data;
+  const updateData = props.updateData;
 
   if (!data || !data.security) {
     return null;
+  }
+
+  const clickedSwitch = async (security_type) => {
+    console.log("switch");
+    console.log(security_type);
+    const formData = {};
+
+    formData["security_type"]= security_type;
+    // switch the switch
+    formData["twoFactor"] = !data.security.two_factor;
+    formData["dataCollection"] = !data.security.data_collection;
+    // update data on backend/db side
+    const response = await fetch(`/edit_security/${props.userId}`, {
+      method: "PUT",
+      dataType: "json",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "OPTIONS, POST, GET",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if(response.ok){
+      console.log("Security updated successfully");
+    }
+    else{
+      console.log("Error: could not update security settings");
+    }
+
+    // update switch/states on frontend 
+    if (props.updateData) {
+      updateData();
+    }
+
   }
 
   return (
@@ -139,6 +176,7 @@ function PrivacyItems(props) {
               <SecuritySwitch
                 checked={data.security.two_factor}
                 sx={{ m: 1 }}
+                onClick={ () => {clickedSwitch("twoFactor")}}
               />
             }
             label={data.security.two_factor ? "Enabled" : "Disabled"}
@@ -153,6 +191,7 @@ function PrivacyItems(props) {
               <SecuritySwitch
                 checked={data.security.data_collection}
                 sx={{ m: 1 }}
+                onClick={() => {clickedSwitch("dataCollection")}}
               />
             }
             label={data.security.data_collection ? "Enabled" : "Disabled"}
@@ -235,7 +274,7 @@ export function AccountSettingsItems({userId}) {
           Privacy & Security
         </Typography>
         <Card sx={AccountSettingStyles.cardMargin}>
-          <PrivacyItems data={data} />
+          <PrivacyItems data={data} updateData={updateData} userId={userId}/>
         </Card>
         <Typography
           variant="h5"
