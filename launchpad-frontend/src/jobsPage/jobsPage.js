@@ -327,17 +327,30 @@ function JobExpanded({ postingSelected, updateList, postings, saved }) {
   const expandedPosting = postings.find(
     (post) => post.postingId === postingSelected
   );
-  const [save, setSave] = React.useState(
+  /*const [save, setSave] = React.useState(
     expandedPosting ? expandedPosting.saved : false
-  );
+  );*/
 
   const isSavedPosting = expandedPosting ? expandedPosting.saved : false;
 
   const handleSave = () => {
-    expandedPosting.saved = !save;
-    setSave(!save);
+    //expandedPosting.saved = !save;
+    //setSave(!save);
+    expandedPosting.saved = !expandedPosting.saved;
     updateList();
-  };
+    
+    try {
+      fetch (
+        // PUT request that talks to index.py and saves the post under the user's account in MongoDB
+        `/jobs/${1}/${expandedPosting.postingId}/toggle-saved`, { method: "PUT", }
+      );
+    } 
+    catch (error) {
+      // Log error if PUT request failed
+      console.error("PUT request to save posting failed! Error: ", error);
+    }
+  }
+  
   return (!saved && expandedPosting) || (saved && isSavedPosting) ? (
     <TableContainer>
       <Table style={PageStyles.table}>
