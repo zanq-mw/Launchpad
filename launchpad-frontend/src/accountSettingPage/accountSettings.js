@@ -12,6 +12,8 @@ import { transformSettingsData } from "./transformSettingsData";
 function ProfileItems(props) {
   const data = props.data;
   const transformedData = props.transformedData;
+  const updateData = props.updateData;
+  const userId = props.userId;
 
   if (!data || !data.profile) {
     return null;
@@ -32,7 +34,7 @@ function ProfileItems(props) {
             <Typography variant="h5" style={{ paddingTop: "10px" }}>
               {data.profile.full_name || ""}
             </Typography>
-            <EditButton data={transformedData.fullname} />
+            <EditButton data={transformedData.fullname} updateData={updateData} userId={userId}/>
           </Typography>
         </div>
         <div style={AccountSettingStyles.row}>
@@ -47,7 +49,7 @@ function ProfileItems(props) {
             <Typography variant="h5" style={{ paddingTop: "10px" }}>
               {data.profile.email}
             </Typography>
-            <EditButton data={transformedData.email} />
+            <EditButton data={transformedData.email} updateData={updateData} userId={userId}/>
           </Typography>
         </div>
         <div style={AccountSettingStyles.row}>
@@ -60,9 +62,9 @@ function ProfileItems(props) {
             style={AccountSettingStyles.rightText}
           >
             <Typography variant="h5" style={{ paddingTop: "10px" }}>
-              {data.profile.password}
+              ***********
             </Typography>
-            <EditButton data={transformedData.password} />
+            <EditButton data={transformedData.password} updateData={updateData} userId={userId}/>
           </Typography>
         </div>
         <div style={AccountSettingStyles.row}>
@@ -77,7 +79,7 @@ function ProfileItems(props) {
             <Typography variant="h5" style={{ paddingTop: "10px" }}>
               {data.profile.program}
             </Typography>
-            <EditButton data={transformedData.program} />
+            <EditButton data={transformedData.program} updateData={updateData} userId={userId}/>
           </Typography>
         </div>
         <div style={AccountSettingStyles.row}>
@@ -94,7 +96,7 @@ function ProfileItems(props) {
                 data.profile.address &&
                 `${data.profile.address.streetAddress}, ${data.profile.address.postalCode}, ${data.profile.address.province}`}
             </Typography>
-            <EditButton data={transformedData.address} />
+            <EditButton data={transformedData.address} updateData={updateData} userId={userId}/>
           </Typography>
         </div>
         <div style={AccountSettingStyles.row}>
@@ -109,7 +111,7 @@ function ProfileItems(props) {
             <Typography variant="h5" style={{ paddingTop: "10px" }}>
               {data.profile.phone_number}
             </Typography>
-            <EditButton data={transformedData.phone} />
+            <EditButton data={transformedData.phone} updateData={updateData} userId={userId}/>
           </Typography>
         </div>
       </CardContent>
@@ -119,9 +121,44 @@ function ProfileItems(props) {
 
 function PrivacyItems(props) {
   const data = props.data;
+  const updateData = props.updateData;
 
   if (!data || !data.security) {
     return null;
+  }
+
+  const clickedSwitch = async (security_type) => {
+    const formData = {};
+
+    formData["security_type"]= security_type;
+    // switch the switch
+    formData["twoFactor"] = !data.security.two_factor;
+    formData["dataCollection"] = !data.security.data_collection;
+    // update data on backend/db side
+    const response = await fetch(`/edit_security/${props.userId}`, {
+      method: "PUT",
+      dataType: "json",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "OPTIONS, POST, GET",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if(response.ok){
+      console.log("Security updated successfully");
+    }
+    else{
+      console.log("Error: could not update security settings");
+    }
+
+    // update switch/states on frontend 
+    if (props.updateData) {
+      updateData();
+    }
+
   }
 
   return (
@@ -137,6 +174,7 @@ function PrivacyItems(props) {
               <SecuritySwitch
                 checked={data.security.two_factor}
                 sx={{ m: 1 }}
+                onClick={ () => {clickedSwitch("twoFactor")}}
               />
             }
             label={data.security.two_factor ? "Enabled" : "Disabled"}
@@ -151,6 +189,7 @@ function PrivacyItems(props) {
               <SecuritySwitch
                 checked={data.security.data_collection}
                 sx={{ m: 1 }}
+                onClick={() => {clickedSwitch("dataCollection")}}
               />
             }
             label={data.security.data_collection ? "Enabled" : "Disabled"}
@@ -188,19 +227,21 @@ function AccountItems() {
   );
 }
 
-export function AccountSettingsItems() {
+export function AccountSettingsItems({userId}) {
   const [data, setData] = useState({});
 
   useEffect(() => {
-    // Change 1 to userId when log-in is implemented
-    fetch("acc-settings/1")
+    updateData();
+  }, []);
+
+  const updateData = () => {
+    fetch(`acc-settings/${userId}`)
       .then((res) => res.json())
       .then((data) => {
         setData(data);
         console.log(data);
       });
-  }, []);
-
+  };
   const transformedData = transformSettingsData(data);
 
   return (
@@ -221,7 +262,7 @@ export function AccountSettingsItems() {
           Profile
         </Typography>
         <Card sx={AccountSettingStyles.cardMargin}>
-          <ProfileItems data={data} transformedData={transformedData} />
+          <ProfileItems data={data} transformedData={transformedData} updateData={updateData} userId={userId}/>
         </Card>
         <Typography
           variant="h5"
@@ -231,7 +272,7 @@ export function AccountSettingsItems() {
           Privacy & Security
         </Typography>
         <Card sx={AccountSettingStyles.cardMargin}>
-          <PrivacyItems data={data} />
+          <PrivacyItems data={data} updateData={updateData} userId={userId}/>
         </Card>
         <Typography
           variant="h5"
@@ -248,8 +289,8 @@ export function AccountSettingsItems() {
   );
 }
 
-export function AccountSettings() {
-  return <AccountSettingsItems />;
+export function AccountSettings({ userId }) {
+  return <AccountSettingsItems userId={userId} />;
 }
 
 const AccountSettingStyles = {
