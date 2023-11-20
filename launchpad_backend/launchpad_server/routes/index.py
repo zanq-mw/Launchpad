@@ -159,9 +159,9 @@ def get_applications(user_id):
         other_table_query = {"postingId": application_id}
        
         #additional_info = list(postings.find(other_table_query))
-        additional_info = postings.find_one(other_table_query, {"postingTitle": 1, "location": 1, "workmodel": 1, "duration": 1, "type":1, "postingDescription":1, "workModel":1, "workterm":1,"deadline":1 })
+        additional_info = postings.find_one(other_table_query, {"postingTitle": 1, "location": 1, "duration": 1, "type":1, "postingDescription":1, "workModel":1, "workterm":1,"deadline":1 })
         additional_info.pop("_id")
-        print(additional_info)
+       
         # Add the additional information to the application data
         app["additionalInfo"] = additional_info
 
