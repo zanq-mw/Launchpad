@@ -9,16 +9,13 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { mockApplicationData } from "./mockData";
 import { transformJSON } from "./mockData"
-import { useNavigate } from "react-router-dom";
-import { Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent } from '@mui/material';
 
 
 // top banner
 function UserApplicationsInfo(props){
     const jsonData = props.data; 
-    const transformedData = props.transformedData;
     const totalApplications = jsonData.data ? jsonData.data.length : 0;
     const interviewRequestedApplications = jsonData.data ? jsonData.data.filter(application => application.Status === 'Interview Requested').length : 0; 
     return(
@@ -109,7 +106,7 @@ function UserApplications(props){
                                     {item.title}
                                 </Typography>
                                 <Typography style={MyApplicationStyles.jobDescription}>
-                                {item.duration !== 'N/A' ? (
+                                {item.duration !== '' ? (
                                     item.duration
                                     ) : (
                                         item.type 
@@ -257,20 +254,22 @@ function UserApplications(props){
     );
 }
 
-  export function MyApplicationItems() {
+  export function MyApplicationItems(props) {
+    const data = props.data;
+    const transformedData = props.transformedData;
     return (
-    <div style={MyApplicationStyles.pageContainer}>
-        <Typography variant="h5" component="div" sx ={MyApplicationStyles.mainTitle}>
-                    My Applications
-        </Typography>
-        <div style={{ margin: '40px' }}></div>
-        <UserApplicationsInfo/>
-        <div style={{ margin: '40px' }}></div>
-        <Typography variant="h5" component="div" sx={MyApplicationStyles.subTitle}>
-            Applications
-        </Typography>
-        <UserApplications/>
-    </div>
+        <div style={MyApplicationStyles.pageContainer}>
+            <Typography variant="h5" component="div" sx ={MyApplicationStyles.mainTitle}>
+                        My Applications
+            </Typography>
+            <div style={{ margin: '40px' }}></div>
+            <UserApplicationsInfo data={data} transformedData={transformedData}/>
+            <div style={{ margin: '40px' }}></div>
+            <Typography variant="h5" component="div" sx={MyApplicationStyles.subTitle}>
+                Applications
+            </Typography>
+            <UserApplications data={data} transformedData={transformedData}/>
+        </div>
 );
 }
         
@@ -293,18 +292,8 @@ export function MyApplication({ userId }) {
    
 
     return (
-        <div style={MyApplicationStyles.pageContainer}>
-            <Typography variant="h5" component="div" sx ={MyApplicationStyles.mainTitle}>
-                        My Applications
-            </Typography>
-            <div style={{ margin: '40px' }}></div>
-            <UserApplicationsInfo data={data} transformedData={transformedData}/>
-            <div style={{ margin: '40px' }}></div>
-            <Typography variant="h5" component="div" sx={MyApplicationStyles.subTitle}>
-                Applications
-            </Typography>
-            <UserApplications data={data} transformedData={transformedData}/>
-        </div>
+        <MyApplicationItems data={data} transformedData={transformedData} />
+        
     );
 }
 

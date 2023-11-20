@@ -7,7 +7,7 @@ export function transformJSON(jsonData) {
   return jsonData.data.map(application => {
     return {
       title: application.additionalInfo.postingTitle ,
-      company: "N/A", // You might need to provide a default value or fetch this from another source
+      company: "", // You might need to provide a default value or fetch this from another source
       duration: application.additionalInfo.duration ,
       type: application.additionalInfo.type ,
       location: application.additionalInfo.location ,
@@ -18,10 +18,10 @@ export function transformJSON(jsonData) {
       workterm: application.additionalInfo.workterm ,
       workModel: application.additionalInfo.workModel ,
       deadline: application.additionalInfo.deadline ,
-      date: "N/A", // You might need to provide a default value or fetch this from another source
-      action: "N/A", // You might need to provide a default value or fetch this from another source
-      imageText: "N/A", // You might need to provide a default value or fetch this from another source
-      redirect: "N/A", // You might need to provide a default value or fetch this from another source
+      date: "", // You might need to provide a default value or fetch this from another source
+      action: "", // You might need to provide a default value or fetch this from another source
+      imageText: "", // You might need to provide a default value or fetch this from another source
+      redirect: "", // You might need to provide a default value or fetch this from another source
     };
   });
 }
