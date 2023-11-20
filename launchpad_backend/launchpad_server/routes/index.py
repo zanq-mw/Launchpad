@@ -245,10 +245,10 @@ def edit_profile(user_id):
     # check it file was updated
     if result.modified_count > 0:
         print("Update user profile successful")
-        return jsonify({"success": "Update user profile succesful."}), 200
+        return jsonify({"success": "Update user profile succesfully."}), 200
     else:
         print("Error update failed")
-        return jsonify({"error": "Could not update."}), 400
+        return jsonify({"error": "Could not update user profile data."}), 400
     
 @app.route("/edit_security/<int:user_id>", methods=["PUT"])
 def edit_security(user_id):
@@ -274,11 +274,11 @@ def edit_security(user_id):
             result = collection.update_one(filter_query, update_query)
     # check it file was updated
     if result.modified_count > 0:
-        print("Update security info successful")
-        return jsonify({"success": "Update security info succesful."}), 200
+        print("Update security info succesfully")
+        return jsonify({"success": "Update security info succesfully."}), 200
     else:
-        print("Error update failed")
-        return jsonify({"error": "Could not update."}), 400
+        print("Error update security info failed")
+        return jsonify({"error": "Could not update security data."}), 400
 
 @app.route("/check_db")
 def check_db():

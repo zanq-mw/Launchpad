@@ -128,8 +128,6 @@ function PrivacyItems(props) {
   }
 
   const clickedSwitch = async (security_type) => {
-    console.log("switch");
-    console.log(security_type);
     const formData = {};
 
     formData["security_type"]= security_type;
