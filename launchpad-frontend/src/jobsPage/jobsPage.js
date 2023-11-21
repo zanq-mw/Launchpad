@@ -19,8 +19,9 @@ import { ClockIcon, PinIcon, LaptopIcon } from "../components/jobsIcons";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CloseIcon from "@mui/icons-material/Close";
 import { ApplyButton } from "../components/applicationPopUp";
+import { useParams, useNavigate } from 'react-router-dom';
 
-export function JobPostings() {
+export function JobPostings({setPage}) {
   const [value, setValue] = React.useState(0);
   const [searchValue, setSearchValue] = React.useState("");
   const [typeFilter, setTypeFilter] = React.useState(null);
@@ -29,6 +30,8 @@ export function JobPostings() {
   const [jobsData, setJobsData] = React.useState({});
   const [companyData, setCompanyData] = React.useState({});
   const [userData, setUserData] = React.useState({});
+  const { jobId } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch(
@@ -56,6 +59,11 @@ export function JobPostings() {
         setUserData(data);
       });
   }, []);
+
+  const clickedTab= () => {
+    setPage('/jobs/:jobId');
+    navigate(`/jobs/:jobId`);
+  }
 
   const jobsCompanyData =
     jobsData.data && companyData.data && userData.data
@@ -121,19 +129,21 @@ export function JobPostings() {
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <ThemeProvider theme={theme}>
             <Tabs value={value} onChange={handleChange}>
-              <Tab label="Postings" {...a11yProps(0)} />
-              <Tab label="Saved" {...a11yProps(1)} />
+              <Tab label="Postings" {...a11yProps(0)} onClick={clickedTab} />
+              <Tab label="Saved" {...a11yProps(1)} onClick={clickedTab}/>
             </Tabs>
           </ThemeProvider>
         </Box>
         <CustomTabPanel value={value} index={0}>
-          <Postings searchValue={searchValue} postings={jobsCompanyData} />
+          <Postings searchValue={searchValue} postings={jobsCompanyData} jobId={jobId} setPage={setPage}/>
         </CustomTabPanel>
         <CustomTabPanel value={value} index={1}>
           <Postings
             saved
             searchValue={searchValue}
             postings={jobsCompanyData}
+            jobId={jobId}
+            setPage={setPage}
           />
         </CustomTabPanel>
       </Box>
@@ -203,7 +213,8 @@ function CustomTabPanel(props) {
   );
 }
 
-function Postings({ saved, searchValue, postings }) {
+function Postings({ saved, searchValue, postings, jobId, setPage }) {
+  const navigate = useNavigate();
   const [postingsExpanded, setPostingsExpanded] = React.useState(false);
 
   const savedPostings = postings.filter((row) => row.saved);
@@ -214,28 +225,29 @@ function Postings({ saved, searchValue, postings }) {
       row.companyName.toLowerCase().includes(searchValue.toLowerCase())
   );
 
-  const [postingSelected, setPostingSelected] = React.useState(
-    saved
-      ? savedPostings.length > 0
-        ? savedPostings[0].postingId
-        : null
-      : filteredPostings.length > 0
-      ? filteredPostings[0].postingId
-      : null
-  );
-
+  const [postingSelected, setPostingSelected] = React.useState(null);
+  
   const selectedPosting = filteredPostings.find(
     (row) => row.postingId === postingSelected
   );
 
+  // select job posting if Id provided
   useEffect(() => {
-    if (selectedPosting === undefined) {
+    if(jobId !== undefined){
+      setPostingSelected(parseInt(jobId));
+    }
+    else if (selectedPosting === undefined) {
       setPostingSelected(null);
     }
-  }, [selectedPosting]);
+  }, [selectedPosting, jobId]);
 
   const [, updateState] = React.useState();
   const forceUpdate = React.useCallback(() => updateState({}), []);
+
+  const clickedJob = (jobId) => {
+    setPage('/jobs/:jobId');
+    navigate(`/jobs/${jobId}`);
+  }
 
   return (
     <Grid container spacing={6}>
@@ -251,7 +263,7 @@ function Postings({ saved, searchValue, postings }) {
                     <TableRow
                       key={i}
                       sx={PageStyles.tableRow}
-                      onClick={() => setPostingSelected(row.postingId)}
+                      onClick={() => clickedJob(row.postingId)}
                       selected={postingSelected === row.postingId}
                     >
                       <TableCell component="th" scope="row" align="center">
