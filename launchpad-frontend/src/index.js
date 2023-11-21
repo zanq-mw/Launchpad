@@ -42,7 +42,7 @@ function Pages({ userId, setUserId }) {
           />
           <Route path={pages.applications} element={<MyApplication />} />
           <Route path={pages.jobs} element={<JobPostings />} />
-          <Route path={pages.account} element={<AccountSettings userId={userId}/>} />
+          <Route path={pages.account} element={<AccountSettings userId={userId} setUserId={setUserId}/>} />
           <Route path={pages.settings} element={<App />} />
         </Routes>
         <LogoutPopup
