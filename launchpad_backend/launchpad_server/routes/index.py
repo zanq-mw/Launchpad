@@ -14,6 +14,7 @@ sys.path.append('./launchpad_server/routes')
 from startup_data import startup_data
 app.config['MONGO_URI'] = 'mongodb://localhost:27017/database'
 from datetime import datetime
+from flask_mail import Mail
 
 # Initialize the PyMongo extension
 mongo = PyMongo(app)
