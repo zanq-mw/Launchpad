@@ -13,8 +13,10 @@ import Bookmark from "@mui/icons-material/Bookmark";
 function StatusIcon(status) {
   if (status === "Applied") {
     return <SubmittedIcon />;
-  } else if (status === "Viewed") {
+  } else if (status === "Reviewed") {
     return <ViewedIcon />;
+  } else {
+    return <></>;
   }
 }
 
@@ -22,8 +24,10 @@ export function LandingPage({ userId }) {
   const [data, setData] = useState(mock_data);
   const [appsExpanded, setAppsExpanded] = useState(false);
   const [savedExpanded, setSavedExpanded] = useState(false);
-  const { applications, saved_jobs, recommended } = data;
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState({});
+  const [applicationData, setApplicationData] = useState({});
+  const [jobData, setJobData] = useState({});
+  const [companyData, setCompanyData] = useState({});
 
   useEffect(() => {
     if (userId) {
@@ -35,7 +39,69 @@ export function LandingPage({ userId }) {
     }
   }, [userId]);
 
+  useEffect(() => {
+    if (userId) {
+      fetch(`/applications/${userId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setApplicationData(data);
+        });
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    fetch(`/jobs?type=null&duration=null&location=null`)
+      .then((res) => res.json())
+      .then((data) => {
+        setJobData(data);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetch(`/companies`)
+      .then((res) => res.json())
+      .then((data) => {
+        setCompanyData(data);
+      });
+  }, []);
+
+  const jobsCompanyData =
+    jobData.data && companyData.data && userData.data
+      ? jobData.data.map((job) => {
+          const companyRecord = companyData.data.find(
+            (company) => company.companyId === job.companyId
+          );
+          const saved = userData.data[0].savedPostings.find(
+            (posting) => posting.postingId === job.postingId
+          );
+          return {
+            ...job,
+            companyName: companyRecord.companyName,
+            saved: saved ? true : false,
+          };
+        })
+      : [];
+
+  const applicationsEnhanced = applicationData.data
+    ? applicationData.data.map((app) => {
+        const jobPosting = jobsCompanyData.find(
+          (posting) => posting.postingId === app.postingId
+        );
+        return {
+          ...app,
+          ...jobPosting,
+        };
+      })
+    : [];
+
+  const savedPostings = jobsCompanyData.filter((job) => job.saved);
+
+  const recommendedPostings = jobsCompanyData.sort((a, b) => {
+    return new Date(a.deadline) - new Date(b.deadline);
+  });
+
   function handleSave(i) {
+    // CHANGE THIS
     let temp = { ...data };
     temp.recommended[i].saved = !temp.recommended[i].saved;
     setData(temp);
@@ -56,8 +122,8 @@ export function LandingPage({ userId }) {
           <TableContainer>
             <Table aria-label="simple table" style={PageStyles.table}>
               <TableBody>
-                {applications
-                  .slice(0, appsExpanded ? applications.length : 3)
+                {applicationsEnhanced
+                  .slice(0, appsExpanded ? applicationsEnhanced.length : 3)
                   .map((row, i) => (
                     <TableRow key={i} sx={PageStyles.tableRow}>
                       <TableCell
@@ -69,18 +135,18 @@ export function LandingPage({ userId }) {
                         <img
                           src={row.logo}
                           height={"40px"}
-                          alt={row.company}
+                          alt={row.companyName}
                         ></img>
                       </TableCell>
-                      <TableCell style={{ paddingLeft: 0 }}>
-                        <p style={PageStyles.job_title}>{row.title}</p>
-                        <p style={PageStyles.company}>{row.company}</p>
+                      <TableCell>
+                        <p style={PageStyles.job_title}>{row.postingTitle}</p>
+                        <p style={PageStyles.company}>{row.companyName}</p>
                         <p style={PageStyles.details}>
-                          {row.type}, {row.location}
+                          {row.duration} {row.type}, {row.location}
                         </p>
                       </TableCell>
                       <TableCell align="center">
-                        {StatusIcon(row.status)}
+                        {StatusIcon(row.Status)}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -104,8 +170,8 @@ export function LandingPage({ userId }) {
           <TableContainer>
             <Table aria-label="simple table" style={PageStyles.table}>
               <TableBody>
-                {saved_jobs
-                  .slice(0, savedExpanded ? saved_jobs.length : 3)
+                {savedPostings
+                  .slice(0, savedExpanded ? savedPostings.length : 3)
                   .map((row, i) => (
                     <TableRow key={i} sx={PageStyles.tableRow}>
                       <TableCell
@@ -117,14 +183,14 @@ export function LandingPage({ userId }) {
                         <img
                           src={row.logo}
                           height={"40px"}
-                          alt={row.company}
+                          alt={row.companyName}
                         ></img>
                       </TableCell>
-                      <TableCell style={{ paddingLeft: 0 }}>
-                        <p style={PageStyles.job_title}>{row.title}</p>
-                        <p style={PageStyles.company}>{row.company}</p>
+                      <TableCell>
+                        <p style={PageStyles.job_title}>{row.postingTitle}</p>
+                        <p style={PageStyles.company}>{row.companyName}</p>
                         <p style={PageStyles.details}>
-                          {row.type}, {row.location}
+                          {row.duration} {row.type}, {row.location}
                         </p>
                       </TableCell>
                     </TableRow>
@@ -151,13 +217,13 @@ export function LandingPage({ userId }) {
           <TableContainer>
             <Table aria-label="simple table" style={PageStyles.table}>
               <TableBody>
-                {recommended.slice(0, 6).map((row, i) => (
+                {recommendedPostings.slice(0, 6).map((row, i) => (
                   <TableRow key={i} sx={PageStyles.tableRow}>
                     <TableCell style={{ paddingLeft: 30, paddingRight: 20 }}>
-                      <p style={PageStyles.job_title}>{row.title}</p>
-                      <p style={PageStyles.company}>{row.company}</p>
+                      <p style={PageStyles.job_title}>{row.postingTitle}</p>
+                      <p style={PageStyles.company}>{row.companyName}</p>
                       <p style={PageStyles.details}>
-                        {row.type}, {row.location}
+                        {row.duration} {row.type}, {row.location}
                       </p>
                     </TableCell>
                     <TableCell align="center" style={{ paddingRight: 20 }}>
