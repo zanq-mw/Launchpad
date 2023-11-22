@@ -3,11 +3,16 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { DeleteIcon } from "../components/navIcons";
 import { EditButton } from "../components/editButton";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { SecuritySwitch } from "../components/securitySwitch";
 import { transformSettingsData } from "./transformSettingsData";
+import DeleteIcon from "@mui/icons-material/Delete";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogTitle from "@mui/material/DialogTitle";
+import { useNavigate } from 'react-router-dom';
+
 
 function ProfileItems(props) {
   const data = props.data;
@@ -200,7 +205,46 @@ function PrivacyItems(props) {
   );
 }
 
-function AccountItems() {
+function AccountItems({userId, setUserId}) {
+  const [isDialogOpen, setDialogOpen] = useState(false);
+  const [deleteConfirmation, setDeleteConfirmation] = useState(null);
+  const navigate = useNavigate();
+
+  const handleDeleteClick = () => {
+    setDialogOpen(true);
+  };
+  const handleDeleteConfirm = async () => {
+    
+    try {
+      const response = await fetch(`/api/delete-account/${userId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        console.log('Account deletion confirmed. Deleting account');
+        setDeleteConfirmation('Account deletion successful.');
+        setDialogOpen(false);
+        setUserId(null);
+        navigate('/');
+      } else {
+
+        console.error('Error deleting account:', response.statusText);
+        setDeleteConfirmation('Error deleting account. Please try again.');
+       
+      }
+    } catch (error) {
+      console.error('Error deleting account:', error);
+      setDeleteConfirmation('Error deleting account. Please try again.');
+      
+    }
+  };
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  };
+
   return (
     <React.Fragment>
       <CardContent>
@@ -215,19 +259,46 @@ function AccountItems() {
               ...AccountSettingStyles.rightText,
               ...AccountSettingStyles.deleteButton,
             }}
+            onClick={handleDeleteClick}
           >
             <DeleteIcon />
-            <Typography variant="h5" style={AccountSettingStyles.deleteButton}>
+            <Typography variant="h5" style={AccountSettingStyles.deleteButtonText}>
               Delete
             </Typography>
           </Button>
         </div>
+
+        {/* Render the confirmation dialog */}
+        <Dialog open={isDialogOpen} onClose={handleDialogClose}>
+          <div>
+            <DialogTitle id="logout-confirmation">
+              {"Are you sure you want to delete your account?"}
+            </DialogTitle>
+            <DialogActions>
+              <Button sx={AccountSettingStyles.cancelButton} onClick={handleDialogClose}>
+                Cancel
+              </Button>
+              <Button sx={AccountSettingStyles.logoutButton} onClick={handleDeleteConfirm}>
+                Delete
+              </Button>
+            </DialogActions>
+          </div>
+        </Dialog>
+
+        {/* Render the confirmation message if available */}
+        {deleteConfirmation && (
+          <div>
+            <p>{deleteConfirmation}</p>
+          </div>
+        )}
       </CardContent>
     </React.Fragment>
   );
 }
 
-export function AccountSettingsItems({userId}) {
+export default AccountItems;
+
+export function AccountSettingsItems({userId, setUserId}) {
   const [data, setData] = useState({});
 
   useEffect(() => {
@@ -282,15 +353,16 @@ export function AccountSettingsItems({userId}) {
           Account
         </Typography>
         <Card sx={AccountSettingStyles.cardMargin}>
-          <AccountItems />
+          {/* Pass setUserId directly to AccountItems */}
+          <AccountItems userId={userId} setUserId={setUserId}/>
         </Card>
       </div>
     </div>
   );
 }
 
-export function AccountSettings({ userId }) {
-  return <AccountSettingsItems userId={userId} />;
+export function AccountSettings({ userId, setUserId }) {
+  return <AccountSettingsItems userId={userId} setUserId={setUserId} />;
 }
 
 const AccountSettingStyles = {
@@ -358,4 +430,25 @@ const AccountSettingStyles = {
     color: "#DD111D",
     paddingTop: "10px",
   },
+
+  cancelButton: {
+    color: "#5e17eb",
+    borderRadius: "15px",
+    borderColor: "#5e17eb",
+    "&:hover": {
+      backgroundColor: "#D3D3D3",
+      borderColor: "#5e17eb",
+    },
+  },
+  logoutButton: {
+    backgroundColor: "#5e17eb",
+    boxShadow: "none",
+    borderRadius: "15px",
+    color: "#FFFFFF",
+    "&:hover": {
+      backgroundColor: "#D3D3D3",
+      boxShadow: "none",
+    },
+  },
+  
 };

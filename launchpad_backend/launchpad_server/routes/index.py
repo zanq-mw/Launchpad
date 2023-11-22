@@ -14,6 +14,7 @@ sys.path.append('./launchpad_server/routes')
 from startup_data import startup_data
 app.config['MONGO_URI'] = 'mongodb://localhost:27017/database'
 from datetime import datetime
+from flask import request
 
 # Initialize the PyMongo extension
 mongo = PyMongo(app)
@@ -390,3 +391,23 @@ def login():
 
         response = {"message": "User does not exist or Incorrect Password"}
         return jsonify(response)
+
+@app.route("/api/delete-account/<int:user_id>", methods=["DELETE"])
+def delete_account(user_id):
+    try:
+        user_collection = mongo.db.user
+        user_query = {"userId": user_id}
+        user_result = user_collection.find_one(user_query)
+
+        if user_result:
+            user_collection.delete_one({"_id": user_result["_id"]})
+            print(f"Account for user ID {user_id} deleted successfully.")
+
+            return jsonify({"message": f"Account for user ID {user_id} deleted successfully."}), 200
+        else:
+            print(f"User not found for user ID: {user_id}")
+            return jsonify({"error": "User not found."}), 404
+    except Exception as e:
+        print(f"Error deleting account: {str(e)}")
+        return jsonify({"error": "Error deleting account. Please try again."}), 500
+
