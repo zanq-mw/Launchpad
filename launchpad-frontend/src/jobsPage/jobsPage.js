@@ -394,7 +394,7 @@ function JobExpanded({ postingSelected, updateList, postings, saved }) {
                     alignContent: "space-evenly",
                   }}
                 >
-                  <ApplyButton companyName={expandedPosting.companyName}>
+                  <ApplyButton postingID={expandedPosting.postingId} companyName={expandedPosting.companyName}>
                     Apply
                   </ApplyButton>
                   <Button

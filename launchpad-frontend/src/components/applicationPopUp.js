@@ -5,7 +5,7 @@ import DialogActions from "@mui/material/DialogActions";
 import Typography from "@mui/material/Typography";
 import "@fontsource/league-spartan";
 
-export function ApplyButton({ companyName }) {
+export function ApplyButton({ postingID, companyName }) {
   const [open, setOpen] = useState(false);
   const [resumeFile, setResumeFile] = useState(null);
   const [coverLetterFile, setCoverLetterFile] = useState(null);
@@ -14,6 +14,7 @@ export function ApplyButton({ companyName }) {
   const [coverLetterUploadDate, setCoverLetterUploadDate] = useState(null);
   const [displayResume, setDisplayResume] = useState(false);
   const [displayCoverLetter, setDisplayCoverLetter] = useState(false);
+  const [applicationId, setApplicationId] = useState(null);
 
   const handleFileChange = (event, fileType) => {
     const fileInput = event.target;
@@ -54,6 +55,7 @@ export function ApplyButton({ companyName }) {
       const formData = new FormData();
       formData.append('resume', resumeFile);
       formData.append('coverLetter', coverLetterFile);
+      formData.append('postingId', postingID);
 
       try 
       {
@@ -65,10 +67,10 @@ export function ApplyButton({ companyName }) {
         // Update the submission status to indicate success
         if (response.ok)
         {
+          const responseData = await response.json();
           setSubmissionStatus('success');
-          console.log('Submission successful');
-          console.log('Resume URL:', response.resume_url);
-          console.log('Cover Letter URL:', response.cover_letter_url);
+          setApplicationId(responseData.applicationId);
+          console.log('Submission successful. Application ID:', responseData.applicationId);
         }
         else
         {
@@ -92,16 +94,28 @@ export function ApplyButton({ companyName }) {
 
   // WIP function to display the submitted pdf
   const handleDisplayResume = async () => {
-    try {
-      const response = await fetch('/get-resume');
-      const resumeBlob = await response.blob();
-      const url = URL.createObjectURL(resumeBlob);
-      window.open(url, '_blank');
-    } catch (error) {
-      console.error('Error fetching resume:', error);
+    if (applicationId) {
+      try {
+        const response = await fetch(`/get-resume/${applicationId}`);
+        if (response.ok) {
+          // Get the blob data from the response
+          const fileBlob = await response.blob();
+          const fileURL = URL.createObjectURL(fileBlob);
+  
+          // Open the file URL in a new tab or window
+          window.open(fileURL, '_blank');
+        } else {
+          console.error('Failed to fetch resume:', response.status);
+        }
+      } catch (error) {
+        console.error('Error displaying resume:', error);
+      }
+    } else {
+      console.error('No application ID available');
     }
   };
-
+  const handleDisplayCoverLetter = async () => {
+  };
 
   const handleOpen = () => {
     resetForm();
@@ -253,6 +267,7 @@ export function ApplyButton({ companyName }) {
             <div style={{ clear: 'both' }} />
             <div>
               <Button onClick={handleDisplayResume}>View Resume</Button>
+              <Button onClick={handleDisplayCoverLetter}>View Cover Letter</Button>
             </div>           
           </>
         )}
