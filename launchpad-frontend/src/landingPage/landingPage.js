@@ -43,7 +43,7 @@ export function LandingPage({ userId, setPage }) {
   }
 
   const clickedJob = (jobId) => {
-    setPage('/jobs/:jobId');
+    setPage(`/jobs/${jobId}`);
     navigate(`/jobs/${jobId}`);
   }
 

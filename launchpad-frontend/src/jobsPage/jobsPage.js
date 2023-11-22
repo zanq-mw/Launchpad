@@ -245,7 +245,7 @@ function Postings({ saved, searchValue, postings, jobId, setPage }) {
   const forceUpdate = React.useCallback(() => updateState({}), []);
 
   const clickedJob = (jobId) => {
-    setPage('/jobs/:jobId');
+    setPage(`/jobs/${jobId}`);
     navigate(`/jobs/${jobId}`);
   }
 
