@@ -34,15 +34,16 @@ function Pages({ userId, setUserId }) {
         <Routes>
           <Route
             path={pages.landing}
-            element={<LandingPage userId={userId} />}
+            element={<LandingPage userId={userId} setPage={setPage} />}
           />
           <Route
             path={pages.notifications}
             element={<NotificationsPage userId={userId} />}
           />
           <Route path={pages.applications} element={<MyApplication />} />
-          <Route path={pages.jobs} element={<JobPostings />} />
-          <Route path={pages.account} element={<AccountSettings userId={userId}/>} />
+          <Route path={pages.jobs} element={<JobPostings setPage={setPage} />} />
+          <Route path={`${pages.jobs}/:jobId`} element={<JobPostings setPage={setPage} />} />
+          <Route path={pages.account} element={<AccountSettings userId={userId} setUserId={setUserId}/>} />
           <Route path={pages.settings} element={<App />} />
         </Routes>
         <LogoutPopup

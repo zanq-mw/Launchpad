@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Grid, IconButton } from "@mui/material";
 import { mock_data } from "./mockData";
+import { useNavigate } from "react-router-dom";
 import "./landingPage.css";
 import { SubmittedIcon, ViewedIcon } from "../components/landingIcons";
 import Table from "@mui/material/Table";
@@ -20,7 +21,7 @@ function StatusIcon(status) {
   }
 }
 
-export function LandingPage({ userId }) {
+export function LandingPage({ userId, setPage }) {
   const [data, setData] = useState(mock_data);
   const [appsExpanded, setAppsExpanded] = useState(false);
   const [savedExpanded, setSavedExpanded] = useState(false);
@@ -28,7 +29,7 @@ export function LandingPage({ userId }) {
   const [applicationData, setApplicationData] = useState({});
   const [jobData, setJobData] = useState({});
   const [companyData, setCompanyData] = useState({});
-
+  const navigate = useNavigate();
   useEffect(() => {
     if (userId) {
       fetch(`/users/${userId}`)
@@ -107,6 +108,11 @@ export function LandingPage({ userId }) {
     setData(temp);
   }
 
+  const clickedJob = (jobId) => {
+    setPage(`/jobs/${jobId}`);
+    navigate(`/jobs/${jobId}`);
+  };
+
   if (!userId) {
     return <div>Loading...</div>;
   }
@@ -125,7 +131,13 @@ export function LandingPage({ userId }) {
                 {applicationsEnhanced
                   .slice(0, appsExpanded ? applicationsEnhanced.length : 3)
                   .map((row, i) => (
-                    <TableRow key={i} sx={PageStyles.tableRow}>
+                    <TableRow
+                      key={i}
+                      sx={PageStyles.tableRow}
+                      onClick={() => {
+                        clickedJob(row.postingId);
+                      }}
+                    >
                       <TableCell
                         component="th"
                         scope="row"
@@ -173,7 +185,13 @@ export function LandingPage({ userId }) {
                 {savedPostings
                   .slice(0, savedExpanded ? savedPostings.length : 3)
                   .map((row, i) => (
-                    <TableRow key={i} sx={PageStyles.tableRow}>
+                    <TableRow
+                      key={i}
+                      sx={PageStyles.tableRow}
+                      onClick={() => {
+                        clickedJob(row.postingId);
+                      }}
+                    >
                       <TableCell
                         component="th"
                         scope="row"
@@ -218,7 +236,13 @@ export function LandingPage({ userId }) {
             <Table aria-label="simple table" style={PageStyles.table}>
               <TableBody>
                 {recommendedPostings.slice(0, 6).map((row, i) => (
-                  <TableRow key={i} sx={PageStyles.tableRow}>
+                  <TableRow
+                    key={i}
+                    sx={PageStyles.tableRow}
+                    onClick={() => {
+                      clickedJob(row.postingId);
+                    }}
+                  >
                     <TableCell style={{ paddingLeft: 30, paddingRight: 20 }}>
                       <p style={PageStyles.job_title}>{row.postingTitle}</p>
                       <p style={PageStyles.company}>{row.companyName}</p>

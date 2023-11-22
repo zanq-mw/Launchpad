@@ -2,6 +2,7 @@ const first_name = "LaunchPad Larry";
 
 const apps = [
   {
+    postingId: 1,
     title: "Software Developer, Intern",
     company: "Apple",
     type: "4-month Internship",
@@ -10,6 +11,7 @@ const apps = [
     logo: "https://www.edigitalagency.com.au/wp-content/uploads/apple-logo-png-black.png",
   },
   {
+    postingId: 2,
     title: "Software Developer, Intern",
     company: "Scotiabank",
     type: "4-month Internship",
@@ -18,6 +20,7 @@ const apps = [
     logo: "https://seeklogo.com/images/S/scotiabank-logo-D2F1AF87B5-seeklogo.com.png",
   },
   {
+    postingId: 3,
     title: "Software Developer, Intern",
     company: "Apple",
     type: "4-month Internship",
@@ -26,6 +29,7 @@ const apps = [
     logo: "https://www.edigitalagency.com.au/wp-content/uploads/apple-logo-png-black.png",
   },
   {
+    postingId: 4,
     title: "Software Developer, Intern",
     company: "Apple",
     type: "4-month Internship",
@@ -37,6 +41,7 @@ const apps = [
 
 const saved = [
   {
+    postingId: 1,
     title: "Software Developer, Intern",
     company: "Apple",
     type: "4-month Internship",
@@ -44,6 +49,7 @@ const saved = [
     logo: "https://www.edigitalagency.com.au/wp-content/uploads/apple-logo-png-black.png",
   },
   {
+    postingId: 2,
     title: "Software Developer, Intern",
     company: "Apple",
     type: "4-month Internship",
@@ -51,6 +57,7 @@ const saved = [
     logo: "https://www.edigitalagency.com.au/wp-content/uploads/apple-logo-png-black.png",
   },
   {
+    postingId: 3,
     title: "Software Developer, Intern",
     company: "Apple",
     type: "4-month Internship",
@@ -58,6 +65,7 @@ const saved = [
     logo: "https://www.edigitalagency.com.au/wp-content/uploads/apple-logo-png-black.png",
   },
   {
+    postingId: 4,
     title: "Software Developer, Intern",
     company: "Apple",
     type: "4-month Internship",
@@ -68,6 +76,7 @@ const saved = [
 
 const recs = [
   {
+    postingId: 1,
     title: "Software Developer, Intern",
     company: "Apple",
     type: "4-month Internship",
@@ -75,6 +84,7 @@ const recs = [
     saved: true,
   },
   {
+    postingId: 2,
     title: "Software Developer, Intern",
     company: "Apple",
     type: "4-month Internship",
@@ -82,6 +92,7 @@ const recs = [
     saved: false,
   },
   {
+    postingId: 3,
     title: "Software Developer, Intern",
     company: "Apple",
     type: "4-month Internship",
@@ -89,6 +100,7 @@ const recs = [
     saved: true,
   },
   {
+    postingId: 4,
     title: "Software Developer, Intern",
     company: "Apple",
     type: "4-month Internship",
@@ -96,6 +108,7 @@ const recs = [
     saved: true,
   },
   {
+    postingId: 5,
     title: "Software Developer, Intern",
     company: "Apple",
     type: "4-month Internship",
@@ -103,6 +116,7 @@ const recs = [
     saved: true,
   },
   {
+    postingId: 1,
     title: "Software Developer, Intern",
     company: "Apple",
     type: "4-month Internship",
