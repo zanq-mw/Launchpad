@@ -438,12 +438,13 @@ def upload_pdf():
         if user_id:
             resume = request.files['resume']
             cover_letter = request.files['coverLetter']
-
+            postingId = request.form['postingId']
+            dt = datetime.now()
             # Save files to MongoDB using GridFS
 
             fs = gridfs.GridFS(mongo.db, collection='application')
-            resume_id = fs.put(resume, filename=resume.filename, custom_metadata={"type": "resume"})
-            cover_letter_id = fs.put(cover_letter, filename=cover_letter.filename, custom_metadata={"type": "cover_letter"}) 
+            resume = fs.put(resume, filename=resume.filename, custom_metadata={"type": "resume"})
+            cover_letter = fs.put(cover_letter, filename=cover_letter.filename, custom_metadata={"type": "cover_letter"}) 
 
             # get number of existing applications, add 1 to generate applicationID
             existing_applications = mongo.db.application.count_documents({})
@@ -451,11 +452,12 @@ def upload_pdf():
 
             application_data = {
                 "applicationId": new_application_id,  
-                "resumeId": resume_id,
-                "coverLetterId": cover_letter_id,
+                "resume": resume,
+                "coverLetter": cover_letter,
                 "Status": "Applied",
-                #"postingId": get_posting_id(),  
-                "userId": user_id
+                "postingId": postingId,  
+                "userId": user_id,
+                "date": dt,
             }
 
             mongo.db.application.insert_one(application_data)
