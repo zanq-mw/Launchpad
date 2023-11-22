@@ -20,6 +20,46 @@ export function EditButton(props) {
     setisClicked(false);
   };
 
+  const clickedSave = async () => {
+    setisClicked(false);
+
+    const formData = {};
+    formData["title"] = data.title;
+
+    // get updated user information 
+    data.fields.forEach((field) => {
+      const textField = document.getElementById(field.label);
+      formData[field.id] = textField.value;
+      // console.log("field", field.label);
+      // console.log("value", textField.value);
+    });
+
+    // update data on backend/db side
+    const response = await fetch(`/edit_profile/${props.userId}`, {
+      method: "PUT",
+      dataType: "json",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "OPTIONS, POST, GET",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if(response.ok){
+      console.log("User profile data updated successfully");
+    }
+    else{
+      console.log("Error: could not update user profile data");
+    }
+
+    // update data/states on frontend 
+    if (props.updateData) {
+      props.updateData();
+    }
+  };
+
   return (
     <div>
       <Button onClick={clickedOpen}>
@@ -60,7 +100,7 @@ export function EditButton(props) {
                 <TextField
                   autoFocus
                   margin="dense"
-                  id="address"
+                  id={field.label}
                   InputLabelProps={{
                     style: {
                       color: "black",
@@ -90,7 +130,7 @@ export function EditButton(props) {
               variant="contained"
               size="small"
               sx={EditButtonStyles.saveButton}
-              onClick={clickedClose}
+              onClick={clickedSave}
             >
               Save
             </Button>

@@ -15,6 +15,7 @@ sys.path.append('./launchpad_server/routes')
 from startup_data import startup_data
 app.config['MONGO_URI'] = 'mongodb://localhost:27017/database'
 from datetime import datetime
+from flask import request
 from bson import ObjectId
 
 # Initialize the PyMongo extension
@@ -191,6 +192,97 @@ def get_user_info(user_id):
 
     return jsonify(response_data), 200
 
+@app.route("/edit_profile/<int:user_id>", methods=["PUT"])
+def edit_profile(user_id):
+    # Connect to the user collection
+    collection = mongo.db.user
+
+    # Find the user by userId
+    filter_query = {"userId": user_id}
+    
+    if request.method == 'PUT':
+        # get form data
+        formData = request.get_json()
+        title = formData["title"]
+
+        # update user info
+        if(title=="Full Name"):
+            first_name =  formData.get('first_name')
+            last_name =formData.get('last_name')
+            update_query = {
+            '$set': {
+                'firstName': first_name,
+                'lastName': last_name,
+                }
+            }
+            result = collection.update_one(filter_query, update_query)
+        elif(title=="Email"):
+            email =  formData.get('email')
+            update_query = { '$set': {'email': email }}
+            result = collection.update_one(filter_query, update_query)
+        elif(title=="Password"):
+            password =   bcrypt.generate_password_hash (formData.get('password')).decode('utf-8')
+            update_query = { '$set': {'password': password }}
+            result = collection.update_one(filter_query, update_query)
+        elif(title=="Program"):
+            program =  formData.get('program')
+            update_query = { '$set': {'program': program }}
+            result = collection.update_one(filter_query, update_query)
+        elif(title=="Address"):
+            street =  formData.get('street')
+            postal_code =formData.get('postal_code')
+            province_state =  formData.get('province_state')
+            update_query = {
+            '$set': {
+                'address.streetAddress': street,
+                'address.postalCode': postal_code,
+                'address.province': province_state,
+                }
+            }
+            result = collection.update_one(filter_query, update_query)
+        elif(title=="Phone Number"):
+            number =  formData.get('number')
+            update_query = { '$set': {'phoneNumber': number }}
+            result = collection.update_one(filter_query, update_query)
+
+    # check it file was updated
+    if result.modified_count > 0:
+        print("Update user profile successful")
+        return jsonify({"success": "Update user profile succesfully."}), 200
+    else:
+        print("Error update failed")
+        return jsonify({"error": "Could not update user profile data."}), 400
+    
+@app.route("/edit_security/<int:user_id>", methods=["PUT"])
+def edit_security(user_id):
+    # Connect to the user collection
+    collection = mongo.db.user
+
+    # Find the user by userId
+    filter_query = {"userId": user_id}
+    
+    if request.method == 'PUT':
+        # get form data
+        formData = request.get_json()
+        security_type = formData["security_type"]
+
+        # update security info
+        if(security_type=="twoFactor"):
+            twoFactor =  formData.get('twoFactor')
+            update_query = { '$set': {'twoFactor': twoFactor }}
+            result = collection.update_one(filter_query, update_query)
+        elif(security_type=="dataCollection"):
+            dataCollection =  formData.get('dataCollection')
+            update_query = { '$set': {'dataCollection': dataCollection }}
+            result = collection.update_one(filter_query, update_query)
+    # check it file was updated
+    if result.modified_count > 0:
+        print("Update security info succesfully")
+        return jsonify({"success": "Update security info succesfully."}), 200
+    else:
+        print("Error update security info failed")
+        return jsonify({"error": "Could not update security data."}), 400
+
 @app.route("/check_db")
 def check_db():
     # Check if the connection is successful
@@ -301,6 +393,26 @@ def login():
 
         response = {"message": "User does not exist or Incorrect Password"}
         return jsonify(response)
+
+@app.route("/api/delete-account/<int:user_id>", methods=["DELETE"])
+def delete_account(user_id):
+    try:
+        user_collection = mongo.db.user
+        user_query = {"userId": user_id}
+        user_result = user_collection.find_one(user_query)
+
+        if user_result:
+            user_collection.delete_one({"_id": user_result["_id"]})
+            print(f"Account for user ID {user_id} deleted successfully.")
+
+            return jsonify({"message": f"Account for user ID {user_id} deleted successfully."}), 200
+        else:
+            print(f"User not found for user ID: {user_id}")
+            return jsonify({"error": "User not found."}), 404
+    except Exception as e:
+        print(f"Error deleting account: {str(e)}")
+        return jsonify({"error": "Error deleting account. Please try again."}), 500
+
 
 @app.route('/get-resume/<resume_id>')
 def get_resume(resume_id):
