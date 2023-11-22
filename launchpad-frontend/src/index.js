@@ -16,7 +16,7 @@ export const pages = {
   landing: "/landing",
   notifications: "/notifications",
   applications: "/applications",
-  jobs: "/jobs/:jobId",
+  jobs: "/jobs",
   account: "/account",
   settings: "/settings",
 };
@@ -41,7 +41,8 @@ function Pages({ userId, setUserId }) {
             element={<NotificationsPage userId={userId} />}
           />
           <Route path={pages.applications} element={<MyApplication />} />
-          <Route path={pages.jobs} element={<JobPostings setPage={setPage}/>} />
+          <Route path={pages.jobs} element={<JobPostings setPage={setPage} />} />
+          <Route path={`${pages.jobs}/:jobId`} element={<JobPostings setPage={setPage} />} />
           <Route path={pages.account} element={<AccountSettings userId={userId}/>} />
           <Route path={pages.settings} element={<App />} />
         </Routes>

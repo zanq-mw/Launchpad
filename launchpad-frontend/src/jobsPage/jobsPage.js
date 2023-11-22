@@ -61,8 +61,8 @@ export function JobPostings({setPage}) {
   }, []);
 
   const clickedTab= () => {
-    setPage('/jobs/:jobId');
-    navigate(`/jobs/:jobId`);
+    setPage('/jobs');
+    navigate(`/jobs`);
   }
 
   const jobsCompanyData =
