@@ -84,15 +84,20 @@ function Register() {
 
             <div id="year-program-container">
               <p className="field1">
-                <label className="label">Year</label> <br></br>
-                <input
+                <label className="label">Year/Graduate</label> <br></br>
+                <select
                   className="input"
                   type="number"
                   name="Year"
-                  min="0"
-                  max="10"
-                  placeholder="0"
-                ></input>
+                >
+                  <option value="" disabled selected hidden>Select an option</option>
+                  <option value="first">First</option>
+                  <option value="second">Second</option>
+                  <option value="third">Third</option>
+                  <option value="fourth">Fourth</option>
+                  <option value="fifth">Fifth</option>
+                  <option value="grad">Graduate</option>
+                  </select>
               </p>
               <div className="input2">
                 <p className="field2">

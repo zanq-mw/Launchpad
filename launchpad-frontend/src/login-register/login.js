@@ -89,7 +89,7 @@ function Login({ userId, setUserId }) {
             </span>
           </p>
           <div id="login-container-login">
-            <p>Already have an account?&nbsp;</p>
+            <p>Don't have an account yet?&nbsp;</p>
             <NavLink to="/signup">
               <i>Register Here</i>
             </NavLink>
