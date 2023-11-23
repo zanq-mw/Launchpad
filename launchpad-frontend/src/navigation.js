@@ -147,6 +147,7 @@ export function LogoutPopup({ setUserId, setShowLogout, showLogout }) {
 
   const handleLogout = useCallback(() => {
     setUserId(null);
+    sessionStorage.setItem("userId", null);
     setShowLogout(false);
     navigate("/");
   }, [navigate, setShowLogout, setUserId]);
