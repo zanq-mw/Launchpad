@@ -15,6 +15,10 @@ from startup_data import startup_data
 app.config['MONGO_URI'] = 'mongodb://localhost:27017/database'
 from datetime import datetime
 from flask_mail import Mail
+from flask_mail import Message
+from itsdangerous import URLSafeTimedSerializer
+import os
+
 
 # Initialize the PyMongo extension
 mongo = PyMongo(app)
@@ -22,6 +26,19 @@ bcrypt = Bcrypt(app)
 
 
 CORS(app, origins='*')
+
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_USERNAME'] = 'organizationlaunchpad@gmail.com'
+app.config['MAIL_PASSWORD'] = 'zeid hsnp odqv jsol'
+app.config['MAIL_DEFAULT_SENDER'] = 'organizationlaunchpad@gmail.com'
+app.config['SECRET_KEY'] = '37e0f3d0ced66904aa5b89a39bb94649ec5ae68d06419f7ccadd7a3c5eebc93a'
+
+mail = Mail(app)
+
+
 
 
 def setup_db():
@@ -354,9 +371,35 @@ def register():
         else:
             mongo.db.get_collection("user").insert_one(data_to_insert)
             response = {'message': 'User registered successfully'}
-        return jsonify(response)
-        
+            confirmation_token = generate_confirmation_token(username)
+            send_confirmation_email(username, confirmation_token)
+
+            response = {'message': 'User registered successfully. Confirmation email sent.'}
+        return jsonify(response)       
     return jsonify(response)
+
+def send_confirmation_email(username, user_token):
+    subject = 'Account Confirmation'
+    body = f'Click the following link to confirm your account: {url_for("confirm_email", token=user_token, _external=True)}'
+    msg = Message(subject, recipients=[username], body=body)
+    mail.send(msg)
+    
+@app.route('/confirm_email/<token>')
+def confirm_email(token):
+    serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+    try:
+        email = serializer.loads(token, salt='email-confirm', max_age=3600)  # Token expiration in seconds
+        # Update user status or perform other necessary actions
+        # For example, set user_confirmed=True in the database
+        flash('Email confirmed successfully!', 'success')
+    except Exception as e:
+        flash('Invalid or expired token. Please try again.', 'error')
+    return redirect(url_for('index'))
+
+def generate_confirmation_token(email):
+    serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+    return serializer.dumps(email, salt='email-confirm')
+
 @app.route("/api/login", methods=['POST'])
 def login():
     if request.method == 'POST':
