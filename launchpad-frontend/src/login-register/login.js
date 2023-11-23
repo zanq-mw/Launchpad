@@ -33,6 +33,7 @@ function Login({ userId, setUserId }) {
     if (responseData.message === "User Logged In successfully") {
       console.log(responseData.user_info.userId);
       setUserId(responseData.user_info.userId);
+      sessionStorage.setItem("userId", responseData.user_info.userId);
       navigate("/landing");
     } else if (
       responseData.message === "User does not exist or Incorrect Password"
