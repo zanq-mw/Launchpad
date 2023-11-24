@@ -44,6 +44,7 @@ function Pages({ userId, setUserId }) {
             path={pages.applications} 
             element={<MyApplication userId={userId} setUserId={setUserId} />} 
           />
+
           <Route
             path={pages.jobs}
             element={<JobPostings setPage={setPage} />}

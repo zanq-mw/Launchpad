@@ -33,6 +33,7 @@ function Login({ userId, setUserId }) {
     if (responseData.message === "User Logged In successfully") {
       console.log(responseData.user_info.userId);
       setUserId(responseData.user_info.userId);
+      sessionStorage.setItem("userId", responseData.user_info.userId);
       navigate("/landing");
     } else if (
       responseData.message === "User does not exist or Incorrect Password"
@@ -89,7 +90,7 @@ function Login({ userId, setUserId }) {
             </span>
           </p>
           <div id="login-container-login">
-            <p>Already have an account?&nbsp;</p>
+            <p>Don't have an account yet?&nbsp;</p>
             <NavLink to="/signup">
               <i>Register Here</i>
             </NavLink>

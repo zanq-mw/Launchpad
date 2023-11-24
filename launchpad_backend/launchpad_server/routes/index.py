@@ -456,6 +456,7 @@ def upload_pdf():
             resume = request.files['resume']
             cover_letter = request.files['coverLetter']
             postingId = int(request.form['postingId'])
+
             dt = datetime.now()
             # Save files to MongoDB using GridFS
 

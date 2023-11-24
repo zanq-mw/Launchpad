@@ -4,9 +4,9 @@
 
 1. Clone repo
 2. Go to launchpad_backend directory `cd launchpad_backend`
-3. Install the required dependencies Windows: `pip install -r requirements.txt` Mac: `pip3 install -r requirements.txt`
+3. Install the required dependencies: `pip install -r requirements.txt` Mac (if the first one didn't work): `pip3 install -r requirements.txt`
 4. Run `python run.py` in terminal
-5. Navigate to http://localhost:5000/ on your browser to see app locally
+5. Navigate to http://localhost:5001/ on your browser to see app locally
 
 ## Running Frontend
 
@@ -24,3 +24,7 @@ All interaction with the db is through the backend so this step is not neccessar
 1. Install MongoDB with default settings: https://www.mongodb.com/try/download/community
 2. Ensure backend server is running (see above)
 3. In MongoDB, establish a new connection with URI mongodb://localhost:27017/database
+
+The Mac setup is a bit different, here is what some of us followed to get it set up
+
+![Mongo Mac Setup Instructions](<Screenshot 2023-11-07 at 12.17.00 AM.png>)
