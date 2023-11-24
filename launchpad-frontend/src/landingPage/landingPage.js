@@ -11,6 +11,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 import Bookmark from "@mui/icons-material/Bookmark";
 
+
+
 function StatusIcon(status) {
   if (status === "Applied") {
     return <SubmittedIcon />;
@@ -113,9 +115,15 @@ export function LandingPage({ userId, setPage }) {
     navigate(`/jobs/${jobId}`);
   };
 
+
   if (!userId) {
     return <div>Loading...</div>;
   }
+
+  const handleSeeMoreClick = () => {
+    setPage('/applications');
+    navigate('/applications');
+  };
 
   return (
     <>
@@ -125,110 +133,110 @@ export function LandingPage({ userId, setPage }) {
       <Grid container spacing={6}>
         <Grid item xs={8}>
           <p style={PageStyles.headings}>Applications</p>
-          <TableContainer>
-            <Table aria-label="simple table" style={PageStyles.table}>
-              <TableBody>
-                {applicationsEnhanced
-                  .slice(0, appsExpanded ? applicationsEnhanced.length : 3)
-                  .map((row, i) => (
-                    <TableRow
-                      key={i}
-                      sx={PageStyles.tableRow}
-                      onClick={() => {
-                        clickedJob(row.postingId);
-                      }}
-                    >
-                      <TableCell
-                        component="th"
-                        scope="row"
-                        align="center"
-                        style={{ paddingRight: 0 }}
-                      >
-                        <img
-                          src={row.logo}
-                          height={"40px"}
-                          alt={row.companyName}
-                        ></img>
-                      </TableCell>
-                      <TableCell>
-                        <p style={PageStyles.job_title}>{row.postingTitle}</p>
-                        <p style={PageStyles.company}>{row.companyName}</p>
-                        <p style={PageStyles.details}>
-                          {row.duration} {row.type}, {row.location}
-                        </p>
-                      </TableCell>
-                      <TableCell align="center">
-                        {StatusIcon(row.Status)}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                <TableRow
-                  key={"end"}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell
-                    colSpan={3}
-                    sx={PageStyles.see_more}
-                    onClick={() => setAppsExpanded(!appsExpanded)}
-                  >
-                    {appsExpanded ? "See Less" : "See More"}
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </TableContainer>
+<TableContainer>
+  <Table aria-label="simple table" style={PageStyles.table}>
+    <TableBody>
+      {applicationsEnhanced
+        .slice(0, appsExpanded ? applicationsEnhanced.length : 3)
+        .map((row, i) => (
+          <TableRow
+            key={i}
+            sx={PageStyles.tableRow}
+            onClick={() => {
+              clickedJob(row.postingId);
+            }}
+          >
+            <TableCell
+              component="th"
+              scope="row"
+              align="center"
+              style={{ paddingRight: 0 }}
+            >
+              <img
+                src={row.logo}
+                height={"40px"}
+                alt={row.companyName}
+              ></img>
+            </TableCell>
+            <TableCell>
+              <p style={PageStyles.job_title}>{row.postingTitle}</p>
+              <p style={PageStyles.company}>{row.companyName}</p>
+              <p style={PageStyles.details}>
+                {row.duration} {row.type}, {row.location}
+              </p>
+            </TableCell>
+            <TableCell align="center">
+              {StatusIcon(row.Status)}
+            </TableCell>
+          </TableRow>
+        ))}
+      <TableRow
+        key={"end"}
+        sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+      >
+       <TableCell colSpan={3} sx={PageStyles.see_more} onClick={handleSeeMoreClick}>
+          See More
+        </TableCell>
+      </TableRow>
+    </TableBody>
+  </Table>
+</TableContainer>
 
           <p style={PageStyles.headings}>Saved Jobs</p>
-          <TableContainer>
-            <Table aria-label="simple table" style={PageStyles.table}>
-              <TableBody>
-                {savedPostings
-                  .slice(0, savedExpanded ? savedPostings.length : 3)
-                  .map((row, i) => (
-                    <TableRow
-                      key={i}
-                      sx={PageStyles.tableRow}
-                      onClick={() => {
-                        clickedJob(row.postingId);
-                      }}
-                    >
-                      <TableCell
-                        component="th"
-                        scope="row"
-                        align="center"
-                        style={{ paddingRight: 0 }}
-                      >
-                        <img
-                          src={row.logo}
-                          height={"40px"}
-                          alt={row.companyName}
-                        ></img>
-                      </TableCell>
-                      <TableCell>
-                        <p style={PageStyles.job_title}>{row.postingTitle}</p>
-                        <p style={PageStyles.company}>{row.companyName}</p>
-                        <p style={PageStyles.details}>
-                          {row.duration} {row.type}, {row.location}
-                        </p>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                <TableRow
-                  key={"end"}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell
-                    colSpan={3}
-                    sx={PageStyles.see_more}
-                    onClick={() => setSavedExpanded(!savedExpanded)}
-                  >
-                    {savedExpanded ? "See Less" : "See More"}
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Grid>
+<TableContainer>
+  <Table aria-label="simple table" style={PageStyles.table}>
+    <TableBody>
+      {savedPostings
+        .slice(0, savedExpanded ? savedPostings.length : 3)
+        .map((row, i) => (
+          <TableRow
+            key={i}
+            sx={PageStyles.tableRow}
+            onClick={() => {
+              clickedJob(row.postingId);
+            }}
+          >
+            <TableCell
+              component="th"
+              scope="row"
+              align="center"
+              style={{ paddingRight: 0 }}
+            >
+              <img
+                src={row.logo}
+                height={"40px"}
+                alt={row.companyName}
+              ></img>
+            </TableCell>
+            <TableCell>
+              <p style={PageStyles.job_title}>{row.postingTitle}</p>
+              <p style={PageStyles.company}>{row.companyName}</p>
+              <p style={PageStyles.details}>
+                {row.duration} {row.type}, {row.location}
+              </p>
+            </TableCell>
+          </TableRow>
+        ))}
+  <TableRow
+  key={"end"}
+  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+  onClick={() => {
+    setPage('/jobs?tab=saved');  
+    navigate('/jobs?tab=saved');  
+  }}
+  
+>
+  <TableCell
+    colSpan={3}
+    sx={PageStyles.see_more}
+  >
+    {"See More"}
+  </TableCell>
+</TableRow>
+    </TableBody>
+  </Table>
+</TableContainer>
+</Grid>
 
         <Grid item xs={4}>
           <p style={PageStyles.headings}>Recommended</p>
