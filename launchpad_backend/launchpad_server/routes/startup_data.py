@@ -7,14 +7,16 @@ bcrypt = Bcrypt(app)
 application = {
     "tableName": "application",
     "index": "applicationId", # Similar to primary key
-    "records": [{
+    "records": [
+    {
         "applicationId": 1, 
         "resume": "figure out how to store pdf lol", 
         "coverLetter": "pdf again",
         "Status": "Reviewed",
         "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/2048px-Microsoft_logo.svg.png",
         "postingId": 1,
-        "userId": 1
+        "userId": 1,
+        "date" : datetime.fromisoformat("2023-09-23T19:50:49.129+00:00"),
     },
     {
         "applicationId": 2, 
@@ -23,7 +25,8 @@ application = {
         "Status": "Interview Requested",
         "logo": "https://seeklogo.com/images/S/scotiabank-logo-D2F1AF87B5-seeklogo.com.png",
         "postingId": 9,
-        "userId": 1
+        "userId": 1,
+         "date" : datetime.fromisoformat("2023-05-23T19:50:49.129+00:00"),
     },
     {
         "applicationId": 3, 
@@ -32,7 +35,8 @@ application = {
         "Status": "Applied",
         "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/2048px-Microsoft_logo.svg.png",
         "postingId": 2,
-        "userId": 2
+        "userId": 2,
+        "date" : datetime.fromisoformat("2023-02-08T19:50:49.129+00:00"),
     }]
 }
 

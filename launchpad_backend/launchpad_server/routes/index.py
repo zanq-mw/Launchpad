@@ -1,5 +1,5 @@
 from launchpad_server import app
-from flask import render_template, request, flash, redirect, url_for,jsonify
+from flask import render_template, request, flash, redirect, url_for,jsonify, send_file
 from .forms import SignupForm, LoginForm  
 from flask_login import login_user
 from flask_bcrypt import Bcrypt, check_password_hash
@@ -10,10 +10,13 @@ from flask import session
 import pymongo
 import sys
 import re
+import gridfs
 sys.path.append('./launchpad_server/routes')
 from startup_data import startup_data
 app.config['MONGO_URI'] = 'mongodb://localhost:27017/database'
 from datetime import datetime
+from flask import request
+from bson import ObjectId
 
 # Initialize the PyMongo extension
 mongo = PyMongo(app)
@@ -146,27 +149,29 @@ def get_users(user_id):
 def get_applications(user_id):
     # Select * from application where userId=user_id
     collection = mongo.db.application
+    print("hello")
+    print(user_id)
     query = {"userId": user_id}
-    applications = list(collection.find(query))
+    projection = {"_id": 1, "Status": 1, "postingId": 1, "userId": 1, "date": 1, "applicationId":1}
+    applications = list(collection.find(query,  projection))
 
     # Remove the "_id" field from each document in the result
     for app in applications:
         app.pop("_id")
 
         # Additional query to retrieve information from anotherTable
-        application_id = app["applicationId"]
+        posting_id = app["postingId"]
         postings = mongo.db.posting
-        other_table_query = {"postingId": application_id}
-       
+        other_table_query = {"postingId": posting_id}
+        
         #additional_info = list(postings.find(other_table_query))
-        additional_info = postings.find_one(other_table_query, {"postingTitle": 1, "location": 1, "duration": 1, "type":1, "postingDescription":1, "workModel":1, "workterm":1,"deadline":1 })
+        additional_info = postings.find_one(other_table_query, {"postingTitle": 1, "location": 1, "duration": 1, "type":1, "postingDescription":1, "workModel":1, "workterm":1,"deadline":1, "logo":1 })
         additional_info.pop("_id")
-       
+    
         # Add the additional information to the application data
         app["additionalInfo"] = additional_info
-
-    
-    return jsonify({"data": applications}) 
+       
+    return jsonify({"data": applications}), 200
 
 # ACCOUNT SETTINGS INFORMATION ---------------------
 @app.route('/acc-settings/<int:user_id>')
@@ -203,6 +208,97 @@ def get_user_info(user_id):
     }
 
     return jsonify(response_data), 200
+
+@app.route("/edit_profile/<int:user_id>", methods=["PUT"])
+def edit_profile(user_id):
+    # Connect to the user collection
+    collection = mongo.db.user
+
+    # Find the user by userId
+    filter_query = {"userId": user_id}
+    
+    if request.method == 'PUT':
+        # get form data
+        formData = request.get_json()
+        title = formData["title"]
+
+        # update user info
+        if(title=="Full Name"):
+            first_name =  formData.get('first_name')
+            last_name =formData.get('last_name')
+            update_query = {
+            '$set': {
+                'firstName': first_name,
+                'lastName': last_name,
+                }
+            }
+            result = collection.update_one(filter_query, update_query)
+        elif(title=="Email"):
+            email =  formData.get('email')
+            update_query = { '$set': {'email': email }}
+            result = collection.update_one(filter_query, update_query)
+        elif(title=="Password"):
+            password =   bcrypt.generate_password_hash (formData.get('password')).decode('utf-8')
+            update_query = { '$set': {'password': password }}
+            result = collection.update_one(filter_query, update_query)
+        elif(title=="Program"):
+            program =  formData.get('program')
+            update_query = { '$set': {'program': program }}
+            result = collection.update_one(filter_query, update_query)
+        elif(title=="Address"):
+            street =  formData.get('street')
+            postal_code =formData.get('postal_code')
+            province_state =  formData.get('province_state')
+            update_query = {
+            '$set': {
+                'address.streetAddress': street,
+                'address.postalCode': postal_code,
+                'address.province': province_state,
+                }
+            }
+            result = collection.update_one(filter_query, update_query)
+        elif(title=="Phone Number"):
+            number =  formData.get('number')
+            update_query = { '$set': {'phoneNumber': number }}
+            result = collection.update_one(filter_query, update_query)
+
+    # check it file was updated
+    if result.modified_count > 0:
+        print("Update user profile successful")
+        return jsonify({"success": "Update user profile succesfully."}), 200
+    else:
+        print("Error update failed")
+        return jsonify({"error": "Could not update user profile data."}), 400
+    
+@app.route("/edit_security/<int:user_id>", methods=["PUT"])
+def edit_security(user_id):
+    # Connect to the user collection
+    collection = mongo.db.user
+
+    # Find the user by userId
+    filter_query = {"userId": user_id}
+    
+    if request.method == 'PUT':
+        # get form data
+        formData = request.get_json()
+        security_type = formData["security_type"]
+
+        # update security info
+        if(security_type=="twoFactor"):
+            twoFactor =  formData.get('twoFactor')
+            update_query = { '$set': {'twoFactor': twoFactor }}
+            result = collection.update_one(filter_query, update_query)
+        elif(security_type=="dataCollection"):
+            dataCollection =  formData.get('dataCollection')
+            update_query = { '$set': {'dataCollection': dataCollection }}
+            result = collection.update_one(filter_query, update_query)
+    # check it file was updated
+    if result.modified_count > 0:
+        print("Update security info succesfully")
+        return jsonify({"success": "Update security info succesfully."}), 200
+    else:
+        print("Error update security info failed")
+        return jsonify({"error": "Could not update security data."}), 400
 
 @app.route("/check_db")
 def check_db():
@@ -314,3 +410,77 @@ def login():
 
         response = {"message": "User does not exist or Incorrect Password"}
         return jsonify(response)
+
+@app.route("/api/delete-account/<int:user_id>", methods=["DELETE"])
+def delete_account(user_id):
+    try:
+        user_collection = mongo.db.user
+        user_query = {"userId": user_id}
+        user_result = user_collection.find_one(user_query)
+
+        if user_result:
+            user_collection.delete_one({"_id": user_result["_id"]})
+            print(f"Account for user ID {user_id} deleted successfully.")
+
+            return jsonify({"message": f"Account for user ID {user_id} deleted successfully."}), 200
+        else:
+            print(f"User not found for user ID: {user_id}")
+            return jsonify({"error": "User not found."}), 404
+    except Exception as e:
+        print(f"Error deleting account: {str(e)}")
+        return jsonify({"error": "Error deleting account. Please try again."}), 500
+
+
+@app.route('/get-resume/<resume_id>')
+def get_resume(resume_id):
+    try:
+        resume_id = ObjectId(resume_id)
+        fs = gridfs.GridFS(mongo.db, collection='pdfs')
+        resume_file = fs.get(resume_id)
+
+        # Set the appropriate content type for PDF files
+        response = send_file(resume_file, mimetype='application/pdf')
+
+        # Optionally, you can specify a filename for the downloaded file
+        response.headers['Content-Disposition'] = 'attachment; filename=resume.pdf'
+        
+        return response
+    except Exception as e:
+        return str(e), 404  # Or handle the error as needed
+
+@app.route ("/upload-pdf", methods=["POST"])
+def upload_pdf():
+    if 'resume' in request.files and 'coverLetter' in request.files:
+        user_id = int(session.get('user_id'))
+        if user_id:
+            resume = request.files['resume']
+            cover_letter = request.files['coverLetter']
+            postingId = int(request.form['postingId'])
+            dt = datetime.now()
+            # Save files to MongoDB using GridFS
+
+            fs = gridfs.GridFS(mongo.db, collection='application')
+            resume = fs.put(resume, filename=resume.filename, custom_metadata={"type": "resume"})
+            cover_letter = fs.put(cover_letter, filename=cover_letter.filename, custom_metadata={"type": "cover_letter"}) 
+
+            # get number of existing applications, add 1 to generate applicationID
+            existing_applications = mongo.db.application.count_documents({})
+            new_application_id = existing_applications + 1
+
+            application_data = {
+                "applicationId": new_application_id,  
+                "resume": resume,
+                "coverLetter": cover_letter,
+                "Status": "Applied",
+                "postingId": postingId,  
+                "userId": user_id,
+                "date": dt,
+            }
+
+            mongo.db.application.insert_one(application_data)
+            return jsonify({"message": "PDF files uploaded successfully"}), 200
+        
+        else:
+            return jsonify({"error": "User not authenticated"}), 401   
+    else:
+        return jsonify({"error": "Missing files"}), 400
