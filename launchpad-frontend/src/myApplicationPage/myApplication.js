@@ -81,7 +81,7 @@ function UserApplications(props){
     if (!data) {
       return null;
     }
-
+   
     return(
         <Card sx = {MyApplicationStyles.cardMargin}>
         <div style={{ marginTop: '20px' }}>
@@ -239,7 +239,8 @@ function UserApplications(props){
                                 {selectedApplication.description && (
                                     <TableRow>
                                         <TableCell style={{ fontWeight: 'bold' }}>Description:</TableCell>
-                                        <TableCell>{selectedApplication.description}</TableCell>
+                                        
+                                        <TableCell style={{ whiteSpace: 'pre-line' }}>{selectedApplication.description}</TableCell>
                                     </TableRow>
                                 )}
                             </TableBody>
@@ -272,21 +273,22 @@ function UserApplications(props){
         </div>
 );
 }
+
+
         
 // main export 
-export function MyApplication({ userId }) {
+export function MyApplication({ userId, setUserId }) {
     
-    const [data, setData] = useState({});
-
+    const [data, setData] = useState({}); 
     useEffect(() => {
       // Change 1 to userId when log-in is implemented
-      fetch("/applications/1")
+      fetch(`/applications/${userId}`)
         .then((res) => res.json())
         .then((data) => {
           setData(data);
           
         });
-    }, []);
+    }, [userId]);
 
     const transformedData = transformJSON(data);
    
