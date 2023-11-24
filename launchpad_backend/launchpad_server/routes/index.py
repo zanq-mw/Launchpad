@@ -164,13 +164,22 @@ def get_applications(user_id):
         postings = mongo.db.posting
         other_table_query = {"postingId": posting_id}
         
-        #additional_info = list(postings.find(other_table_query))
-        additional_info = postings.find_one(other_table_query, {"postingTitle": 1, "location": 1, "duration": 1, "type":1, "postingDescription":1, "workModel":1, "workterm":1,"deadline":1, "logo":1 })
+        
+        additional_info = postings.find_one(other_table_query, {"postingTitle": 1, "location": 1, "duration": 1, "type":1, "postingDescription":1, "workModel":1, "workterm":1,"deadline":1, "logo":1, "companyId":1 })
         additional_info.pop("_id")
+
+        company_id = additional_info["companyId"]
+        company = mongo.db.company
+        company_query = {"companyId": company_id}
+        company_info = company.find_one(company_query, {"companyName": 1})
+        company_name = company_info['companyName']
+
+
+        app["additionalInfo"] = {
+            **additional_info,
+            "companyName": company_name
+        }
     
-        # Add the additional information to the application data
-        app["additionalInfo"] = additional_info
-       
     return jsonify({"data": applications}), 200
 
 # ACCOUNT SETTINGS INFORMATION ---------------------
@@ -456,7 +465,6 @@ def upload_pdf():
             resume = request.files['resume']
             cover_letter = request.files['coverLetter']
             postingId = int(request.form['postingId'])
-
             dt = datetime.now()
             # Save files to MongoDB using GridFS
 
