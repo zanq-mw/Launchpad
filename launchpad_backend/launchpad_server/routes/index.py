@@ -368,25 +368,31 @@ def register():
         user_exists = mongo.db.get_collection("user").find_one({"email": username}) #check if user exists
        
         if user_exists:
-            response = {'message': 'User already exists'}
-        else:
-            mongo.db.get_collection("user").insert_one(data_to_insert)
+            return jsonify({'message': 'User already exists'})
+        
+        mongo.db.get_collection("user").insert_one(data_to_insert)
+        confirmation_token = generate_confirmation_token(username)
+        send_confirmation_email(username, confirmation_token)
 
-            confirmation_token = generate_confirmation_token(username)
-            send_confirmation_email(username, confirmation_token)
-
-            response = {'message': 'User registered successfully.'}
-        return jsonify(response)       
-    return jsonify(response)
+        return jsonify({'message': 'User registered successfully'})
+    
+    return jsonify({'message': 'Invalid request method'})
 
 def send_confirmation_email(username, user_token):
+    confirmation_link = f'http://localhost:3000/confirm_email?token={user_token}'
     subject = 'Account Confirmation'
-    body = f'Click the following link to confirm your account: {url_for("confirm_email", token=user_token, _external=True)}'
+    body = f'Click the following link to confirm your account: {confirmation_link}'
     msg = Message(subject, recipients=[username], body=body)
     mail.send(msg)
 
-@app.route('/confirm_email/<token>', methods=['GET', 'POST'])
-def confirm_email(token):
+@app.route('/confirm_email', methods=['GET', 'POST'])
+def confirm_email():
+    data = request.get_json()
+    token = data.get('token')
+
+    if not token:
+        return jsonify({"status": "error", "message": "Token not provided."})
+
     serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
     try:
         email = serializer.loads(token, salt='email-confirm', max_age=3600)  # Token expiration in seconds
@@ -397,7 +403,7 @@ def confirm_email(token):
         update_query = {"$set": {"userConfirmed": True}}
         user_collection.update_one(filter_query, update_query)
 
-        # Return a JSON response indicating success
+        # Redirect the user to the main application page or return a JSON response indicating success
         return jsonify({"status": "success", "message": "Email confirmed successfully!"})
     except Exception as e:
         # Return a JSON response indicating failure
@@ -407,7 +413,7 @@ def generate_confirmation_token(email):
     serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
     return serializer.dumps(email, salt='email-confirm')
 
-@app.route('/login', methods=['GET','POST'])
+@app.route('/api/login', methods=['POST'])
 def login():
     if request.method == 'POST':
         data = request.get_json()
