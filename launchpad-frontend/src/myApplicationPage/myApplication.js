@@ -126,7 +126,7 @@ function UserApplications(props){
                                     ></img>
                                 </Typography>
                                 <Typography style={MyApplicationStyles.companyName} align="center">
-                                    {item.company}
+                                    {item.companyName}
                                 </Typography>
                             </TableCell>
                             <TableCell>

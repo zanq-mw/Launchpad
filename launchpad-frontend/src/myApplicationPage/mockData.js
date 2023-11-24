@@ -6,7 +6,7 @@ export function transformJSON(jsonData) {
   return jsonData.data.map(application => {
     return {
       title: application.additionalInfo.postingTitle ,
-      company: "", // You might need to provide a default value or fetch this from another source
+      companyName: application.additionalInfo.companyName, // You might need to provide a default value or fetch this from another source
       duration: application.additionalInfo.duration ,
       type: application.additionalInfo.type ,
       location: application.additionalInfo.location ,
@@ -15,7 +15,6 @@ export function transformJSON(jsonData) {
       description:  application.additionalInfo.postingDescription ,
       workModel: application.additionalInfo.workModel,
       workterm: application.additionalInfo.workterm ,
-      workModel: application.additionalInfo.workModel ,
       deadline: application.additionalInfo.deadline ,
       date: application.date, // You might need to provide a default value or fetch this from another source
       action: "", // You might need to provide a default value or fetch this from another source
