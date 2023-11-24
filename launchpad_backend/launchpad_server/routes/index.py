@@ -434,11 +434,11 @@ def get_resume(resume_id):
 @app.route ("/upload-pdf", methods=["POST"])
 def upload_pdf():
     if 'resume' in request.files and 'coverLetter' in request.files:
-        user_id = session.get('user_id')
+        user_id = int(session.get('user_id'))
         if user_id:
             resume = request.files['resume']
             cover_letter = request.files['coverLetter']
-            postingId = request.form['postingId']
+            postingId = int(request.form['postingId'])
             dt = datetime.now()
             # Save files to MongoDB using GridFS
 
