@@ -55,7 +55,8 @@ export function JobPostings() {
       .then((data) => {
         setUserData(data);
       });
-  }, []);
+  }, [value]);
+
 
   const jobsCompanyData =
     jobsData.data && companyData.data && userData.data
