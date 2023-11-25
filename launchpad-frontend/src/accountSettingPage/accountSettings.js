@@ -12,6 +12,17 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useNavigate } from "react-router-dom";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#5E17EB",
+    },
+  },
+});
 
 function ProfileItems(props) {
   const data = props.data;
@@ -331,6 +342,7 @@ export default AccountItems;
 
 export function AccountSettingsItems({ userId, setUserId }) {
   const [data, setData] = useState({});
+  const [loading, setLoading] = React.useState(true);
 
   useEffect(() => {
     updateData();
@@ -341,10 +353,28 @@ export function AccountSettingsItems({ userId, setUserId }) {
       .then((res) => res.json())
       .then((data) => {
         setData(data);
+        setLoading(false);
         console.log(data);
       });
   };
   const transformedData = transformSettingsData(data);
+
+  if (loading) {
+    return (
+      <ThemeProvider theme={theme}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "100vh",
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      </ThemeProvider>
+    );
+  }
 
   return (
     <div style={AccountSettingStyles.container}>

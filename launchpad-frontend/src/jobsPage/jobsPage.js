@@ -19,9 +19,18 @@ import { ClockIcon, PinIcon, LaptopIcon } from "../components/jobsIcons";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CloseIcon from "@mui/icons-material/Close";
 import { ApplyButton } from "../components/applicationPopUp";
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from "react-router-dom";
+import CircularProgress from "@mui/material/CircularProgress";
 
-export function JobPostings({setPage}) {
+const theme1 = createTheme({
+  palette: {
+    primary: {
+      main: "#5E17EB",
+    },
+  },
+});
+
+export function JobPostings({ userId, setPage }) {
   const [value, setValue] = React.useState(0);
   const [searchValue, setSearchValue] = React.useState("");
   const [typeFilter, setTypeFilter] = React.useState(null);
@@ -31,48 +40,47 @@ export function JobPostings({setPage}) {
   const [companyData, setCompanyData] = React.useState({});
   const [userData, setUserData] = React.useState({});
   const { jobId } = useParams();
+  const [loading1, setLoading1] = React.useState(true);
+  const [loading2, setLoading2] = React.useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const tabParam = params.get('tab');
-  
-    if (tabParam === 'saved') {
-      setValue(1); 
+    const tabParam = params.get("tab");
+
+    if (tabParam === "saved") {
+      setValue(1);
     } else {
-      setValue(0); 
+      setValue(0);
     }
-  
+
     fetch(
       `/jobs?type=${typeFilter}&duration=${durationFilter}&location=${locationFilter}`
     )
       .then((res) => res.json())
       .then((data) => {
         setJobsData(data);
+        setLoading1(false);
       });
   }, [durationFilter, locationFilter, searchValue, typeFilter]);
 
   useEffect(() => {
-    fetch(`/companies`)
-      .then((res) => res.json())
-      .then((data) => {
-        setCompanyData(data);
-      });
-  }, []);
+    const companiesPromise = fetch(`/companies`).then((res) => res.json());
+    const usersPromise = fetch(`/users/${userId}`).then((res) => res.json());
 
-  useEffect(() => {
-    // add user id here when it is integrated with the code
-    fetch(`/users/1`)
-      .then((res) => res.json())
-      .then((data) => {
-        setUserData(data);
-      });
-  }, []);
+    Promise.all([companiesPromise, usersPromise])
+      .then(([companyData, userData]) => {
+        setCompanyData(companyData);
+        setUserData(userData);
+        setLoading2(false);
+      })
+      .catch((error) => console.error("Error fetching data:", error));
+  }, [userId]);
 
-  const clickedTab= () => {
-    setPage('/jobs');
+  const clickedTab = () => {
+    setPage("/jobs");
     navigate(`/jobs`);
-  }
+  };
 
   const jobsCompanyData =
     jobsData.data && companyData.data && userData.data
@@ -100,6 +108,23 @@ export function JobPostings({setPage}) {
       id: `jobs-tab-${index}`,
       "aria-controls": `jobs-tabpanel-${index}`,
     };
+  }
+
+  if (loading1 || loading2) {
+    return (
+      <ThemeProvider theme={theme1}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "100vh",
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      </ThemeProvider>
+    );
   }
 
   return (
@@ -139,12 +164,17 @@ export function JobPostings({setPage}) {
           <ThemeProvider theme={theme}>
             <Tabs value={value} onChange={handleChange}>
               <Tab label="Postings" {...a11yProps(0)} onClick={clickedTab} />
-              <Tab label="Saved" {...a11yProps(1)} onClick={clickedTab}/>
+              <Tab label="Saved" {...a11yProps(1)} onClick={clickedTab} />
             </Tabs>
           </ThemeProvider>
         </Box>
         <CustomTabPanel value={value} index={0}>
-          <Postings searchValue={searchValue} postings={jobsCompanyData} jobId={jobId} setPage={setPage}/>
+          <Postings
+            searchValue={searchValue}
+            postings={jobsCompanyData}
+            jobId={jobId}
+            setPage={setPage}
+          />
         </CustomTabPanel>
         <CustomTabPanel value={value} index={1}>
           <Postings
@@ -235,17 +265,16 @@ function Postings({ saved, searchValue, postings, jobId, setPage }) {
   );
 
   const [postingSelected, setPostingSelected] = React.useState(null);
-  
+
   const selectedPosting = filteredPostings.find(
     (row) => row.postingId === postingSelected
   );
 
   // select job posting if Id provided
   useEffect(() => {
-    if(jobId !== undefined){
+    if (jobId !== undefined) {
       setPostingSelected(parseInt(jobId));
-    }
-    else if (selectedPosting === undefined) {
+    } else if (selectedPosting === undefined) {
       setPostingSelected(null);
     }
   }, [selectedPosting, jobId]);
@@ -256,7 +285,7 @@ function Postings({ saved, searchValue, postings, jobId, setPage }) {
   const clickedJob = (jobId) => {
     setPage(`/jobs/${jobId}`);
     navigate(`/jobs/${jobId}`);
-  }
+  };
 
   return (
     <Grid container spacing={6}>
@@ -415,7 +444,10 @@ function JobExpanded({ postingSelected, updateList, postings, saved }) {
                     alignContent: "space-evenly",
                   }}
                 >
-                  <ApplyButton postingID={expandedPosting.postingId} companyName={expandedPosting.companyName}>
+                  <ApplyButton
+                    postingID={expandedPosting.postingId}
+                    companyName={expandedPosting.companyName}
+                  >
                     Apply
                   </ApplyButton>
                   <Button

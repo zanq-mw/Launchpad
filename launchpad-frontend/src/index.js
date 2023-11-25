@@ -47,11 +47,11 @@ function Pages({ userId, setUserId }) {
 
           <Route
             path={pages.jobs}
-            element={<JobPostings setPage={setPage} />}
+            element={<JobPostings userId={userId} setPage={setPage} />}
           />
           <Route
             path={`${pages.jobs}/:jobId`}
-            element={<JobPostings setPage={setPage} />}
+            element={<JobPostings userId={userId} setPage={setPage} />}
           />
           <Route
             path={pages.account}
