@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
@@ -9,10 +9,15 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { mockApplicationData } from "./mockData";
+import { transformJSON } from "./mockData"
+import { Dialog, DialogTitle, DialogContent } from '@mui/material';
+
 
 // top banner
-function UserApplicationsInfo(){
+function UserApplicationsInfo(props){
+    const jsonData = props.data; 
+    const totalApplications = jsonData.data ? jsonData.data.length : 0;
+    const interviewRequestedApplications = jsonData.data ? jsonData.data.filter(application => application.Status === 'Interview Requested').length : 0; 
     return(
         <Card sx={{ ...MyApplicationStyles.cardMargin, paddingTop: '15px', paddingBottom: '15px' }}>
             <CardContent>
@@ -20,12 +25,12 @@ function UserApplicationsInfo(){
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <div>
                         <Typography variant="h6" component="div" style={{ fontSize: '18px', fontWeight: 'bold' }}>
-                            Application Submitted
+                             Application Submitted
                         </Typography>
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                         <Typography variant="h6" component="div" style={{ fontSize: '17px', marginRight: '520px', color: '#C1C1C1', fontWeight:'bold' }}>
-                            60
+                           { totalApplications } 
                         </Typography>
                         </div>
                     </div>
@@ -42,7 +47,7 @@ function UserApplicationsInfo(){
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                         <Typography variant="h6" component="div" style={{ fontSize: '17px', marginRight: '520px', color: '#C1C1C1',fontWeight:'bold'  }}>
-                            5
+                            {interviewRequestedApplications}
                         </Typography>
                         </div>
                     </div>
@@ -52,10 +57,31 @@ function UserApplicationsInfo(){
     );
 }
 
-// bottom banner
-function UserApplications(){
-    const [savedExpanded, setSavedExpanded] = useState(false);
 
+
+// bottom banner
+function UserApplications(props){
+    const [savedExpanded, setSavedExpanded] = useState(false);
+    const data = props.data;
+    const mockApplicationData = props.transformedData;
+
+    
+    const [selectedApplication, setSelectedApplication] = useState(null);
+
+    const handleOpenPopup = (application) => {
+       
+        setSelectedApplication(application);
+    };
+
+    const handleClosePopup = () => {
+        setSelectedApplication(null);
+    };
+
+
+    if (!data) {
+      return null;
+    }
+   
     return(
         <Card sx = {MyApplicationStyles.cardMargin}>
         <div style={{ marginTop: '20px' }}>
@@ -73,14 +99,18 @@ function UserApplications(){
                     <TableBody>
                     {mockApplicationData
                     .slice(0, savedExpanded ? mockApplicationData.length : 3)
-                    .map((item) => (
+                    .map((item, index) => (
                             <TableRow>
                             <TableCell>
                                 <Typography style={MyApplicationStyles.jobTitle}>
                                     {item.title}
                                 </Typography>
                                 <Typography style={MyApplicationStyles.jobDescription}>
-                                    {item.duration}
+                                {item.duration !== '' ? (
+                                    item.duration
+                                    ) : (
+                                        item.type 
+                                    )}
                                     <Typography variant = "span">
                                         , {item.location}
                                     </Typography>
@@ -96,7 +126,7 @@ function UserApplications(){
                                     ></img>
                                 </Typography>
                                 <Typography style={MyApplicationStyles.companyName} align="center">
-                                    {item.company}
+                                    {item.companyName}
                                 </Typography>
                             </TableCell>
                             <TableCell>
@@ -112,17 +142,28 @@ function UserApplications(){
                             <TableCell>
                                 <Typography style={MyApplicationStyles.jobTitle}>
                                 {item.action.toLowerCase() === "complete" ? (
-                            <Button variant="contained" size="small" sx={MyApplicationStyles.actionButtonComplete} >
+                            <Button 
+                                variant="contained" 
+                                size="small" 
+                                sx={MyApplicationStyles.actionButtonComplete} 
+                                onClick={() => handleOpenPopup(item)}
+                             >
                             <Typography variant="p">
                                 Complete
                                 {/* TODO: add redirect */}
+                                navigate("/");
                             </Typography>
                             </Button>
                             ) : 
-                            <Button variant="contained" size="small" sx={MyApplicationStyles.actionButtonPending} >
+                            <Button 
+                                variant="contained" 
+                                size="small" 
+                                sx={MyApplicationStyles.actionButtonPending} 
+                                onClick={() => handleOpenPopup(item)}
+                            >
                                     <Typography variant="p">
                                     {/* TODO: add redirect */}
-                                        Complete
+                                        view
                                     </Typography>
                                 </Button>
                             }
@@ -146,33 +187,116 @@ function UserApplications(){
                 </Table>
             </TableContainer>
             </div>
+            <Dialog open={!!selectedApplication} onClose={handleClosePopup}>
+            {selectedApplication && (
+                <>
+                    <DialogTitle>{selectedApplication.title}</DialogTitle>
+                    <DialogContent>
+                        <Table size="small">
+                            <TableBody>
+                                {selectedApplication.location && (
+                                    <TableRow>
+                                        <TableCell style={{ fontWeight: 'bold' }}>Location:</TableCell>
+                                        <TableCell>{selectedApplication.location}</TableCell>
+                                    </TableRow>
+                                )}
+
+                                {selectedApplication.workModel && (
+                                    <TableRow>
+                                        <TableCell style={{ fontWeight: 'bold' }}>Work Model:</TableCell>
+                                        <TableCell>{selectedApplication.workModel}</TableCell>
+                                    </TableRow>
+                                )}
+
+                                {selectedApplication.duration && (
+                                    <TableRow>
+                                        <TableCell style={{ fontWeight: 'bold' }}>Duration:</TableCell>
+                                        <TableCell>{selectedApplication.duration}</TableCell>
+                                    </TableRow>
+                                )}
+
+                                {selectedApplication.workterm && (
+                                    <TableRow>
+                                        <TableCell style={{ fontWeight: 'bold' }}>Work Term:</TableCell>
+                                        <TableCell>{selectedApplication.workterm}</TableCell>
+                                    </TableRow>
+                                )}
+
+                                {selectedApplication.status && (
+                                    <TableRow>
+                                        <TableCell style={{ fontWeight: 'bold' }}>Status:</TableCell>
+                                        <TableCell>{selectedApplication.status}</TableCell>
+                                    </TableRow>
+                                )}
+
+                                {selectedApplication.deadline && (
+                                    <TableRow>
+                                        <TableCell style={{ fontWeight: 'bold' }}>Deadline:</TableCell>
+                                        <TableCell>{selectedApplication.deadline}</TableCell>
+                                    </TableRow>
+                                )}
+
+                                {selectedApplication.description && (
+                                    <TableRow>
+                                        <TableCell style={{ fontWeight: 'bold' }}>Description:</TableCell>
+                                        
+                                        <TableCell style={{ whiteSpace: 'pre-line' }}>{selectedApplication.description}</TableCell>
+                                    </TableRow>
+                                )}
+                            </TableBody>
+                        </Table>
+                    </DialogContent>
+                </>
+            )}
+        </Dialog>
 
         </Card>
+        
     );
 }
 
-  export function MyApplicationItems() {
+  export function MyApplicationItems(props) {
+    const data = props.data;
+    const transformedData = props.transformedData;
     return (
-    <div style={MyApplicationStyles.pageContainer}>
-        <Typography variant="h5" component="div" sx ={MyApplicationStyles.mainTitle}>
-                    My Applications
-        </Typography>
-        <div style={{ margin: '40px' }}></div>
-        <UserApplicationsInfo/>
-        <div style={{ margin: '40px' }}></div>
-        <Typography variant="h5" component="div" sx={MyApplicationStyles.subTitle}>
-            Applications
-        </Typography>
-        <UserApplications/>
-    </div>
+        <div style={MyApplicationStyles.pageContainer}>
+            <Typography variant="h5" component="div" sx ={MyApplicationStyles.mainTitle}>
+                        My Applications
+            </Typography>
+            <div style={{ margin: '40px' }}></div>
+            <UserApplicationsInfo data={data} transformedData={transformedData}/>
+            <div style={{ margin: '40px' }}></div>
+            <Typography variant="h5" component="div" sx={MyApplicationStyles.subTitle}>
+                Applications
+            </Typography>
+            <UserApplications data={data} transformedData={transformedData}/>
+        </div>
 );
 }
+
+
         
 // main export 
-export function MyApplication() {
+export function MyApplication({ userId, setUserId }) {
+    
+    const [data, setData] = useState({}); 
+    useEffect(() => {
+      // Change 1 to userId when log-in is implemented
+      fetch(`/applications/${userId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setData(data);
+          
+        });
+    }, [userId]);
+
+    const transformedData = transformJSON(data);
+   
+
     return (
-        <MyApplicationItems/>
-    )
+        <MyApplicationItems data={data} transformedData={transformedData} />
+        
+    );
 }
 
 // styles
@@ -252,7 +376,7 @@ const MyApplicationStyles = {
         borderRadius: 10
     },
     actionButtonPending: {
-        background: "#c1c1c1",
+        background: "#5E17EB",
         opacity: 0.9,
         fontSize: 14,
         fontFamily: 'Roboto',

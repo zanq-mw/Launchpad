@@ -40,7 +40,11 @@ function Pages({ userId, setUserId }) {
             path={pages.notifications}
             element={<NotificationsPage userId={userId} />}
           />
-          <Route path={pages.applications} element={<MyApplication />} />
+          <Route 
+            path={pages.applications} 
+            element={<MyApplication userId={userId} setUserId={setUserId} />} 
+          />
+
           <Route
             path={pages.jobs}
             element={<JobPostings setPage={setPage} />}
