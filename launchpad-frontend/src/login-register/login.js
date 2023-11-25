@@ -83,12 +83,6 @@ function Login({ userId, setUserId }) {
               <button className="submit-btn">Log In</button>
             </div>
           </form>
-          <p>
-            <span id="forgot-password">
-              {" "}
-              <i>Forgot password?</i>
-            </span>
-          </p>
           <div id="login-container-login">
             <p>Don't have an account yet?&nbsp;</p>
             <NavLink to="/signup">
