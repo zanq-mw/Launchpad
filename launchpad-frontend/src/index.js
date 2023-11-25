@@ -80,6 +80,10 @@ function AppRouter() {
           path="/"
           element={<Login user={userId} setUserId={setUserId} />}
         />
+        <Route
+          path="/confirm_email"
+          element={<Login user={userId} setUserId={setUserId} />}
+        />
         <Route path="/signup" element={<SignUp />} />
         <Route
           path="*"

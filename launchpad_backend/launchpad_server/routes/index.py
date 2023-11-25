@@ -15,7 +15,11 @@ sys.path.append('./launchpad_server/routes')
 from startup_data import startup_data
 app.config['MONGO_URI'] = 'mongodb://localhost:27017/database'
 from datetime import datetime
+from flask_mail import Mail
+from flask_mail import Message
+from itsdangerous import URLSafeTimedSerializer
 from flask import request
+import os
 from bson import ObjectId
 
 # Initialize the PyMongo extension
@@ -24,6 +28,19 @@ bcrypt = Bcrypt(app)
 
 
 CORS(app, origins='*')
+
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_USERNAME'] = 'organizationlaunchpad@gmail.com'
+app.config['MAIL_PASSWORD'] = 'zeid hsnp odqv jsol'
+app.config['MAIL_DEFAULT_SENDER'] = 'organizationlaunchpad@gmail.com'
+app.config['SECRET_KEY'] = '37e0f3d0ced66904aa5b89a39bb94649ec5ae68d06419f7ccadd7a3c5eebc93a'
+
+mail = Mail(app)
+
+
 
 
 def setup_db():
@@ -386,6 +403,7 @@ def register():
                 "postalCode": "",
                 "province": ""
             },
+            "userConfirmed": False,
             "phoneNumber": "",  # If number is not specified for a record, do not include this key-value pair in the dictionary
             "twoFactor": False,
             "dataCollection": True,
@@ -399,14 +417,52 @@ def register():
         user_exists = mongo.db.get_collection("user").find_one({"email": username}) #check if user exists
        
         if user_exists:
-            response = {'message': 'User already exists'}
-        else:
-            mongo.db.get_collection("user").insert_one(data_to_insert)
-            response = {'message': 'User registered successfully'}
-        return jsonify(response)
+            return jsonify({'message': 'User already exists'})
         
-    return jsonify(response)
-@app.route("/api/login", methods=['POST'])
+        mongo.db.get_collection("user").insert_one(data_to_insert)
+        confirmation_token = generate_confirmation_token(username)
+        send_confirmation_email(username, confirmation_token)
+
+        return jsonify({'message': 'User registered successfully'})
+    
+    return jsonify({'message': 'Invalid request method'})
+
+def send_confirmation_email(username, user_token):
+    confirmation_link = f'http://localhost:3000/confirm_email?token={user_token}'
+    subject = 'Account Confirmation'
+    body = f'Click the following link to confirm your account: {confirmation_link}'
+    msg = Message(subject, recipients=[username], body=body)
+    mail.send(msg)
+
+@app.route('/confirm_email', methods=['GET', 'POST'])
+def confirm_email():
+    data = request.get_json()
+    token = data.get('token')
+
+    if not token:
+        return jsonify({"status": "error", "message": "Token not provided."})
+
+    serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+    try:
+        email = serializer.loads(token, salt='email-confirm', max_age=3600)  # Token expiration in seconds
+        user_collection = mongo.db.get_collection("user")
+
+        # Update the user status in the database
+        filter_query = {"email": email}
+        update_query = {"$set": {"userConfirmed": True}}
+        user_collection.update_one(filter_query, update_query)
+
+        # Redirect the user to the main application page or return a JSON response indicating success
+        return jsonify({"status": "success", "message": "Email confirmed successfully!"})
+    except Exception as e:
+        # Return a JSON response indicating failure
+        return jsonify({"status": "error", "message": "Invalid or expired token. Please try again."})
+
+def generate_confirmation_token(email):
+    serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+    return serializer.dumps(email, salt='email-confirm')
+
+@app.route('/api/login', methods=['POST'])
 def login():
     if request.method == 'POST':
         data = request.get_json()
