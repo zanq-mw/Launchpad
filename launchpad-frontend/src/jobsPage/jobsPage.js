@@ -327,15 +327,10 @@ function JobExpanded({ postingSelected, updateList, postings, saved }) {
   const expandedPosting = postings.find(
     (post) => post.postingId === postingSelected
   );
-  /*const [save, setSave] = React.useState(
-    expandedPosting ? expandedPosting.saved : false
-  );*/
 
   const isSavedPosting = expandedPosting ? expandedPosting.saved : false;
 
   const handleSave = () => {
-    //expandedPosting.saved = !save;
-    //setSave(!save);
     expandedPosting.saved = !expandedPosting.saved;
     updateList();
     
