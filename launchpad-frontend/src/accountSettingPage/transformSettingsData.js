@@ -10,12 +10,14 @@ export function transformSettingsData(data) {
       fields: [
         {
           label: "First Name",
+          id: "first_name",
           placeholder:
             (data.profile.full_name && data.profile.full_name.split(" ")[0]) ||
             "",
         },
         {
           label: "Last Name",
+          id: "last_name",
           placeholder:
             (data.profile.full_name && data.profile.full_name.split(" ")[1]) ||
             "",
@@ -28,6 +30,7 @@ export function transformSettingsData(data) {
       fields: [
         {
           label: "Email",
+          id: "email",
           placeholder: data.profile.email || "",
         },
       ],
@@ -38,7 +41,8 @@ export function transformSettingsData(data) {
       fields: [
         {
           label: "Password",
-          placeholder: data.profile.password || "",
+          id: "password",
+          placeholder: "***********" || "",
         },
       ],
     },
@@ -48,6 +52,7 @@ export function transformSettingsData(data) {
       fields: [
         {
           label: "Program",
+          id: "program",
           placeholder: data.profile.program || "",
         },
       ],
@@ -59,14 +64,17 @@ export function transformSettingsData(data) {
       fields: [
         {
           label: "Street",
+          id: "street",
           placeholder: data.profile.address.streetAddress || "",
         },
         {
           label: "Postal Code",
+          id: "postal_code",
           placeholder: data.profile.address.postalCode || "",
         },
         {
           label: "Province/State",
+          id: "province_state",
           placeholder: data.profile.address.province || "",
         },
       ],
@@ -77,6 +85,7 @@ export function transformSettingsData(data) {
       fields: [
         {
           label: "Phone Number",
+          id: "number",
           placeholder: data.profile.phone_number || "",
         },
       ],

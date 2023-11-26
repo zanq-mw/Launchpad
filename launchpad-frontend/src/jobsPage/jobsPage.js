@@ -19,8 +19,18 @@ import { ClockIcon, PinIcon, LaptopIcon } from "../components/jobsIcons";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CloseIcon from "@mui/icons-material/Close";
 import { ApplyButton } from "../components/applicationPopUp";
+import { useParams, useNavigate } from "react-router-dom";
+import CircularProgress from "@mui/material/CircularProgress";
 
-export function JobPostings() {
+const theme1 = createTheme({
+  palette: {
+    primary: {
+      main: "#5E17EB",
+    },
+  },
+});
+
+export function JobPostings({ userId, setPage }) {
   const [value, setValue] = React.useState(0);
   const [searchValue, setSearchValue] = React.useState("");
   const [typeFilter, setTypeFilter] = React.useState(null);
@@ -29,50 +39,70 @@ export function JobPostings() {
   const [jobsData, setJobsData] = React.useState({});
   const [companyData, setCompanyData] = React.useState({});
   const [userData, setUserData] = React.useState({});
+  const [jobsCompanyData, setJobsCompanyData] = React.useState([]);
+  const { jobId } = useParams();
+  const [loading1, setLoading1] = React.useState(true);
+  const [loading2, setLoading2] = React.useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const tabParam = params.get("tab");
+
+    if (tabParam === "saved") {
+      setValue(1);
+    } else {
+      setValue(0);
+    }
+
     fetch(
       `/jobs?type=${typeFilter}&duration=${durationFilter}&location=${locationFilter}`
     )
       .then((res) => res.json())
       .then((data) => {
         setJobsData(data);
+        setLoading1(false);
       });
   }, [durationFilter, locationFilter, searchValue, typeFilter]);
 
   useEffect(() => {
-    fetch(`/companies`)
-      .then((res) => res.json())
-      .then((data) => {
-        setCompanyData(data);
-      });
-  }, []);
+    const companiesPromise = fetch(`/companies`).then((res) => res.json());
+    const usersPromise = fetch(`/users/${userId}`).then((res) => res.json());
 
-  useEffect(() => {
-    // add user id here when it is integrated with the code
-    fetch(`/users/1`)
-      .then((res) => res.json())
-      .then((data) => {
-        setUserData(data);
-      });
-  }, [value]);
+    Promise.all([companiesPromise, usersPromise])
+      .then(([companyData, userData]) => {
+        setCompanyData(companyData);
+        setUserData(userData);
+        setLoading2(false);
+      })
+      .catch((error) => console.error("Error fetching data:", error));
+  }, [userId, value]);
 
-  const jobsCompanyData =
-    jobsData.data && companyData.data && userData.data
-      ? jobsData.data.map((job) => {
-          const companyRecord = companyData.data.find(
-            (company) => company.companyId === job.companyId
-          );
-          const saved = userData.data[0].savedPostings.find(
-            (posting) => posting.postingId === job.postingId
-          );
-          return {
-            ...job,
-            companyName: companyRecord.companyName,
-            saved: saved ? true : false,
-          };
-        })
-      : [];
+  const clickedTab = () => {
+    setPage("/jobs");
+    navigate(`/jobs`);
+  };
+
+// Store the retrieved job, company, and user data into "jobsCompanyData" every time the data is retrieved
+useEffect(() => {
+  if (jobsData.data && companyData.data && userData.data) {
+    const data = jobsData.data.map((job) => {
+      const companyRecord = companyData.data.find(
+        (company) => company.companyId === job.companyId
+      );
+      const saved = userData.data[0].savedPostings.find(
+        (posting) => posting.postingId === job.postingId
+      );
+      return {
+        ...job,
+        companyName: companyRecord ? companyRecord.companyName : 'Unknown',
+        saved: saved ? true : false,
+      };
+    });
+
+    setJobsCompanyData(data);
+  }
+}, [jobsData.data, companyData.data, userData.data]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -83,6 +113,23 @@ export function JobPostings() {
       id: `jobs-tab-${index}`,
       "aria-controls": `jobs-tabpanel-${index}`,
     };
+  }
+
+  if (loading1 || loading2) {
+    return (
+      <ThemeProvider theme={theme1}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "100vh",
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      </ThemeProvider>
+    );
   }
 
   return (
@@ -121,19 +168,26 @@ export function JobPostings() {
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <ThemeProvider theme={theme}>
             <Tabs value={value} onChange={handleChange}>
-              <Tab label="Postings" {...a11yProps(0)} />
-              <Tab label="Saved" {...a11yProps(1)} />
+              <Tab label="Postings" {...a11yProps(0)} onClick={clickedTab} />
+              <Tab label="Saved" {...a11yProps(1)} onClick={clickedTab} />
             </Tabs>
           </ThemeProvider>
         </Box>
         <CustomTabPanel value={value} index={0}>
-          <Postings searchValue={searchValue} postings={jobsCompanyData} />
+          <Postings
+            searchValue={searchValue}
+            postings={jobsCompanyData}
+            jobId={jobId}
+            setPage={setPage}
+          />
         </CustomTabPanel>
         <CustomTabPanel value={value} index={1}>
           <Postings
             saved
             searchValue={searchValue}
             postings={jobsCompanyData}
+            jobId={jobId}
+            setPage={setPage}
           />
         </CustomTabPanel>
       </Box>
@@ -203,7 +257,8 @@ function CustomTabPanel(props) {
   );
 }
 
-function Postings({ saved, searchValue, postings }) {
+function Postings({ saved, searchValue, postings, jobId, setPage }) {
+  const navigate = useNavigate();
   const [postingsExpanded, setPostingsExpanded] = React.useState(false);
 
   const savedPostings = postings.filter((row) => row.saved);
@@ -214,28 +269,28 @@ function Postings({ saved, searchValue, postings }) {
       row.companyName.toLowerCase().includes(searchValue.toLowerCase())
   );
 
-  const [postingSelected, setPostingSelected] = React.useState(
-    saved
-      ? savedPostings.length > 0
-        ? savedPostings[0].postingId
-        : null
-      : filteredPostings.length > 0
-      ? filteredPostings[0].postingId
-      : null
-  );
+  const [postingSelected, setPostingSelected] = React.useState(null);
 
   const selectedPosting = filteredPostings.find(
     (row) => row.postingId === postingSelected
   );
 
+  // select job posting if Id provided
   useEffect(() => {
-    if (selectedPosting === undefined) {
+    if (jobId !== undefined) {
+      setPostingSelected(parseInt(jobId));
+    } else if (selectedPosting === undefined) {
       setPostingSelected(null);
     }
-  }, [selectedPosting]);
+  }, [selectedPosting, jobId]);
 
   const [, updateState] = React.useState();
   const forceUpdate = React.useCallback(() => updateState({}), []);
+
+  const clickedJob = (jobId) => {
+    setPage(`/jobs/${jobId}`);
+    navigate(`/jobs/${jobId}`);
+  };
 
   return (
     <Grid container spacing={6}>
@@ -251,7 +306,7 @@ function Postings({ saved, searchValue, postings }) {
                     <TableRow
                       key={i}
                       sx={PageStyles.tableRow}
-                      onClick={() => setPostingSelected(row.postingId)}
+                      onClick={() => clickedJob(row.postingId)}
                       selected={postingSelected === row.postingId}
                     >
                       <TableCell component="th" scope="row" align="center">
@@ -345,7 +400,6 @@ function JobExpanded({ postingSelected, updateList, postings, saved }) {
       console.error("PUT request to save posting failed! Error: ", error);
     }
   }
-  
   return (!saved && expandedPosting) || (saved && isSavedPosting) ? (
     <TableContainer>
       <Table style={PageStyles.table}>
@@ -402,7 +456,10 @@ function JobExpanded({ postingSelected, updateList, postings, saved }) {
                     alignContent: "space-evenly",
                   }}
                 >
-                  <ApplyButton companyName={expandedPosting.companyName}>
+                  <ApplyButton
+                    postingID={expandedPosting.postingId}
+                    companyName={expandedPosting.companyName}
+                  >
                     Apply
                   </ApplyButton>
                   <Button

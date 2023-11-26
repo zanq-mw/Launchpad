@@ -34,15 +34,29 @@ function Pages({ userId, setUserId }) {
         <Routes>
           <Route
             path={pages.landing}
-            element={<LandingPage userId={userId} />}
+            element={<LandingPage userId={userId} setPage={setPage} />}
           />
           <Route
             path={pages.notifications}
             element={<NotificationsPage userId={userId} />}
           />
-          <Route path={pages.applications} element={<MyApplication />} />
-          <Route path={pages.jobs} element={<JobPostings />} />
-          <Route path={pages.account} element={<AccountSettings />} />
+          <Route 
+            path={pages.applications} 
+            element={<MyApplication userId={userId} setUserId={setUserId} />} 
+          />
+
+          <Route
+            path={pages.jobs}
+            element={<JobPostings userId={userId} setPage={setPage} />}
+          />
+          <Route
+            path={`${pages.jobs}/:jobId`}
+            element={<JobPostings userId={userId} setPage={setPage} />}
+          />
+          <Route
+            path={pages.account}
+            element={<AccountSettings userId={userId} setUserId={setUserId} />}
+          />
           <Route path={pages.settings} element={<App />} />
         </Routes>
         <LogoutPopup
@@ -56,13 +70,18 @@ function Pages({ userId, setUserId }) {
 }
 
 function AppRouter() {
-  const [userId, setUserId] = useState(null);
+  const [userId, setUserId] = useState(sessionStorage.getItem("userId"));
+  console.log(sessionStorage.getItem("userId"));
 
   return (
     <Router>
       <Routes>
         <Route
           path="/"
+          element={<Login user={userId} setUserId={setUserId} />}
+        />
+        <Route
+          path="/confirm_email"
           element={<Login user={userId} setUserId={setUserId} />}
         />
         <Route path="/signup" element={<SignUp />} />

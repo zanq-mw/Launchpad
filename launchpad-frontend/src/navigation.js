@@ -27,6 +27,8 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 
 export function NavItems({ open, page, setPage, setShowLogout }) {
+  const isJobsPage = page.startsWith(`/jobs`);
+
   return (
     <React.Fragment>
       <ThemeProvider theme={theme}>
@@ -76,7 +78,7 @@ export function NavItems({ open, page, setPage, setShowLogout }) {
           <ListItemButton
             sx={NavStyles.navOption}
             onClick={useCallback(() => setPage(pages.jobs), [setPage])}
-            selected={page === pages.jobs}
+            selected={isJobsPage}
           >
             <LPListItemIcon open={open}>
               <JobIcon />
@@ -145,6 +147,7 @@ export function LogoutPopup({ setUserId, setShowLogout, showLogout }) {
 
   const handleLogout = useCallback(() => {
     setUserId(null);
+    sessionStorage.setItem("userId", null);
     setShowLogout(false);
     navigate("/");
   }, [navigate, setShowLogout, setUserId]);
