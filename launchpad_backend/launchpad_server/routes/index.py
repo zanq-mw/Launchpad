@@ -138,6 +138,48 @@ def get_jobs():
         doc.pop("_id")
     return (jsonify({"data": result}))
 
+@app.route("/jobs/<int:user_id>/<int:posting_id>/toggle-saved", methods=["PUT"])
+def toggle_posting_saved(user_id, posting_id):
+
+    # Check if the user with userId = user_id has a saved posting with postingId = posting_id
+    posting_exists = mongo.db.user.find_one(
+        {"userId": user_id, "savedPostings.postingId": posting_id},
+        {"_id": 0, "savedPostings.$": 1}
+    )
+    
+    # If the user does not have the posting saved
+    if not posting_exists:
+
+        # Get current datetime and format it into ISO 8601
+        date_time = datetime.utcnow()
+
+        # Add the posting to savedPostings
+        result = mongo.db.user.update_one(
+            {"userId": user_id},
+            {"$addToSet": {"savedPostings": {"dateTime": date_time, "postingId": posting_id}}}
+        )
+
+        # Log a success/error message if the posting was/wasn't saved respectively
+        if result.modified_count > 0:
+            return jsonify({"message": "Posting saved successfully!"}), 200
+        else:
+            return jsonify({"message": "Posting save failed :("}), 404
+
+    # If the user has the posting saved
+    else: 
+
+        # Remove the posting from savedPostings
+        result = mongo.db.user.update_one(
+            {"userId": user_id},
+            {"$pull": {"savedPostings": {"postingId": posting_id}}}
+        )
+
+        # Log a success/error message if the posting was/wasn't unsaved respectively
+        if result.modified_count > 0:
+            return jsonify({"message": "Posting unsaved successfully!"}), 200
+        else:
+            return jsonify({"message": "Posting unsave failed :("}), 404
+          
 @app.route("/recommended-jobs/<int:user_id>")
 def get_recommended_jobs(user_id):
     # Query to get postingIds of jobs user has applied to

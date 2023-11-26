@@ -39,6 +39,7 @@ export function JobPostings({ userId, setPage }) {
   const [jobsData, setJobsData] = React.useState({});
   const [companyData, setCompanyData] = React.useState({});
   const [userData, setUserData] = React.useState({});
+  const [jobsCompanyData, setJobsCompanyData] = React.useState([]);
   const { jobId } = useParams();
   const [loading1, setLoading1] = React.useState(true);
   const [loading2, setLoading2] = React.useState(true);
@@ -75,29 +76,33 @@ export function JobPostings({ userId, setPage }) {
         setLoading2(false);
       })
       .catch((error) => console.error("Error fetching data:", error));
-  }, [userId]);
+  }, [userId, value]);
 
   const clickedTab = () => {
     setPage("/jobs");
     navigate(`/jobs`);
   };
 
-  const jobsCompanyData =
-    jobsData.data && companyData.data && userData.data
-      ? jobsData.data.map((job) => {
-          const companyRecord = companyData.data.find(
-            (company) => company.companyId === job.companyId
-          );
-          const saved = userData.data[0].savedPostings.find(
-            (posting) => posting.postingId === job.postingId
-          );
-          return {
-            ...job,
-            companyName: companyRecord.companyName,
-            saved: saved ? true : false,
-          };
-        })
-      : [];
+// Store the retrieved job, company, and user data into "jobsCompanyData" every time the data is retrieved
+useEffect(() => {
+  if (jobsData.data && companyData.data && userData.data) {
+    const data = jobsData.data.map((job) => {
+      const companyRecord = companyData.data.find(
+        (company) => company.companyId === job.companyId
+      );
+      const saved = userData.data[0].savedPostings.find(
+        (posting) => posting.postingId === job.postingId
+      );
+      return {
+        ...job,
+        companyName: companyRecord ? companyRecord.companyName : 'Unknown',
+        saved: saved ? true : false,
+      };
+    });
+
+    setJobsCompanyData(data);
+  }
+}, [jobsData.data, companyData.data, userData.data]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -377,17 +382,24 @@ function JobExpanded({ postingSelected, updateList, postings, saved }) {
   const expandedPosting = postings.find(
     (post) => post.postingId === postingSelected
   );
-  const [save, setSave] = React.useState(
-    expandedPosting ? expandedPosting.saved : false
-  );
 
   const isSavedPosting = expandedPosting ? expandedPosting.saved : false;
 
   const handleSave = () => {
-    expandedPosting.saved = !save;
-    setSave(!save);
+    expandedPosting.saved = !expandedPosting.saved;
     updateList();
-  };
+    
+    try {
+      fetch (
+        // PUT request that talks to index.py and saves the post under the user's account in MongoDB
+        `/jobs/${1}/${expandedPosting.postingId}/toggle-saved`, { method: "PUT", }
+      );
+    } 
+    catch (error) {
+      // Log error if PUT request failed
+      console.error("PUT request to save posting failed! Error: ", error);
+    }
+  }
   return (!saved && expandedPosting) || (saved && isSavedPosting) ? (
     <TableContainer>
       <Table style={PageStyles.table}>
