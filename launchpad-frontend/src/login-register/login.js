@@ -1,11 +1,46 @@
-import React from "react";
+import React, { useEffect } from "react";
 import logo from "../images/launchpadLogo.png";
-import { NavLink } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import "./startup.css";
 
 function Login({ userId, setUserId }) {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const confirmationToken = urlParams.get("token");
+    console.log("Token:", confirmationToken);
+
+    if (confirmationToken) {
+      // Send the token to the backend for verification
+      verifyEmail(confirmationToken);
+    }
+  }, [location.search]);
+
+  const verifyEmail = async (token) => {
+    try {
+      const response = await fetch("/confirm_email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token }),
+      });
+
+      const responseData = await response.json();
+
+      if (responseData.status === "success") {
+        console.log("Email confirmed successfully!");
+        // Redirect to a success page or update the UI as needed
+      } else {
+        console.error("Error confirming email:", responseData.message);
+        // Handle the error, e.g., display an error message to the user
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -83,12 +118,6 @@ function Login({ userId, setUserId }) {
               <button className="submit-btn">Log In</button>
             </div>
           </form>
-          <p>
-            <span id="forgot-password">
-              {" "}
-              <i>Forgot password?</i>
-            </span>
-          </p>
           <div id="login-container-login">
             <p>Don't have an account yet?&nbsp;</p>
             <NavLink to="/signup">

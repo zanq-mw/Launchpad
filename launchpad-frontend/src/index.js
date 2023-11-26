@@ -40,14 +40,18 @@ function Pages({ userId, setUserId }) {
             path={pages.notifications}
             element={<NotificationsPage userId={userId} />}
           />
-          <Route path={pages.applications} element={<MyApplication />} />
+          <Route 
+            path={pages.applications} 
+            element={<MyApplication userId={userId} setUserId={setUserId} />} 
+          />
+
           <Route
             path={pages.jobs}
-            element={<JobPostings setPage={setPage} />}
+            element={<JobPostings userId={userId} setPage={setPage} />}
           />
           <Route
             path={`${pages.jobs}/:jobId`}
-            element={<JobPostings setPage={setPage} />}
+            element={<JobPostings userId={userId} setPage={setPage} />}
           />
           <Route
             path={pages.account}
@@ -74,6 +78,10 @@ function AppRouter() {
       <Routes>
         <Route
           path="/"
+          element={<Login user={userId} setUserId={setUserId} />}
+        />
+        <Route
+          path="/confirm_email"
           element={<Login user={userId} setUserId={setUserId} />}
         />
         <Route path="/signup" element={<SignUp />} />
