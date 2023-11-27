@@ -10,8 +10,8 @@ application = {
     "records": [
     {
         "applicationId": 1, 
-        "resume": "figure out how to store pdf lol", 
-        "coverLetter": "pdf again",
+        "resume": "ObjectId('6563d580da34094c437971c5')", 
+        "coverLetter": "ObjectId('6563d580da34094c437971c7')",
         "Status": "Reviewed",
         "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/2048px-Microsoft_logo.svg.png",
         "postingId": 1,
@@ -20,8 +20,8 @@ application = {
     },
     {
         "applicationId": 2, 
-        "resume": "figure out how to store pdf lol", 
-        "coverLetter": "pdf again",
+        "resume": "ObjectId('6563d557da34094c437971b0')", 
+        "coverLetter": "ObjectId('6563d580da34094c437971c7')",
         "Status": "Interview Requested",
         "logo": "https://seeklogo.com/images/S/scotiabank-logo-D2F1AF87B5-seeklogo.com.png",
         "postingId": 9,
@@ -30,8 +30,8 @@ application = {
     },
     {
         "applicationId": 3, 
-        "resume": "figure out how to store pdf lol", 
-        "coverLetter": "pdf again",
+        "resume": "ObjectId('6563d557da34094c437971b0')", 
+        "coverLetter": "ObjectId('6563d580da34094c437971c7')",
         "Status": "Applied",
         "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/2048px-Microsoft_logo.svg.png",
         "postingId": 2,
