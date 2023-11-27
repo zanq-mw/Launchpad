@@ -1,5 +1,5 @@
 from launchpad_server import app
-from flask import render_template, request, flash, redirect, url_for,jsonify, send_file
+from flask import render_template, request, flash, redirect, url_for,jsonify, send_file, Response
 from .forms import SignupForm, LoginForm  
 from flask_login import login_user
 from flask_bcrypt import Bcrypt, check_password_hash
@@ -21,6 +21,7 @@ from itsdangerous import URLSafeTimedSerializer
 from flask import request
 import os
 from bson import ObjectId
+
 
 # Initialize the PyMongo extension
 mongo = PyMongo(app)
@@ -517,22 +518,47 @@ def delete_account(user_id):
         return jsonify({"error": "Error deleting account. Please try again."}), 500
 
 
-@app.route('/get-resume/<resume_id>')
-def get_resume(resume_id):
+@app.route('/display-resume/<applicationId>')
+def get_resume(applicationId):
     try:
-        resume_id = ObjectId(resume_id)
-        fs = gridfs.GridFS(mongo.db, collection='pdfs')
-        resume_file = fs.get(resume_id)
+        print(f"Attempting to retrieve application with ID: {applicationId}")
+        application = mongo.db.application.find_one({'applicationId': int(applicationId.strip())})
+        print(f"Query result: {application}")
+        if application:
+            print(f"Application found for ID: {applicationId}")
 
-        # Set the appropriate content type for PDF files
-        response = send_file(resume_file, mimetype='application/pdf')
+            resume_id = application.get('resume')
+            fs = gridfs.GridFS(mongo.db, collection='application')
 
-        # Optionally, you can specify a filename for the downloaded file
-        response.headers['Content-Disposition'] = 'attachment; filename=resume.pdf'
+            resume_file = fs.get(ObjectId(resume_id))
+            file_content = resume_file.read()
+            return Response(file_content, mimetype='application/pdf')
+        return "Application not found", 404
         
-        return response
     except Exception as e:
-        return str(e), 404  # Or handle the error as needed
+        print(f"Error occurred: {str(e)}")
+        return str(e), 500  
+
+@ app.route('/display-cover-letter/<applicationId>')
+def get_cover_letter(applicationId):
+    try:
+        print(f"Attempting to retrieve application with ID: {applicationId}")
+        application = mongo.db.application.find_one({'applicationId': int(applicationId.strip())})
+        print(f"Query result: {application}")
+
+        if application:
+            print(f"Application found for ID: {applicationId}")
+            cover_letter_id = application.get('coverLetter')
+            fs = gridfs.GridFS(mongo.db, collection='application')
+            cover_letter_file = fs.get(ObjectId(cover_letter_id))
+            file_content = cover_letter_file.read()
+            return Response(file_content, mimetype='application/pdf')
+
+        return "Application not found", 404
+        
+    except Exception as e:
+        print(f"Error occurred: {str(e)}")
+        return str(e), 500  
 
 @app.route ("/upload-pdf", methods=["POST"])
 def upload_pdf():
@@ -543,8 +569,8 @@ def upload_pdf():
             cover_letter = request.files['coverLetter']
             postingId = int(request.form['postingId'])
             dt = datetime.now()
-            # Save files to MongoDB using GridFS
 
+            # Save files to MongoDB using GridFS
             fs = gridfs.GridFS(mongo.db, collection='application')
             resume = fs.put(resume, filename=resume.filename, custom_metadata={"type": "resume"})
             cover_letter = fs.put(cover_letter, filename=cover_letter.filename, custom_metadata={"type": "cover_letter"}) 
@@ -564,7 +590,12 @@ def upload_pdf():
             }
 
             mongo.db.application.insert_one(application_data)
-            return jsonify({"message": "PDF files uploaded successfully"}), 200
+            response_data = {
+                "message": "PDF files uploaded successfully",
+                "applicationId": str(new_application_id)
+            }
+
+            return jsonify(response_data), 200
         
         else:
             return jsonify({"error": "User not authenticated"}), 401   
