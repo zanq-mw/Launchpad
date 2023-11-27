@@ -92,29 +92,48 @@ export function ApplyButton({ postingID, companyName }) {
     }
   };
 
-  // WIP function to display the submitted pdf
-  const handleDisplayResume = async () => {
-    if (applicationId) {
-      try {
-        const response = await fetch(`/get-resume/${applicationId}`);
-        if (response.ok) {
-          // Get the blob data from the response
-          const fileBlob = await response.blob();
-          const fileURL = URL.createObjectURL(fileBlob);
-  
-          // Open the file URL in a new tab or window
-          window.open(fileURL, '_blank');
-        } else {
-          console.error('Failed to fetch resume:', response.status);
-        }
-      } catch (error) {
-        console.error('Error displaying resume:', error);
+  const handleDisplayResume = async(applicationId) => {
+    try 
+    {
+      const response = await fetch(`/display-resume/${applicationId}`);
+      if (response.ok)
+      {
+        const blob = await response.blob();
+        const url= window.URL.createObjectURL(blob);
+        window.open(url, '_blank');
       }
-    } else {
-      console.error('No application ID available');
+      else
+      {
+        console.error('Failed to download resume', response.status)
+      }
+    } 
+    catch (error) 
+    {
+      console.error('Error downloading resume: ', error)
     }
+    
   };
+
   const handleDisplayCoverLetter = async () => {
+    try 
+    {
+      const response = await fetch(`/display-cover-letter/${applicationId}`);
+      if (response.ok)
+      {
+        const blob = await response.blob();
+        const url= window.URL.createObjectURL(blob);
+        window.open(url, '_blank');
+      }
+      else
+      {
+        console.error('Failed to download cover letter', response.status)
+      }
+    } 
+    catch (error) 
+    {
+      console.error('Error downloading cover letter: ', error)
+    }
+    
   };
 
   const handleOpen = () => {
@@ -266,8 +285,8 @@ export function ApplyButton({ postingID, companyName }) {
             <div style={{ marginBottom: '45px' }} />
             <div style={{ clear: 'both' }} />
             <div>
-              <Button onClick={handleDisplayResume}>View Resume</Button>
-              <Button onClick={handleDisplayCoverLetter}>View Cover Letter</Button>
+              <Button onClick={() => handleDisplayResume(applicationId)}>View Resume</Button>
+              <Button onClick={() => handleDisplayCoverLetter(applicationId)}>View Cover Letter</Button>
             </div>           
           </>
         )}
