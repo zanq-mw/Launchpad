@@ -22,6 +22,9 @@ import { ApplyButton } from "../components/applicationPopUp";
 import { useParams, useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 
+// Current logged in user's ID
+let currentUserId = -1;
+
 const theme1 = createTheme({
   palette: {
     primary: {
@@ -44,6 +47,9 @@ export function JobPostings({ userId, setPage }) {
   const [loading1, setLoading1] = React.useState(true);
   const [loading2, setLoading2] = React.useState(true);
   const navigate = useNavigate();
+
+  // Set current logged in user's ID
+  currentUserId = userId;
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -457,6 +463,7 @@ function JobExpanded({ postingSelected, updateList, postings, saved }) {
                   }}
                 >
                   <ApplyButton
+                    userID={currentUserId}
                     postingID={expandedPosting.postingId}
                     companyName={expandedPosting.companyName}
                   >
