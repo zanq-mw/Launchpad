@@ -73,7 +73,9 @@ def get_notifications(user_id):
     # Select notifications where notificationId is in notifications_ids
     notification_collection = mongo.db.notification
     notification_query = {"notificationId": {"$in": notifications_ids}}
-    notification_result = list(notification_collection.find(notification_query))
+
+    # Sort the result by 'dateTime' in descending order (-1 for descending)
+    notification_result = list(notification_collection.find(notification_query).sort('dateTime', -1))
 
     for doc in notification_result:
         doc.pop("_id")
@@ -97,6 +99,9 @@ def add_notifications(user_id, subject, body, application_id):
         {"userId": user_id},
         {"$addToSet": {"notifications": notification_id}}
     )
+
+    # Replace quadruple spaces with line breaks in the body
+    body = body.replace('    ', '\n')
 
     # Create a notification object
     notification = {

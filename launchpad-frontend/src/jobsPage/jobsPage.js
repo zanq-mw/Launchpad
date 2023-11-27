@@ -466,6 +466,7 @@ function JobExpanded({ postingSelected, updateList, postings, saved }) {
                     userID={currentUserId}
                     postingID={expandedPosting.postingId}
                     companyName={expandedPosting.companyName}
+                    positionName={expandedPosting.postingTitle}
                   >
                     Apply
                   </ApplyButton>
