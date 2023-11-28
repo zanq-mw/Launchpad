@@ -394,7 +394,7 @@ function JobExpanded({ userId, postingSelected, updateList, postings, saved }) {
     try {
       fetch (
         // PUT request that talks to index.py and saves the post under the user's account in MongoDB
-        `/jobs/${1}/${expandedPosting.postingId}/toggle-saved`, { method: "PUT", }
+        `/jobs/${userId}/${expandedPosting.postingId}/toggle-saved`, { method: "PUT", }
       );
     } 
     catch (error) {
