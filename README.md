@@ -28,3 +28,15 @@ All interaction with the db is through the backend so this step is not neccessar
 The Mac setup is a bit different, here is what some of us followed to get it set up
 
 ![Mongo Mac Setup Instructions](<Screenshot 2023-11-07 at 12.17.00 AM.png>)
+
+## Logging In
+
+You can log in by either signing up for a new account and using those credentials, or logging in with the credentials of an existing account.
+
+There are 2 existing accounts. Those are recommend to be used for testing purposes as they already have existing data on them as opposed to a new account, such as job applications sent and notifications.
+
+Email: ash.ketchum@gmail.com  
+Password: Pikachu@123
+
+Email: naruto.uzumaki@gmail.com  
+Password: BelieveIt@123
