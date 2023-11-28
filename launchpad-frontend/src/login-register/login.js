@@ -32,10 +32,10 @@ function Login({ userId, setUserId }) {
 
       if (responseData.status === "success") {
         console.log("Email confirmed successfully!");
-        // Redirect to a success page or update the UI as needed
+        alert("Email confirmed successfully!");
       } else {
         console.error("Error confirming email:", responseData.message);
-        // Handle the error, e.g., display an error message to the user
+        alert("Error confirming email:", responseData.message);
       }
     } catch (error) {
       console.error("Error:", error);
