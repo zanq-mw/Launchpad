@@ -53,34 +53,30 @@ export function ApplyButton({ postingID, companyName }) {
     // Check if both resume and cover letter files are uploaded
     if (resumeFile && coverLetterFile) {
       const formData = new FormData();
-      formData.append('resume', resumeFile);
-      formData.append('coverLetter', coverLetterFile);
-      formData.append('postingId', postingID);
+      formData.append("resume", resumeFile);
+      formData.append("coverLetter", coverLetterFile);
+      formData.append("postingId", postingID);
 
-      try 
-      {
-        const response = await fetch('/upload-pdf', {
-          method: 'POST',
+      try {
+        const response = await fetch("/upload-pdf", {
+          method: "POST",
           body: formData,
         });
 
         // Update the submission status to indicate success
-        if (response.ok)
-        {
+        if (response.ok) {
           const responseData = await response.json();
-          setSubmissionStatus('success');
+          setSubmissionStatus("success");
           setApplicationId(responseData.applicationId);
-          console.log('Submission successful. Application ID:', responseData.applicationId);
+          console.log(
+            "Submission successful. Application ID:",
+            responseData.applicationId
+          );
+        } else {
+          console.error("Submission failed:", response.status);
         }
-        else
-        {
-          console.error('Submission failed:', response.status);
-        }
-      } 
-
-      catch (error) 
-      {
-        console.error('Error during submission:', error);
+      } catch (error) {
+        console.error("Error during submission:", error);
       }
 
       // Update the submission status to indicate success
@@ -92,48 +88,34 @@ export function ApplyButton({ postingID, companyName }) {
     }
   };
 
-  const handleDisplayResume = async(applicationId) => {
-    try 
-    {
+  const handleDisplayResume = async (applicationId) => {
+    try {
       const response = await fetch(`/display-resume/${applicationId}`);
-      if (response.ok)
-      {
+      if (response.ok) {
         const blob = await response.blob();
-        const url= window.URL.createObjectURL(blob);
-        window.open(url, '_blank');
+        const url = window.URL.createObjectURL(blob);
+        window.open(url, "_blank");
+      } else {
+        console.error("Failed to download resume", response.status);
       }
-      else
-      {
-        console.error('Failed to download resume', response.status)
-      }
-    } 
-    catch (error) 
-    {
-      console.error('Error downloading resume: ', error)
+    } catch (error) {
+      console.error("Error downloading resume: ", error);
     }
-    
   };
 
   const handleDisplayCoverLetter = async () => {
-    try 
-    {
+    try {
       const response = await fetch(`/display-cover-letter/${applicationId}`);
-      if (response.ok)
-      {
+      if (response.ok) {
         const blob = await response.blob();
-        const url= window.URL.createObjectURL(blob);
-        window.open(url, '_blank');
+        const url = window.URL.createObjectURL(blob);
+        window.open(url, "_blank");
+      } else {
+        console.error("Failed to download cover letter", response.status);
       }
-      else
-      {
-        console.error('Failed to download cover letter', response.status)
-      }
-    } 
-    catch (error) 
-    {
-      console.error('Error downloading cover letter: ', error)
+    } catch (error) {
+      console.error("Error downloading cover letter: ", error);
     }
-    
   };
 
   const handleOpen = () => {
@@ -282,12 +264,22 @@ export function ApplyButton({ postingID, companyName }) {
             <Typography sx={ApplyButtonStyles.heading2}>
               Your application has succesfully been submitted!
             </Typography>
-            <div style={{ marginBottom: '45px' }} />
-            <div style={{ clear: 'both' }} />
-            <div>
-              <Button onClick={() => handleDisplayResume(applicationId)}>View Resume</Button>
-              <Button onClick={() => handleDisplayCoverLetter(applicationId)}>View Cover Letter</Button>
-            </div>           
+            <div style={{ marginLeft: "45px" }}>
+              <Button
+                style={ApplyButtonStyles.uploadbuttonStyles}
+                onClick={() => handleDisplayResume(applicationId)}
+              >
+                View Resume
+              </Button>
+              <Button
+                style={ApplyButtonStyles.uploadbuttonStyles}
+                onClick={() => handleDisplayCoverLetter(applicationId)}
+              >
+                View Cover Letter
+              </Button>
+            </div>
+            <div style={{ marginBottom: "45px" }} />
+            <div style={{ clear: "both" }} />
           </>
         )}
       </Dialog>
@@ -404,6 +396,7 @@ const ApplyButtonStyles = {
     padding: "10px 20px",
     cursor: "pointer",
     borderRadius: "20px",
+    marginRight: "10px",
   },
   uploadContainer: {
     display: "flex",
