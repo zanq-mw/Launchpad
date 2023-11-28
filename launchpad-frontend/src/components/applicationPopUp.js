@@ -74,7 +74,7 @@ export function ApplyButton({ userID, postingID, companyName, positionName }) {
 
           // Create subject and body for submission notification
           const subject = `Application Received - ${companyName}`;
-          const body = `Thank you for applying to the \"${positionName}\" position at ${companyName}. Please check your notifications for more updates; you should hear back from them soon!    Best of luck,    LaunchPad`;
+          const body = `Thank you for applying to the \"${positionName}\" position at ${companyName}. Please check your notifications for more updates; you should hear back from them soon!<br>Best of luck,<br>LaunchPad`;
 
           // Add submission notification
           try {

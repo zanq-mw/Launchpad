@@ -101,7 +101,7 @@ def add_notifications(user_id, subject, body, application_id):
     )
 
     # Replace quadruple spaces with line breaks in the body
-    body = body.replace('    ', '\n')
+    body = body.replace('<br>', '\n')
 
     # Create a notification object
     notification = {
