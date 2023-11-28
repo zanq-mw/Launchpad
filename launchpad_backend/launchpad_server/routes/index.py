@@ -73,12 +73,56 @@ def get_notifications(user_id):
     # Select notifications where notificationId is in notifications_ids
     notification_collection = mongo.db.notification
     notification_query = {"notificationId": {"$in": notifications_ids}}
-    notification_result = list(notification_collection.find(notification_query))
+
+    # Sort the result by 'dateTime' in descending order (-1 for descending)
+    notification_result = list(notification_collection.find(notification_query).sort('dateTime', -1))
 
     for doc in notification_result:
         doc.pop("_id")
 
     return jsonify({"data": notification_result})
+
+
+@app.route("/notifications/<int:user_id>/<subject>/<body>/<int:application_id>/add-notification", methods=["POST"])
+def add_notifications(user_id, subject, body, application_id):
+
+    # Raise an error if any of the parameters are missing
+    if not all([user_id, subject, body, application_id]):
+        return jsonify({"error": "Missing parameters for notification"}), 404
+
+    # Create a new notificationId by find the highest existing notificationId and adding 1
+    max_notification = mongo.db.notification.find_one(sort=[("notificationId", -1)])
+    notification_id = (max_notification['notificationId'] + 1) if max_notification else 1 # If no notifications exist, set new notificationID to 1
+    
+    # Add the notifications to the user's notifications list
+    result_user = mongo.db.user.update_one(
+        {"userId": user_id},
+        {"$addToSet": {"notifications": notification_id}}
+    )
+
+    # Replace quadruple spaces with line breaks in the body
+    body = body.replace('<br>', '\n')
+
+    # Create a notification object
+    notification = {
+        "notificationId": notification_id,
+        "subject": subject,
+        "body": body,
+        "dateTime": datetime.utcnow(),
+        "read": False,
+        "saved": False,
+        "applicationId": application_id
+    }
+
+    # Insert the notification object into the database
+    result_notification = mongo.db.notification.insert_one(notification)
+
+    # Log a success/error message if the notification was/wasn't inserted respectively
+    if result_user.modified_count > 0 and result_notification.inserted_id: # Inserted ID is only generated if insertion was successful 
+        return jsonify({"message": f"Notification {notification_id} added successfully"}), 200
+    else:
+        return jsonify({"error": f"Failed to add notification {notification_id}"}), 404
+
 
 @app.route("/notifications/<int:notification_id>/mark-as-read", methods=["PUT"])
 def mark_notification_as_read(notification_id):

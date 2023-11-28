@@ -5,7 +5,7 @@ import DialogActions from "@mui/material/DialogActions";
 import Typography from "@mui/material/Typography";
 import "@fontsource/league-spartan";
 
-export function ApplyButton({ postingID, companyName }) {
+export function ApplyButton({ userID, postingID, companyName, positionName }) {
   const [open, setOpen] = useState(false);
   const [resumeFile, setResumeFile] = useState(null);
   const [coverLetterFile, setCoverLetterFile] = useState(null);
@@ -71,6 +71,22 @@ export function ApplyButton({ postingID, companyName }) {
           setSubmissionStatus('success');
           setApplicationId(responseData.applicationId);
           console.log('Submission successful. Application ID:', responseData.applicationId);
+
+          // Create subject and body for submission notification
+          const subject = `Application Received - ${companyName}`;
+          const body = `Thank you for applying to the \"${positionName}\" position at ${companyName}. Please check your notifications for more updates; you should hear back from them soon!<br>Best of luck,<br>LaunchPad`;
+
+          // Add submission notification
+          try {
+            await fetch (
+              // POST request that talks to index.py and saves the post under the user's account in MongoDB
+              `/notifications/${userID}/${subject}/${body}/${responseData.applicationId}/add-notification`, { method: "POST", }
+            )
+          } 
+          catch (error) {
+            // Log error if PUT request failed
+            console.error("PUT request to add submission notification failed! Error: ", error);
+          }
         }
         else
         {

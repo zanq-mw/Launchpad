@@ -175,6 +175,7 @@ useEffect(() => {
         </Box>
         <CustomTabPanel value={value} index={0}>
           <Postings
+            userId={userId}
             searchValue={searchValue}
             postings={jobsCompanyData}
             jobId={jobId}
@@ -257,7 +258,7 @@ function CustomTabPanel(props) {
   );
 }
 
-function Postings({ saved, searchValue, postings, jobId, setPage }) {
+function Postings({ userId, saved, searchValue, postings, jobId, setPage }) {
   const navigate = useNavigate();
   const [postingsExpanded, setPostingsExpanded] = React.useState(false);
 
@@ -355,6 +356,7 @@ function Postings({ saved, searchValue, postings, jobId, setPage }) {
       </Grid>
       <Grid item xs={8}>
         <JobExpanded
+          userId={userId}
           postingSelected={postingSelected}
           updateList={forceUpdate}
           postings={filteredPostings}
@@ -378,7 +380,7 @@ function JobDescription({ posting }) {
   );
 }
 
-function JobExpanded({ postingSelected, updateList, postings, saved }) {
+function JobExpanded({ userId, postingSelected, updateList, postings, saved }) {
   const expandedPosting = postings.find(
     (post) => post.postingId === postingSelected
   );
@@ -457,8 +459,10 @@ function JobExpanded({ postingSelected, updateList, postings, saved }) {
                   }}
                 >
                   <ApplyButton
+                    userID={userId}
                     postingID={expandedPosting.postingId}
                     companyName={expandedPosting.companyName}
+                    positionName={expandedPosting.postingTitle}
                   >
                     Apply
                   </ApplyButton>
