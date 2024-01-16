@@ -1,4 +1,5 @@
 # Launchpad
+Launchpad is a dynamic web application tailored for university students and recent graduates seeking career opportunities. Built with Python, Flask, JavaScript, React, and MongoDB, this platform enables users to effortlessly upload resumes and cover letters in PDF format, apply for internships and full-time jobs, and communicate directly with employers. Offering a streamlined job application process, Launchpad bridges the gap between talented individuals and their dream careers.
 
 ## Running Backend
 
