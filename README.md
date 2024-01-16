@@ -1,6 +1,9 @@
 # Launchpad
 Launchpad is a dynamic web application tailored for university students and recent graduates seeking career opportunities. Built with Python, Flask, JavaScript, React, and MongoDB, this platform enables users to effortlessly upload resumes and cover letters in PDF format, apply for internships and full-time jobs, and communicate directly with employers. Offering a streamlined job application process, Launchpad bridges the gap between talented individuals and their dream careers.
 
+![image](https://github.com/zanq-mw/Launchpad/assets/60675575/8287e29e-5acf-40f2-99df-edef2682e6c0)
+![image](https://github.com/zanq-mw/Launchpad/assets/60675575/1a9e8cee-65ae-4fd3-9264-8e8184ebb928)
+
 ## Running Backend
 
 1. Clone repo
